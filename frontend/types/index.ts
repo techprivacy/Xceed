@@ -48,6 +48,14 @@ export interface QuoteRequestInput {
   productRequirement: string;
   quantity?: string;
   city?: string;
+  state?: string;
+  whatsappNumber?: string;
+  officeAddress?: string;
+  industry?: string;
+  specialRequirement?: string;
+  contactPerson?: string;
+  email?: string;
+  source?: string;
 }
 
 export type QuoteStatus = 'new' | 'follow_up' | 'negotiation' | 'quotation_sent' | 'won' | 'lost';
@@ -74,8 +82,10 @@ export interface QuoteRequest {
   contactPerson?: string;
   email?: string;
   mobileNumber: string;
+  whatsappNumber?: string;
   city?: string;
   state?: string;
+  officeAddress?: string;
   productRequirement: string;
   quantity?: string;
   specialRequirement?: string;
@@ -86,6 +96,15 @@ export interface QuoteRequest {
   source: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface ThemePalette {
+  primary: string;
+  primaryDark: string;
+  secondary: string;
+  dark: string;
+  surface: string;
+  muted: string;
 }
 
 export interface ApiResponse<T> {

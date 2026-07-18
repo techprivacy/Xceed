@@ -7,6 +7,7 @@ import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import StatCard from '@/components/admin/StatCard';
 import DataTable from '@/components/admin/DataTable';
 import StatusBadge from '@/components/admin/StatusBadge';
+import Button from '@/components/ui/Button';
 import { getAdminToken, getProducts, deleteProduct } from '@/lib/api';
 import { toast } from '@/lib/toast';
 import { Category, Product } from '@/types';
@@ -65,12 +66,9 @@ export default function ProductsPage() {
         title="Products"
         subtitle={`${products.length} products across all categories`}
         action={
-          <Link
-            href="/admin/products/new"
-            className="flex items-center gap-1.5 rounded bg-gradient-to-r from-brand-blueDark to-brand-blue px-4 py-2 text-xs font-bold uppercase tracking-wide text-white shadow-sm transition-transform hover:-translate-y-0.5 hover:shadow-md"
-          >
+          <Button href="/admin/products/new" size="sm">
             <Plus size={14} /> Add Product
-          </Link>
+          </Button>
         }
       />
 
@@ -80,8 +78,8 @@ export default function ProductsPage() {
         <StatCard icon={Ban} label="Out of Stock" value={outOfStock} />
       </div>
 
-      <div className="mb-4 flex max-w-sm items-center rounded-lg border border-brand-border bg-white px-3">
-        <Search size={16} className="text-gray-400" />
+      <div className="mb-4 flex max-w-sm items-center rounded-full border border-brand-border bg-white px-4">
+        <Search size={16} className="text-brand-slate" />
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -95,10 +93,7 @@ export default function ProductsPage() {
       {loading ? (
         <div className="space-y-2">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-12 animate-pulse rounded-lg border border-brand-border bg-gray-50"
-            />
+            <div key={i} className="h-12 animate-pulse border border-brand-border bg-brand-mist" />
           ))}
         </div>
       ) : (
@@ -107,7 +102,7 @@ export default function ProductsPage() {
           rows={filtered}
           emptyMessage={search ? 'No products match your search.' : 'No products found.'}
           columns={[
-            { header: 'Product', accessor: (p) => <span className="font-semibold text-gray-900">{p.name}</span> },
+            { header: 'Product', accessor: (p) => <span className="font-semibold text-brand-black">{p.name}</span> },
             {
               header: 'Category',
               accessor: (p) => (typeof p.category === 'object' ? (p.category as Category).name : '—'),
@@ -129,14 +124,14 @@ export default function ProductsPage() {
                   <Link
                     href={`/admin/products/${p._id}/edit`}
                     aria-label="Edit"
-                    className="rounded p-1.5 text-gray-400 hover:bg-blue-50 hover:text-brand-blue"
+                    className="rounded-full p-1.5 text-brand-slate hover:bg-blue-50 hover:text-brand-blue"
                   >
                     <Pencil size={15} />
                   </Link>
                   <button
                     onClick={() => handleDelete(p._id, p.name)}
                     aria-label="Delete"
-                    className="rounded p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-600"
+                    className="rounded-full p-1.5 text-brand-slate hover:bg-red-50 hover:text-red-600"
                   >
                     <Trash2 size={15} />
                   </button>

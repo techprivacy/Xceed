@@ -9,6 +9,7 @@ const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const quoteRoutes = require('./routes/quoteRoutes');
+const themeRoutes = require('./routes/themeRoutes');
 
 const app = express();
 
@@ -36,6 +37,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/quotes', quoteRoutes);
+app.use('/api/theme', themeRoutes);
 
 // 404 handler
 app.use((req, res) => {

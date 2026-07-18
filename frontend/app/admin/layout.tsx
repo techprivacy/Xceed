@@ -31,14 +31,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (!checked) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50 text-sm text-gray-500">
+      <div className="flex min-h-screen items-center justify-center bg-brand-mist text-sm text-brand-slate">
         Checking session...
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-brand-mist">
       <AdminSidebar />
       <div className="flex-1 overflow-x-hidden">{children}</div>
       <ToastHost />

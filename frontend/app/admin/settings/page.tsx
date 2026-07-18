@@ -1,4 +1,5 @@
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
+import Card from '@/components/ui/Card';
 
 const SECTIONS = [
   {
@@ -53,24 +54,24 @@ export default function SettingsPage() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {SECTIONS.map((section) => (
-          <div key={section.title} className="rounded-xl border border-brand-border bg-white p-5 shadow-sm">
-            <h2 className="mb-4 text-sm font-bold uppercase tracking-wide text-brand-blue">{section.title}</h2>
+          <Card key={section.title} className="p-5">
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-brand-red">{section.title}</h2>
             <div className="space-y-3">
               {section.fields.map((f) => (
                 <div key={f.label}>
-                  <label className="mb-1 block text-xs font-semibold text-gray-600">{f.label}</label>
+                  <label className="mb-1 block text-xs font-semibold text-brand-charcoal">{f.label}</label>
                   <input
                     defaultValue={f.value}
                     readOnly
-                    className="w-full rounded border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-600"
+                    className="w-full rounded-xl border border-brand-border bg-brand-mist px-3 py-2 text-sm text-brand-charcoal"
                   />
                 </div>
               ))}
             </div>
-          </div>
+          </Card>
         ))}
       </div>
-      <p className="mt-4 text-xs text-gray-400">
+      <p className="mt-4 text-xs text-brand-slate/70">
         Showing demo values — SMTP is genuinely read from the backend .env file; everything else here is read-only for now.
       </p>
     </main>

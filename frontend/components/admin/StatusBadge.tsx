@@ -1,5 +1,5 @@
 const TONE_STYLES: Record<string, string> = {
-  gray: 'bg-gray-100 text-gray-700',
+  gray: 'bg-brand-mist text-brand-slate',
   blue: 'bg-blue-100 text-brand-blue',
   amber: 'bg-amber-100 text-amber-700',
   green: 'bg-green-100 text-green-700',
@@ -15,8 +15,6 @@ export default function StatusBadge({
   tone?: keyof typeof TONE_STYLES;
 }) {
   return (
-    <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${TONE_STYLES[tone]}`}>
-      {label}
-    </span>
+    <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${TONE_STYLES[tone]}`}>{label}</span>
   );
 }

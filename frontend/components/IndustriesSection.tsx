@@ -1,35 +1,27 @@
 import Image from 'next/image';
 import { INDUSTRIES } from '@/lib/staticData';
+import SectionHeading from '@/components/ui/SectionHeading';
+import Button from '@/components/ui/Button';
+import Card from '@/components/ui/Card';
 
 export default function IndustriesSection() {
   return (
-    <section className="bg-gray-50 py-14">
+    <section className="bg-brand-mist py-14">
       <div className="container-x grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,340px)_1fr]">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wide text-brand-blue">
-            Industry Applications
-          </span>
-          <h2 className="mt-2 text-3xl font-extrabold leading-tight text-gray-900">
-            Built for India&apos;s Industrial Workforce
-          </h2>
-          <p className="mt-4 text-sm text-gray-600">
+          <SectionHeading eyebrow="Industry Applications" title="Built for India's Industrial Workforce" />
+          <p className="mt-4 text-sm text-brand-slate">
             Our marking solutions are trusted by thousands of industries across India for their
             daily marking, identification and traceability needs.
           </p>
-          <a
-            href="/industries"
-            className="mt-6 inline-block rounded border border-brand-blue px-5 py-2.5 text-xs font-bold uppercase tracking-wide text-brand-blue shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-blue hover:text-white hover:shadow-md hover:shadow-brand-blue/30"
-          >
+          <Button href="/industries" variant="ghost" size="sm" className="mt-6">
             Explore Industries →
-          </a>
+          </Button>
         </div>
 
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           {INDUSTRIES.map((industry) => (
-            <div
-              key={industry.name}
-              className="group overflow-hidden rounded-xl bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-            >
+            <Card key={industry.name} accent className="group overflow-hidden p-0 hover:shadow-md">
               <div className="relative h-24 w-full overflow-hidden bg-gradient-to-br from-brand-charcoal to-brand-black">
                 <Image
                   src={industry.image}
@@ -39,10 +31,8 @@ export default function IndustriesSection() {
                   className="object-cover transition-transform duration-500 group-hover:scale-110"
                 />
               </div>
-              <p className="p-3 text-center text-xs font-semibold text-gray-800">
-                {industry.name}
-              </p>
-            </div>
+              <p className="p-3 text-center text-xs font-semibold text-brand-charcoal">{industry.name}</p>
+            </Card>
           ))}
         </div>
       </div>

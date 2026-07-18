@@ -16,18 +16,7 @@ export default async function TrendingSection() {
   return (
     <section className="bg-white py-14">
       <div className="container-x">
-        <div className="mb-6 flex flex-wrap items-center gap-3 text-sm">
-          <span className="rounded bg-brand-red px-2.5 py-1 text-xs font-bold uppercase text-white">
-            Trending Now
-          </span>
-          <span className="font-semibold text-gray-800">Popular Products:</span>
-          <span className="text-gray-500">
-            5 mm Cast Letters | 6 mm Holder Sets | Detachable Jig | Powerful Detachable Jig | Magnetic
-            Marking Tool
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {products.slice(0, 6).map((product) => (
             <ProductCard key={product._id} product={product} />
           ))}

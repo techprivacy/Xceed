@@ -1,5 +1,48 @@
 import { Product } from '@/types';
 
+export interface ProductCategoryLink {
+  urlSlug: string;
+  apiSlug: string;
+  title: string;
+  description: string;
+}
+
+// urlSlug is what the nav/footer link to; apiSlug is the actual Category
+// slug seeded in the backend (backend/seed/seed.js) — they differ for
+// magnetic tools (plural URL, singular seeded slug).
+export const PRODUCT_CATEGORIES: ProductCategoryLink[] = [
+  {
+    urlSlug: 'cast-letters',
+    apiSlug: 'cast-letters',
+    title: 'Cast Letters',
+    description: 'Precision cast steel letters for permanent, high-visibility marking.',
+  },
+  {
+    urlSlug: 'cast-numbers',
+    apiSlug: 'cast-numbers',
+    title: 'Cast Numbers',
+    description: 'Precision cast steel numbers built to the same Japanese quality standard.',
+  },
+  {
+    urlSlug: 'holders',
+    apiSlug: 'holders',
+    title: 'Holders',
+    description: 'Standard, adhesive and screw-type holders for secure, repeatable marking.',
+  },
+  {
+    urlSlug: 'magnetic-tools',
+    apiSlug: 'magnetic-tool',
+    title: 'Magnetic Tools',
+    description: 'Strong magnetic-grip tools for fast, accurate marking on steel surfaces.',
+  },
+  {
+    urlSlug: 'custom-marking',
+    apiSlug: 'custom-marking',
+    title: 'Custom Marking',
+    description: 'Bespoke marking solutions built to your specification.',
+  },
+];
+
 export const FALLBACK_TRENDING: Partial<Product>[] = [
   {
     _id: 'standard-holders',
@@ -55,19 +98,6 @@ export const FALLBACK_TRENDING: Partial<Product>[] = [
     priceUnit: 'per_piece',
     images: ['https://images.unsplash.com/photo-1611288870280-4a322b8ec7ec?w=400&h=300&fit=crop'],
   },
-];
-
-export const PRICING_ROWS = [
-  { label: '5 mm Letter', price: 95 },
-  { label: '6 mm Letter', price: 100 },
-  { label: '7 mm Letter', price: 105 },
-  { label: '8 mm Letter', price: 115 },
-];
-
-export const ACCESSORY_ROWS = [
-  { label: 'Detachable Jig', price: 7000 },
-  { label: 'Powerful Detachable Jig', price: 8000 },
-  { label: 'Magnetic Tool', price: 2500 },
 ];
 
 export const INDUSTRIES = [

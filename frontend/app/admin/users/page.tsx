@@ -29,7 +29,7 @@ export default function UsersPage() {
         rows={users}
         emptyMessage={loading ? 'Loading...' : 'No users found.'}
         columns={[
-          { header: 'Username', accessor: (u) => <span className="font-semibold text-gray-900">{u.username}</span> },
+          { header: 'Username', accessor: (u) => <span className="font-semibold text-brand-black">{u.username}</span> },
           { header: 'Email', accessor: (u) => u.email || '—' },
           {
             header: 'Role',
@@ -37,7 +37,7 @@ export default function UsersPage() {
           },
         ]}
       />
-      <p className="mt-3 flex items-center gap-1.5 text-xs text-gray-400">
+      <p className="mt-3 flex items-center gap-1.5 text-xs text-brand-slate/70">
         <ShieldCheck size={13} /> This list is real data from the backend. Role-based permission editing (Sales
         Manager, Inventory Manager, etc.) isn't wired up yet.
       </p>

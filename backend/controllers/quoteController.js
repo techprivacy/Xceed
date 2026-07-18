@@ -5,7 +5,21 @@ const { getTransporter, isConfigured } = require('../config/mailer');
 // @route POST /api/quotes  (public - from "Submit Request" form)
 exports.createQuoteRequest = async (req, res) => {
   try {
-    const { companyName, mobileNumber, productRequirement, quantity, city } = req.body;
+    const {
+      companyName,
+      mobileNumber,
+      whatsappNumber,
+      productRequirement,
+      quantity,
+      city,
+      state,
+      officeAddress,
+      industry,
+      specialRequirement,
+      contactPerson,
+      email,
+      source,
+    } = req.body;
 
     if (!companyName || !mobileNumber || !productRequirement) {
       return res.status(400).json({
@@ -17,9 +31,17 @@ exports.createQuoteRequest = async (req, res) => {
     const quote = await QuoteRequest.create({
       companyName,
       mobileNumber,
+      whatsappNumber,
       productRequirement,
       quantity,
       city,
+      state,
+      officeAddress,
+      industry,
+      specialRequirement,
+      contactPerson,
+      email,
+      source: source || 'website',
     });
 
     res.status(201).json({ success: true, message: 'Request submitted successfully', data: quote });
@@ -31,10 +53,12 @@ exports.createQuoteRequest = async (req, res) => {
 // @route GET /api/quotes (admin)
 exports.getQuoteRequests = async (req, res) => {
   try {
-    const { status, industry, salesExecutive, search, page = 1, limit = 20 } = req.query;
+    const { status, industry, productRequirement, source, salesExecutive, search, page = 1, limit = 20 } = req.query;
     const filter = {};
     if (status) filter.status = status;
     if (industry) filter.industry = industry;
+    if (productRequirement) filter.productRequirement = productRequirement;
+    if (source) filter.source = source;
     if (salesExecutive) filter.salesExecutive = salesExecutive;
     if (search) {
       filter.$or = [

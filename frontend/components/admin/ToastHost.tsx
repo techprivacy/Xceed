@@ -26,10 +26,10 @@ export default function ToastHost() {
       {toasts.map((t) => (
         <div
           key={t.id}
-          className={`pointer-events-auto flex animate-fadeIn items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium shadow-lg ring-1 ${
+          className={`pointer-events-auto flex animate-fadeIn items-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium shadow-lg ring-1 ${
             t.type === 'success'
-              ? 'bg-white text-gray-800 ring-green-200'
-              : 'bg-white text-gray-800 ring-red-200'
+              ? 'bg-white text-brand-charcoal ring-green-200'
+              : 'bg-white text-brand-charcoal ring-red-200'
           }`}
         >
           {t.type === 'success' ? (

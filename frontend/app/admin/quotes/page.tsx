@@ -4,6 +4,9 @@ import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { Search, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { getAdminToken, getQuoteRequests, deleteQuoteRequest } from '@/lib/api';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
+import DataTable from '@/components/admin/DataTable';
+import StatusBadge from '@/components/admin/StatusBadge';
 import { QuoteRequest, QuoteStatus } from '@/types';
 
 const STATUS_OPTIONS: { value: QuoteStatus | ''; label: string }[] = [
@@ -16,13 +19,13 @@ const STATUS_OPTIONS: { value: QuoteStatus | ''; label: string }[] = [
   { value: 'lost', label: 'Lost' },
 ];
 
-const STATUS_STYLES: Record<QuoteStatus, string> = {
-  new: 'bg-gray-100 text-gray-700',
-  follow_up: 'bg-amber-100 text-amber-700',
-  negotiation: 'bg-purple-100 text-purple-700',
-  quotation_sent: 'bg-blue-100 text-brand-blue',
-  won: 'bg-green-100 text-green-700',
-  lost: 'bg-red-100 text-red-700',
+const STATUS_TONE: Record<QuoteStatus, 'gray' | 'amber' | 'purple' | 'blue' | 'green' | 'red'> = {
+  new: 'gray',
+  follow_up: 'amber',
+  negotiation: 'purple',
+  quotation_sent: 'blue',
+  won: 'green',
+  lost: 'red',
 };
 
 const STATUS_LABELS: Record<QuoteStatus, string> = {
@@ -79,18 +82,14 @@ export default function QuotesListPage() {
 
   return (
     <main className="p-6">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-extrabold text-gray-900">Bulk Quote CRM</h1>
-          <p className="text-sm text-gray-500">
-            {total} lead{total === 1 ? '' : 's'} captured from bulk quote requests
-          </p>
-        </div>
-      </div>
+      <AdminPageHeader
+        title="Bulk Quote CRM"
+        subtitle={`${total} lead${total === 1 ? '' : 's'} captured from bulk quote requests`}
+      />
 
       <div className="mb-4 flex flex-wrap items-center gap-3">
-        <div className="flex min-w-[240px] flex-1 items-center rounded-lg border border-brand-border bg-white px-3">
-          <Search size={16} className="text-gray-400" />
+        <div className="flex min-w-[240px] flex-1 items-center rounded-full border border-brand-border bg-white px-4">
+          <Search size={16} className="text-brand-slate" />
           <input
             value={search}
             onChange={(e) => {
@@ -107,7 +106,7 @@ export default function QuotesListPage() {
             setPage(1);
             setStatus(e.target.value as QuoteStatus | '');
           }}
-          className="rounded-lg border border-brand-border bg-white px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brand-blue"
+          className="rounded-full border border-brand-border bg-white px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brand-blue"
         >
           {STATUS_OPTIONS.map((opt) => (
             <option key={opt.value} value={opt.value}>
@@ -117,109 +116,91 @@ export default function QuotesListPage() {
         </select>
       </div>
 
-      <div className="overflow-x-auto rounded-xl border border-brand-border bg-white shadow-sm">
-        <table className="w-full min-w-[900px] text-sm">
-          <thead className="bg-gray-50 text-left text-xs font-bold uppercase tracking-wide text-gray-500">
-            <tr>
-              <th className="px-4 py-3">Company</th>
-              <th className="px-4 py-3">Contact</th>
-              <th className="px-4 py-3">Industry</th>
-              <th className="px-4 py-3">Requirement</th>
-              <th className="px-4 py-3">Sales Exec</th>
-              <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Received</th>
-              <th className="px-4 py-3" />
-            </tr>
-          </thead>
-          <tbody>
-            {loading && (
-              <tr>
-                <td colSpan={8} className="px-4 py-8 text-center text-gray-400">
-                  Loading...
-                </td>
-              </tr>
-            )}
-            {!loading && error && (
-              <tr>
-                <td colSpan={8} className="px-4 py-8 text-center text-red-600">
-                  {error}
-                </td>
-              </tr>
-            )}
-            {!loading && !error && quotes.length === 0 && (
-              <tr>
-                <td colSpan={8} className="px-4 py-8 text-center text-gray-400">
-                  No quote requests found.
-                </td>
-              </tr>
-            )}
-            {!loading &&
-              !error &&
-              quotes.map((q) => (
-                <tr key={q._id} className="border-t border-brand-border hover:bg-gray-50">
-                  <td className="px-4 py-3">
-                    <Link
-                      href={`/admin/quotes/${q._id}`}
-                      className="font-semibold text-brand-blue hover:underline"
-                    >
-                      {q.companyName}
-                    </Link>
-                    <p className="text-xs text-gray-500">{q.city}</p>
-                  </td>
-                  <td className="px-4 py-3 text-gray-700">
-                    <p>{q.contactPerson || '—'}</p>
-                    <p className="text-xs text-gray-500">{q.mobileNumber}</p>
-                  </td>
-                  <td className="px-4 py-3 text-gray-700">{q.industry || '—'}</td>
-                  <td className="max-w-[220px] truncate px-4 py-3 text-gray-700">
-                    {q.productRequirement}
-                  </td>
-                  <td className="px-4 py-3 text-gray-700">
-                    {typeof q.salesExecutive === 'object' && q.salesExecutive
-                      ? q.salesExecutive.username
-                      : '—'}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span
-                      className={`rounded-full px-2.5 py-1 text-xs font-semibold ${STATUS_STYLES[q.status]}`}
-                    >
-                      {STATUS_LABELS[q.status]}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-xs text-gray-500">
-                    {new Date(q.createdAt).toLocaleDateString('en-IN')}
-                  </td>
-                  <td className="px-4 py-3 text-right">
-                    <button
-                      onClick={() => handleDelete(q._id)}
-                      aria-label="Delete"
-                      className="rounded p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-600"
-                    >
-                      <Trash2 size={15} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
+      {loading ? (
+        <div className="rounded-2xl border border-black/5 bg-white px-4 py-8 text-center text-sm text-brand-slate">
+          Loading...
+        </div>
+      ) : error ? (
+        <div className="rounded-2xl border border-black/5 bg-white px-4 py-8 text-center text-sm text-red-600">
+          {error}
+        </div>
+      ) : (
+        <DataTable
+          keyField={(q) => q._id}
+          rows={quotes}
+          emptyMessage="No quote requests found."
+          columns={[
+            {
+              header: 'Company',
+              accessor: (q) => (
+                <>
+                  <Link href={`/admin/quotes/${q._id}`} className="font-semibold text-brand-red hover:underline">
+                    {q.companyName}
+                  </Link>
+                  <p className="text-xs text-brand-slate">{q.city}</p>
+                </>
+              ),
+            },
+            {
+              header: 'Contact',
+              accessor: (q) => (
+                <>
+                  <p>{q.contactPerson || '—'}</p>
+                  <p className="text-xs text-brand-slate">{q.mobileNumber}</p>
+                </>
+              ),
+            },
+            { header: 'Industry', accessor: (q) => q.industry || '—' },
+            {
+              header: 'Requirement',
+              accessor: (q) => q.productRequirement,
+              className: 'max-w-[220px] truncate',
+            },
+            {
+              header: 'Sales Exec',
+              accessor: (q) => (typeof q.salesExecutive === 'object' && q.salesExecutive ? q.salesExecutive.username : '—'),
+            },
+            {
+              header: 'Status',
+              accessor: (q) => <StatusBadge label={STATUS_LABELS[q.status]} tone={STATUS_TONE[q.status]} />,
+            },
+            {
+              header: 'Received',
+              accessor: (q) => <span className="text-xs">{new Date(q.createdAt).toLocaleDateString('en-IN')}</span>,
+            },
+            {
+              header: '',
+              accessor: (q) => (
+                <button
+                  onClick={() => handleDelete(q._id)}
+                  aria-label="Delete"
+                  className="rounded-full p-1.5 text-brand-slate hover:bg-red-50 hover:text-red-600"
+                >
+                  <Trash2 size={15} />
+                </button>
+              ),
+              className: 'text-right',
+            },
+          ]}
+        />
+      )}
 
       {pages > 1 && (
         <div className="mt-4 flex items-center justify-center gap-3 text-sm">
           <button
             disabled={page <= 1}
             onClick={() => setPage((p) => Math.max(1, p - 1))}
-            className="flex items-center gap-1 rounded border border-brand-border px-3 py-1.5 disabled:opacity-40"
+            className="flex items-center gap-1 rounded-full border border-brand-border px-3 py-1.5 disabled:opacity-40"
           >
             <ChevronLeft size={14} /> Prev
           </button>
-          <span className="text-gray-500">
+          <span className="text-brand-slate">
             Page {page} of {pages}
           </span>
           <button
             disabled={page >= pages}
             onClick={() => setPage((p) => Math.min(pages, p + 1))}
-            className="flex items-center gap-1 rounded border border-brand-border px-3 py-1.5 disabled:opacity-40"
+            className="flex items-center gap-1 rounded-full border border-brand-border px-3 py-1.5 disabled:opacity-40"
           >
             Next <ChevronRight size={14} />
           </button>

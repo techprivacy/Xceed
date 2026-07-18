@@ -17,7 +17,7 @@ export const getAssetUrl = (path?: string) => {
   return `${ASSET_ORIGIN}${path}`;
 };
 
-async function request<T>(path: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
+export async function request<T>(path: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
   const res = await fetch(`${API_URL}${path}`, {
     headers: { 'Content-Type': 'application/json' },
     // Home page data can be revalidated periodically
@@ -37,7 +37,7 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<ApiR
 export const getAdminToken = () =>
   typeof window === 'undefined' ? null : localStorage.getItem('xceed_admin_token');
 
-async function adminRequest<T>(
+export async function adminRequest<T>(
   path: string,
   token: string,
   options: RequestInit = {}
@@ -63,7 +63,8 @@ async function adminRequest<T>(
 export const getTrendingProducts = () =>
   request<Product[]>('/products?trending=true&limit=6');
 
-export const getCategories = () => request<Category[]>('/categories', { cache: 'no-store' });
+export const getCategories = () =>
+  request<Category[]>('/categories', { cache: 'no-store', next: undefined });
 
 export interface CategoryInput {
   name: string;
@@ -102,7 +103,7 @@ export const getProducts = (params: ProductListParams = {}) => {
       return acc;
     }, {})
   ).toString();
-  return request<Product[]>(`/products${query ? `?${query}` : ''}`, { cache: 'no-store' });
+  return request<Product[]>(`/products${query ? `?${query}` : ''}`, { cache: 'no-store', next: undefined });
 };
 
 export const getProductBySlug = (slug: string) =>
@@ -183,6 +184,8 @@ export const getUsers = (token: string) => adminRequest<AdminUser[]>('/auth/user
 export interface QuoteListParams {
   status?: string;
   industry?: string;
+  productRequirement?: string;
+  source?: string;
   salesExecutive?: string;
   search?: string;
   page?: number;

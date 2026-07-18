@@ -1,54 +1,42 @@
 import Image from 'next/image';
-import { Search, ShoppingCart, User, MessageCircle } from 'lucide-react';
+import { Search, ShoppingCart, User } from 'lucide-react';
 
 export default function Header() {
   return (
-    <header className="border-b border-gray-100 bg-white/90 backdrop-blur-md supports-[backdrop-filter]:bg-white/80">
-      <div className="container-x flex flex-wrap items-center justify-between gap-4 py-4 sm:flex-nowrap sm:gap-6">
-        <a href="/" className="relative h-16 w-56 shrink-0 sm:h-20 sm:w-64">
-          <Image src="/logo.png" alt="XCEED India" fill className="object-contain" priority />
+    <header className="hidden bg-white/95 backdrop-blur-md supports-[backdrop-filter]:bg-white/90 lg:block">
+      <div className="container-x flex flex-wrap items-center justify-between gap-4 py-3.5 sm:flex-nowrap sm:gap-6">
+        <a href="/" className="relative h-12 w-44 shrink-0 sm:h-16 sm:w-60">
+          <Image src="/logo.png" alt="XCEED India" fill sizes="240px" className="object-contain" priority />
         </a>
 
         <div className="order-last flex w-full items-stretch sm:order-none sm:w-auto sm:max-w-xl sm:flex-1">
           <input
             type="text"
             placeholder="Search letters, holders, jigs and marking tools..."
-            className="w-full rounded-l border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brand-blue"
+            className="w-full rounded-l-full border border-brand-border bg-brand-mist/60 px-5 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red/20"
           />
           <button
             aria-label="Search"
-            className="flex items-center justify-center rounded-r bg-brand-blue px-4 text-white shadow-sm transition-all duration-300 hover:bg-brand-blueDarker hover:shadow-md hover:shadow-brand-blue/30"
+            className="flex items-center justify-center rounded-r-full bg-brand-red px-6 text-white transition-colors duration-200 hover:bg-brand-redDark"
           >
-            <Search size={18} />
+            <Search size={20} />
           </button>
         </div>
 
-        <div className="flex shrink-0 items-center gap-3 text-sm sm:gap-6">
-          <a href="/cart" className="relative flex flex-col items-center gap-0.5 text-gray-700 hover:text-brand-blueDark">
-            <span className="absolute -right-2 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-brand-blue text-[10px] text-white">
+        <div className="flex shrink-0 items-center gap-4 text-sm sm:gap-7">
+          <a
+            href="/cart"
+            className="relative flex flex-col items-center gap-0.5 text-brand-charcoal hover:text-brand-red"
+          >
+            <span className="absolute -right-2 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-brand-red text-[10px] text-white">
               0
             </span>
-            <ShoppingCart size={20} />
-            <span className="hidden text-xs sm:inline">Cart</span>
+            <ShoppingCart size={23} />
+            <span className="hidden text-sm sm:inline">Cart</span>
           </a>
-          <a href="/account" className="flex flex-col items-center gap-0.5 text-gray-700 hover:text-brand-blueDark">
-            <User size={20} />
-            <span className="hidden text-xs sm:inline">Account</span>
-          </a>
-          <a
-            href="https://wa.me/919909611333"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-gray-700 hover:text-green-600"
-          >
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-green-500 text-white">
-              <MessageCircle size={18} />
-            </span>
-            <span className="hidden text-xs leading-tight lg:block">
-              WhatsApp
-              <br />
-              Enquiry
-            </span>
+          <a href="/admin/login" className="flex flex-col items-center gap-0.5 text-brand-charcoal hover:text-brand-red">
+            <User size={23} />
+            <span className="hidden text-sm sm:inline">Login</span>
           </a>
         </div>
       </div>

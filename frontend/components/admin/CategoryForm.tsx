@@ -5,7 +5,12 @@ import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { getAdminToken, createCategory, updateCategory, CategoryInput } from '@/lib/api';
 import { toast } from '@/lib/toast';
+import Button from '@/components/ui/Button';
 import { Category } from '@/types';
+
+const INPUT_CLASSES =
+  'w-full rounded-xl border border-brand-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue/20';
+const LABEL_CLASSES = 'mb-1 block text-xs font-semibold text-brand-charcoal';
 
 const slugify = (value: string) =>
   value
@@ -72,23 +77,16 @@ export default function CategoryForm({ category }: CategoryFormProps) {
   return (
     <form onSubmit={handleSubmit} className="max-w-xl space-y-5">
       {error && (
-        <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-600">
-          {error}
-        </p>
+        <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-600">{error}</p>
       )}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1 block text-xs font-semibold text-gray-600">Name</label>
-          <input
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full rounded-lg border border-brand-border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-brand-blue"
-          />
+          <label className={LABEL_CLASSES}>Name</label>
+          <input required value={name} onChange={(e) => setName(e.target.value)} className={INPUT_CLASSES} />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-semibold text-gray-600">Slug</label>
+          <label className={LABEL_CLASSES}>Slug</label>
           <input
             required
             value={slug}
@@ -96,58 +94,45 @@ export default function CategoryForm({ category }: CategoryFormProps) {
               setSlugTouched(true);
               setSlug(slugify(e.target.value));
             }}
-            className="w-full rounded-lg border border-brand-border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-brand-blue"
+            className={INPUT_CLASSES}
           />
         </div>
       </div>
 
       <div>
-        <label className="mb-1 block text-xs font-semibold text-gray-600">Description</label>
+        <label className={LABEL_CLASSES}>Description</label>
         <textarea
           rows={3}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full rounded-lg border border-brand-border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-brand-blue"
+          className={INPUT_CLASSES}
         />
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1 block text-xs font-semibold text-gray-600">Image URL</label>
+          <label className={LABEL_CLASSES}>Image URL</label>
           <input
             value={image}
             onChange={(e) => setImage(e.target.value)}
             placeholder="https://..."
-            className="w-full rounded-lg border border-brand-border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-brand-blue"
+            className={INPUT_CLASSES}
           />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-semibold text-gray-600">Display Order</label>
-          <input
-            type="number"
-            value={order}
-            onChange={(e) => setOrder(e.target.value)}
-            className="w-full rounded-lg border border-brand-border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-brand-blue"
-          />
+          <label className={LABEL_CLASSES}>Display Order</label>
+          <input type="number" value={order} onChange={(e) => setOrder(e.target.value)} className={INPUT_CLASSES} />
         </div>
       </div>
 
       <div className="flex items-center gap-3">
-        <button
-          type="submit"
-          disabled={saving}
-          className="flex items-center gap-2 rounded bg-gradient-to-r from-brand-blueDark to-brand-blue px-5 py-2.5 text-xs font-bold uppercase tracking-wide text-white shadow-sm disabled:opacity-50"
-        >
+        <Button type="submit" disabled={saving} variant="primary" size="sm">
           {saving && <Loader2 size={14} className="animate-spin" />}
           {isEdit ? 'Save Changes' : 'Create Category'}
-        </button>
-        <button
-          type="button"
-          onClick={() => router.push('/admin/categories')}
-          className="rounded border border-brand-border px-5 py-2.5 text-xs font-bold uppercase tracking-wide text-gray-600"
-        >
+        </Button>
+        <Button type="button" onClick={() => router.push('/admin/categories')} variant="ghost" size="sm">
           Cancel
-        </button>
+        </Button>
       </div>
     </form>
   );

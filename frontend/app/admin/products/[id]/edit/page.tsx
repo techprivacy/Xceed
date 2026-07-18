@@ -35,7 +35,7 @@ export default function EditProductPage() {
   return (
     <main className="p-6">
       <AdminPageHeader title="Edit Product" subtitle={product?.name} />
-      {loading && <p className="text-sm text-gray-400">Loading...</p>}
+      {loading && <p className="text-sm text-brand-slate/70">Loading...</p>}
       {!loading && error && <p className="text-sm text-red-600">{error}</p>}
       {!loading && product && <ProductForm product={product} />}
     </main>

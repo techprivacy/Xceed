@@ -6,6 +6,7 @@ import { Plus, FolderTree, Pencil, Trash2, Search } from 'lucide-react';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import StatCard from '@/components/admin/StatCard';
 import DataTable from '@/components/admin/DataTable';
+import Button from '@/components/ui/Button';
 import { getAdminToken, getCategories, deleteCategory } from '@/lib/api';
 import { toast } from '@/lib/toast';
 import { Category } from '@/types';
@@ -58,12 +59,9 @@ export default function CategoriesPage() {
         title="Categories"
         subtitle={`${categories.length} product categories`}
         action={
-          <Link
-            href="/admin/categories/new"
-            className="flex items-center gap-1.5 rounded bg-gradient-to-r from-brand-blueDark to-brand-blue px-4 py-2 text-xs font-bold uppercase tracking-wide text-white shadow-sm transition-transform hover:-translate-y-0.5 hover:shadow-md"
-          >
+          <Button href="/admin/categories/new" size="sm">
             <Plus size={14} /> Add Category
-          </Link>
+          </Button>
         }
       />
 
@@ -71,8 +69,8 @@ export default function CategoriesPage() {
         <StatCard icon={FolderTree} label="Total Categories" value={categories.length} />
       </div>
 
-      <div className="mb-4 flex max-w-sm items-center rounded-lg border border-brand-border bg-white px-3">
-        <Search size={16} className="text-gray-400" />
+      <div className="mb-4 flex max-w-sm items-center rounded-full border border-brand-border bg-white px-4">
+        <Search size={16} className="text-brand-slate" />
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -86,10 +84,7 @@ export default function CategoriesPage() {
       {loading ? (
         <div className="space-y-2">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-12 animate-pulse rounded-lg border border-brand-border bg-gray-50"
-            />
+            <div key={i} className="h-12 animate-pulse border border-brand-border bg-brand-mist" />
           ))}
         </div>
       ) : (
@@ -98,7 +93,7 @@ export default function CategoriesPage() {
           rows={filtered}
           emptyMessage={search ? 'No categories match your search.' : 'No categories found.'}
           columns={[
-            { header: 'Category', accessor: (c) => <span className="font-semibold text-gray-900">{c.name}</span> },
+            { header: 'Category', accessor: (c) => <span className="font-semibold text-brand-black">{c.name}</span> },
             { header: 'Slug', accessor: (c) => c.slug },
             { header: 'Order', accessor: (c) => c.order ?? 0 },
             {
@@ -108,14 +103,14 @@ export default function CategoriesPage() {
                   <Link
                     href={`/admin/categories/${c._id}/edit`}
                     aria-label="Edit"
-                    className="rounded p-1.5 text-gray-400 hover:bg-blue-50 hover:text-brand-blue"
+                    className="rounded-full p-1.5 text-brand-slate hover:bg-blue-50 hover:text-brand-blue"
                   >
                     <Pencil size={15} />
                   </Link>
                   <button
                     onClick={() => handleDelete(c._id, c.name)}
                     aria-label="Delete"
-                    className="rounded p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-600"
+                    className="rounded-full p-1.5 text-brand-slate hover:bg-red-50 hover:text-red-600"
                   >
                     <Trash2 size={15} />
                   </button>

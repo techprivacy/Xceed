@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import { CheckCircle2, Circle, PackageSearch, Truck, Home, ClipboardList } from 'lucide-react';
-import TopBar from '@/components/TopBar';
 import SiteHeader from '@/components/SiteHeader';
 import Footer from '@/components/Footer';
+import Card from '@/components/ui/Card';
+import Button from '@/components/ui/Button';
 
 const STEPS = [
   { key: 'placed', label: 'Order Placed', icon: ClipboardList },
@@ -48,13 +49,15 @@ export default function TrackOrderPage() {
 
   return (
     <main>
-      <TopBar />
       <SiteHeader />
 
       <section className="bg-brand-navy py-14">
         <div className="container-x text-center">
-          <h1 className="text-3xl font-extrabold text-white md:text-4xl">Track Your Order</h1>
-          <p className="mx-auto mt-3 max-w-xl text-sm text-white/70">
+          <span className="mb-3 inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white">
+            Order Status
+          </span>
+          <h1 className="text-3xl font-bold tracking-tight text-white md:text-4xl">Track Your Order</h1>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-white/70">
             Enter your order number and the email address used at checkout to see the latest
             status of your delivery.
           </p>
@@ -63,65 +66,54 @@ export default function TrackOrderPage() {
 
       <section className="bg-white py-14">
         <div className="container-x max-w-xl">
-          <form
-            onSubmit={handleSubmit}
-            className="grid grid-cols-1 gap-4 rounded-xl border border-brand-border p-6 shadow-sm sm:grid-cols-2"
-          >
-            <div className="sm:col-span-1">
-              <label className="mb-1 block text-xs font-semibold text-gray-700">
-                Order Number *
-              </label>
-              <input
-                value={orderNumber}
-                onChange={(e) => setOrderNumber(e.target.value)}
-                placeholder="e.g. XI-10293"
-                className="w-full rounded border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brand-blue"
-              />
-            </div>
-            <div className="sm:col-span-1">
-              <label className="mb-1 block text-xs font-semibold text-gray-700">
-                Email Address *
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@company.com"
-                className="w-full rounded border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brand-blue"
-              />
-            </div>
+          <Card className="p-6">
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="sm:col-span-1">
+                <label className="mb-1 block text-xs font-semibold text-brand-charcoal">Order Number *</label>
+                <input
+                  value={orderNumber}
+                  onChange={(e) => setOrderNumber(e.target.value)}
+                  placeholder="e.g. XI-10293"
+                  className="w-full rounded-xl border border-brand-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red/20"
+                />
+              </div>
+              <div className="sm:col-span-1">
+                <label className="mb-1 block text-xs font-semibold text-brand-charcoal">Email Address *</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@company.com"
+                  className="w-full rounded-xl border border-brand-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red/20"
+                />
+              </div>
 
-            <button
-              type="submit"
-              disabled={status === 'loading'}
-              className="rounded bg-gradient-to-r from-brand-blueDark to-brand-blue px-6 py-3 text-sm font-bold uppercase tracking-wide text-white shadow-lg shadow-brand-blue/20 transition-all duration-300 hover:-translate-y-0.5 hover:from-brand-blueDarker hover:to-brand-blueDarker hover:shadow-xl hover:shadow-brand-blue/40 disabled:opacity-60 disabled:hover:translate-y-0 sm:col-span-2"
-            >
-              {status === 'loading' ? 'Searching...' : 'Track Order'}
-            </button>
+              <Button type="submit" disabled={status === 'loading'} variant="primary" className="sm:col-span-2">
+                {status === 'loading' ? 'Searching...' : 'Track Order'}
+              </Button>
 
-            {status === 'error' && (
-              <p className="text-sm font-medium text-red-600 sm:col-span-2">
-                Please enter both your order number and email address.
-              </p>
-            )}
-          </form>
+              {status === 'error' && (
+                <p className="text-sm font-medium text-red-600 sm:col-span-2">
+                  Please enter both your order number and email address.
+                </p>
+              )}
+            </form>
+          </Card>
 
           {status === 'found' && result && (
-            <div className="mt-8 animate-fadeIn rounded-xl border border-brand-border p-6 shadow-md">
+            <Card className="mt-8 animate-fadeIn p-6">
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-brand-border pb-4">
                 <div>
-                  <p className="text-xs uppercase tracking-wide text-gray-500">Order Number</p>
-                  <p className="text-sm font-bold text-brand-blue">{result.orderNumber}</p>
+                  <p className="text-xs uppercase tracking-wide text-brand-slate">Order Number</p>
+                  <p className="text-sm font-bold text-brand-red">{result.orderNumber}</p>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-wide text-gray-500">Placed On</p>
-                  <p className="text-sm font-semibold text-gray-800">{result.placedOn}</p>
+                  <p className="text-xs uppercase tracking-wide text-brand-slate">Placed On</p>
+                  <p className="text-sm font-semibold text-brand-charcoal">{result.placedOn}</p>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-wide text-gray-500">
-                    Estimated Delivery
-                  </p>
-                  <p className="text-sm font-semibold text-gray-800">{result.estimatedDelivery}</p>
+                  <p className="text-xs uppercase tracking-wide text-brand-slate">Estimated Delivery</p>
+                  <p className="text-sm font-semibold text-brand-charcoal">{result.estimatedDelivery}</p>
                 </div>
               </div>
 
@@ -135,35 +127,29 @@ export default function TrackOrderPage() {
                       <div className="flex w-full items-center">
                         <div
                           className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${
-                            done ? 'bg-brand-blue text-white' : 'bg-gray-100 text-gray-400'
+                            done ? 'bg-brand-blue text-white' : 'bg-brand-mist text-brand-slate'
                           }`}
                         >
                           <Icon size={18} />
                         </div>
                         {!isLast && (
                           <div
-                            className={`h-0.5 flex-1 ${
-                              i < result.currentStep ? 'bg-brand-blue' : 'bg-gray-200'
-                            }`}
+                            className={`h-0.5 flex-1 ${i < result.currentStep ? 'bg-brand-blue' : 'bg-brand-border'}`}
                           />
                         )}
                       </div>
-                      <p
-                        className={`mt-2 text-xs font-semibold ${
-                          done ? 'text-brand-blue' : 'text-gray-400'
-                        }`}
-                      >
+                      <p className={`mt-2 text-xs font-semibold ${done ? 'text-brand-blue' : 'text-brand-slate'}`}>
                         {step.label}
                       </p>
                       {done && i === result.currentStep && (
                         <CheckCircle2 size={14} className="mt-1 text-brand-blue" />
                       )}
-                      {!done && <Circle size={14} className="mt-1 text-gray-300" />}
+                      {!done && <Circle size={14} className="mt-1 text-brand-border" />}
                     </div>
                   );
                 })}
               </div>
-            </div>
+            </Card>
           )}
         </div>
       </section>

@@ -1,7 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { login } from '@/lib/api';
+import Button from '@/components/ui/Button';
+import SiteHeader from '@/components/SiteHeader';
+import Footer from '@/components/Footer';
 
 export default function AdminLoginPage() {
   const [username, setUsername] = useState('');
@@ -25,43 +29,43 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-sm rounded-lg border border-gray-100 bg-white p-8 shadow-sm"
-      >
-        <h1 className="mb-1 text-xl font-extrabold text-gray-900">XCEED India Admin</h1>
-        <p className="mb-6 text-sm text-gray-500">Sign in to manage products &amp; quote requests.</p>
-
-        <label className="mb-1 block text-xs font-semibold text-gray-700">Username</label>
-        <input
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-          placeholder="ak"
-          className="mb-4 w-full rounded border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brand-blue"
-        />
-
-        <label className="mb-1 block text-xs font-semibold text-gray-700">Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          placeholder="••••••••"
-          className="mb-6 w-full rounded border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brand-blue"
-        />
-
-        {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded bg-gradient-to-r from-brand-blueDark to-brand-blue py-2.5 text-sm font-bold uppercase tracking-wide text-white transition-all duration-300 hover:from-brand-blueDarker hover:to-brand-blueDarker disabled:opacity-60"
+    <main>
+      <SiteHeader />
+      <div className="flex min-h-[70vh] items-center justify-center bg-brand-navy px-4 py-16">
+        <form
+          onSubmit={handleSubmit}
+          className="w-full max-w-sm rounded-3xl bg-white p-8 shadow-2xl"
         >
-          {loading ? 'Signing in...' : 'Sign In'}
-        </button>
-      </form>
+          <Image src="/logo.png" alt="XCEED India" width={280} height={126} priority className="mb-3 h-10 w-auto object-contain" />
+          <p className="mb-6 text-sm text-brand-slate">Sign in to manage products &amp; quote requests.</p>
+
+          <label className="mb-1 block text-xs font-semibold text-brand-charcoal">Username</label>
+          <input
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            placeholder="admin"
+            className="mb-4 w-full rounded-xl border border-brand-border px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brand-blue"
+          />
+
+          <label className="mb-1 block text-xs font-semibold text-brand-charcoal">Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            placeholder="••••••••"
+            className="mb-6 w-full rounded-xl border border-brand-border px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brand-blue"
+          />
+
+          {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
+
+          <Button type="submit" disabled={loading} variant="primary" className="w-full">
+            {loading ? 'Signing in...' : 'Sign In'}
+          </Button>
+        </form>
+      </div>
+      <Footer />
     </main>
   );
 }

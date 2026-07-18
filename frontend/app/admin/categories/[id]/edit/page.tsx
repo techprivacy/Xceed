@@ -38,7 +38,7 @@ export default function EditCategoryPage() {
   return (
     <main className="p-6">
       <AdminPageHeader title="Edit Category" subtitle={category?.name} />
-      {loading && <p className="text-sm text-gray-400">Loading...</p>}
+      {loading && <p className="text-sm text-brand-slate/70">Loading...</p>}
       {!loading && error && <p className="text-sm text-red-600">{error}</p>}
       {!loading && category && <CategoryForm category={category} />}
     </main>

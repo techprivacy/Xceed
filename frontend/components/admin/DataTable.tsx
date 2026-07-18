@@ -18,9 +18,9 @@ export default function DataTable<T>({
   emptyMessage = 'No records found.',
 }: DataTableProps<T>) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-brand-border bg-white shadow-sm">
+    <div className="overflow-x-auto rounded-2xl border border-black/5 bg-white shadow-sm">
       <table className="w-full min-w-[640px] text-sm">
-        <thead className="bg-gray-50 text-left text-xs font-bold uppercase tracking-wide text-gray-500">
+        <thead className="bg-brand-mist text-left text-xs font-semibold uppercase tracking-wide text-brand-slate">
           <tr>
             {columns.map((col) => (
               <th key={col.header} className="px-4 py-3">
@@ -32,15 +32,15 @@ export default function DataTable<T>({
         <tbody>
           {rows.length === 0 ? (
             <tr>
-              <td colSpan={columns.length} className="px-4 py-8 text-center text-gray-400">
+              <td colSpan={columns.length} className="px-4 py-8 text-center text-brand-slate/70">
                 {emptyMessage}
               </td>
             </tr>
           ) : (
             rows.map((row) => (
-              <tr key={keyField(row)} className="border-t border-brand-border hover:bg-gray-50">
+              <tr key={keyField(row)} className="border-t border-black/5 hover:bg-brand-mist/60">
                 {columns.map((col) => (
-                  <td key={col.header} className={`px-4 py-3 text-gray-700 ${col.className ?? ''}`}>
+                  <td key={col.header} className={`px-4 py-3 text-brand-charcoal ${col.className ?? ''}`}>
                     {col.accessor(row)}
                   </td>
                 ))}
