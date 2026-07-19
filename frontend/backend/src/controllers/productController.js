@@ -103,7 +103,7 @@ exports.deleteProduct = async (req, res) => {
     if (!product) return res.status(404).json({ success: false, message: 'Product not found' });
 
     (product.images || []).forEach((imageUrl) => {
-      const filePath = path.join(__dirname, '..', imageUrl.replace(/^\//, ''));
+      const filePath = path.join(__dirname, '..', '..', imageUrl.replace(/^\//, ''));
       fs.unlink(filePath, () => {});
     });
 

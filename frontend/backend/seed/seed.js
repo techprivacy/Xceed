@@ -1,10 +1,10 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-const connectDB = require('../config/db');
-const User = require('../models/User');
-const Category = require('../models/Category');
-const Product = require('../models/Product');
-const QuoteRequest = require('../models/QuoteRequest');
+const connectDB = require('../src/config/db');
+const User = require('../src/models/User');
+const Category = require('../src/models/Category');
+const Product = require('../src/models/Product');
+const QuoteRequest = require('../src/models/QuoteRequest');
 
 const run = async () => {
   await connectDB();

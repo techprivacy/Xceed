@@ -9,8 +9,8 @@ const {
   deleteProduct,
   uploadProductImages,
 } = require('../controllers/productController');
-const { protect, adminOnly } = require('../middleware/auth');
-const uploadImages = require('../middleware/uploadImages');
+const { protect, adminOnly } = require('../middlewares/auth');
+const uploadImages = require('../middlewares/uploadImages');
 const { generateProductDescription } = require('../controllers/aiController');
 
 router.get('/', getProducts);

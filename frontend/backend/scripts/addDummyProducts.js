@@ -1,7 +1,7 @@
 require('dotenv').config();
-const connectDB = require('../config/db');
-const Category = require('../models/Category');
-const Product = require('../models/Product');
+const connectDB = require('../src/config/db');
+const Category = require('../src/models/Category');
+const Product = require('../src/models/Product');
 
 const IMAGES = {
   'cast-letters': 'https://images.unsplash.com/photo-1697281679290-ad7be1b10682?w=400&h=300&fit=crop',

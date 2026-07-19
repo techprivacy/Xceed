@@ -7,8 +7,8 @@ Recreated from the provided homepage design.
 
 ```
 xceed-india/
-├── backend/     Express API + MongoDB models
-└── frontend/    Next.js website
+└── frontend/           Next.js website
+    └── backend/        Express API + MongoDB models (src/config, controllers, middlewares, models, routes, services, utils)
 ```
 
 ## 1. Database — MongoDB
@@ -34,7 +34,7 @@ If you're using MongoDB Atlas, create a Database User with the same username/pas
 ## 2. Backend setup
 
 ```bash
-cd backend
+cd frontend/backend
 cp .env.example .env     # edit MONGO_URI if needed
 npm install
 npm run seed              # creates admin user (ak/ak@123) + sample categories & products

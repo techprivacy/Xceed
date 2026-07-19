@@ -11,8 +11,8 @@ const {
   downloadQuotePdf,
   emailQuotePdf,
 } = require('../controllers/quoteController');
-const { protect, adminOnly } = require('../middleware/auth');
-const upload = require('../middleware/upload');
+const { protect, adminOnly } = require('../middlewares/auth');
+const upload = require('../middlewares/upload');
 
 router.post('/', createQuoteRequest);
 router.get('/', protect, adminOnly, getQuoteRequests);
