@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ShieldCheck } from 'lucide-react';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import DataTable from '@/components/admin/DataTable';
-import StatusBadge from '@/components/admin/StatusBadge';
+import Badge from '@/components/ui/Badge';
 import { getAdminToken, getUsers } from '@/lib/api';
 import { AdminUser } from '@/types';
 
@@ -33,7 +33,7 @@ export default function UsersPage() {
           { header: 'Email', accessor: (u) => u.email || '—' },
           {
             header: 'Role',
-            accessor: (u) => <StatusBadge label={u.role} tone={u.role === 'admin' ? 'blue' : 'gray'} />,
+            accessor: (u) => <Badge tone={u.role === 'admin' ? 'blue' : 'gray'}>{u.role}</Badge>,
           },
         ]}
       />

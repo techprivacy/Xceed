@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import SiteHeader from '@/components/SiteHeader';
+import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SectionHeading from '@/components/ui/SectionHeading';
 import ProductCard from '@/components/ProductCard';
@@ -17,7 +17,7 @@ export default async function ProductsPage() {
 
   return (
     <main>
-      <SiteHeader />
+      <Header />
 
       <section className="bg-brand-mist py-14">
         <div className="container-x">

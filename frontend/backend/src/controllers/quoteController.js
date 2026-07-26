@@ -19,6 +19,7 @@ exports.createQuoteRequest = async (req, res) => {
       contactPerson,
       email,
       source,
+      companyLogo,
     } = req.body;
 
     if (!companyName || !mobileNumber || !productRequirement) {
@@ -42,6 +43,7 @@ exports.createQuoteRequest = async (req, res) => {
       contactPerson,
       email,
       source: source || 'website',
+      companyLogo,
     });
 
     res.status(201).json({ success: true, message: 'Request submitted successfully', data: quote });
@@ -160,6 +162,17 @@ exports.uploadDrawing = async (req, res) => {
   res.status(201).json({
     success: true,
     data: { url: `/uploads/drawings/${req.file.filename}`, originalName: req.file.originalname },
+  });
+};
+
+// @route POST /api/quotes/upload-logo (public - membership application company logo)
+exports.uploadCompanyLogo = async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ success: false, message: 'No file uploaded' });
+  }
+  res.status(201).json({
+    success: true,
+    data: { url: `/uploads/logos/${req.file.filename}`, originalName: req.file.originalname },
   });
 };
 

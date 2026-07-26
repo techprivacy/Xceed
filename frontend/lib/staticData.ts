@@ -1,5 +1,7 @@
 import { Product } from '@/types';
 
+export const WHATSAPP_GROUP_URL = 'https://chat.whatsapp.com/G9h8eBlH4sH0wbneTdh27j?s=sw&p=i&mlu=4&amv=0';
+
 export interface ProductCategoryLink {
   urlSlug: string;
   apiSlug: string;

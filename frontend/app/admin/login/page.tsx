@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { login } from '@/lib/api';
 import Button from '@/components/ui/Button';
-import SiteHeader from '@/components/SiteHeader';
+import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 export default function AdminLoginPage() {
@@ -30,7 +30,7 @@ export default function AdminLoginPage() {
 
   return (
     <main>
-      <SiteHeader />
+      <Header />
       <div className="flex min-h-[70vh] items-center justify-center bg-brand-navy px-4 py-16">
         <form
           onSubmit={handleSubmit}

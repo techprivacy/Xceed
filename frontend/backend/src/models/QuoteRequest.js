@@ -20,6 +20,7 @@ const quoteRequestSchema = new mongoose.Schema(
     city: { type: String },
     state: { type: String },
     officeAddress: { type: String, trim: true },
+    companyLogo: { type: String },
     productRequirement: { type: String, required: true },
     quantity: { type: String },
     specialRequirement: { type: String },

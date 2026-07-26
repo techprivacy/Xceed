@@ -14,13 +14,24 @@ const productSchema = new mongoose.Schema(
     priceUnit: { type: String, enum: ['per_letter', 'per_piece', 'per_set'], default: 'per_piece' },
     currency: { type: String, default: 'INR' },
 
-    // Variants e.g. size (5mm/6mm/7mm/8mm), letter style (concave/convex)
-    variants: [
+    // Drives which interactive builder renders on this product's category page
+    // (Cast Letters / Cast Numbers / Holders) instead of a plain product grid.
+    configuratorType: {
+      type: String,
+      enum: ['none', 'cast_letters', 'cast_numbers', 'holder'],
+      default: 'none',
+    },
+
+    // Per-size pricing for cast_letters / cast_numbers / holder configurators
+    sizePricing: [
       {
-        label: { type: String }, // e.g. "6 mm"
-        priceOverride: { type: Number },
+        size: { type: String }, // e.g. "5mm"
+        price: { type: Number },
       },
     ],
+
+    // Holder price matrix, holder configurator only: { [size]: { GLUE|SCREW: { [capacity]: price } } }
+    holderPriceMatrix: { type: mongoose.Schema.Types.Mixed },
 
     minOrderQty: { type: Number, default: 1 },
     inStock: { type: Boolean, default: true },

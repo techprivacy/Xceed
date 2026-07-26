@@ -3,6 +3,8 @@ const fs = require('fs');
 const Product = require('../models/Product');
 const Category = require('../models/Category');
 
+const EXCLUDED_PRODUCT_SLUGS = ['hr-801-magnetic-marking-pen'];
+
 // @route GET /api/products
 // Query params: category, trending, bestSeller, search, page, limit
 exports.getProducts = async (req, res) => {
@@ -17,6 +19,7 @@ exports.getProducts = async (req, res) => {
     if (trending === 'true') filter.isTrending = true;
     if (bestSeller === 'true') filter.isBestSeller = true;
     if (search) filter.$text = { $search: search };
+    filter.slug = { $nin: EXCLUDED_PRODUCT_SLUGS };
 
     const skip = (Number(page) - 1) * Number(limit);
 
@@ -41,7 +44,12 @@ exports.getProducts = async (req, res) => {
 // @route GET /api/products/:slug
 exports.getProductBySlug = async (req, res) => {
   try {
-    const product = await Product.findOne({ slug: req.params.slug }).populate('category', 'name slug');
+    const { slug } = req.params;
+    if (EXCLUDED_PRODUCT_SLUGS.includes(slug)) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
+
+    const product = await Product.findOne({ slug }).populate('category', 'name slug');
     if (!product) return res.status(404).json({ success: false, message: 'Product not found' });
     res.json({ success: true, data: product });
   } catch (err) {

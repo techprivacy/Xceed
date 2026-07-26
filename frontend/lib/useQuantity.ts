@@ -1,0 +1,12 @@
+'use client';
+
+import { useState } from 'react';
+
+export function useQuantity(initial = 1, min = 1) {
+  const [quantity, setQuantity] = useState(initial);
+
+  const increment = () => setQuantity((q) => q + 1);
+  const decrement = () => setQuantity((q) => Math.max(min, q - 1));
+
+  return { quantity, increment, decrement, setQuantity };
+}

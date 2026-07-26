@@ -6,11 +6,17 @@ import { Plus, Package, Ban, Star, Pencil, Trash2, Search } from 'lucide-react';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import StatCard from '@/components/admin/StatCard';
 import DataTable from '@/components/admin/DataTable';
-import StatusBadge from '@/components/admin/StatusBadge';
+import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import { getAdminToken, getProducts, deleteProduct } from '@/lib/api';
 import { toast } from '@/lib/toast';
-import { Category, Product } from '@/types';
+import { Category, ConfiguratorType, Product } from '@/types';
+
+const CONFIGURATOR_LABELS: Record<Exclude<ConfiguratorType, 'none'>, string> = {
+  cast_letters: 'Cast Letters',
+  cast_numbers: 'Cast Numbers',
+  holder: 'Holder Configurator',
+};
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -102,7 +108,17 @@ export default function ProductsPage() {
           rows={filtered}
           emptyMessage={search ? 'No products match your search.' : 'No products found.'}
           columns={[
-            { header: 'Product', accessor: (p) => <span className="font-semibold text-brand-black">{p.name}</span> },
+            {
+              header: 'Product',
+              accessor: (p) => (
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-brand-black">{p.name}</span>
+                  {p.configuratorType && p.configuratorType !== 'none' && (
+                    <Badge tone="blue">{CONFIGURATOR_LABELS[p.configuratorType]}</Badge>
+                  )}
+                </div>
+              ),
+            },
             {
               header: 'Category',
               accessor: (p) => (typeof p.category === 'object' ? (p.category as Category).name : '—'),
@@ -112,9 +128,9 @@ export default function ProductsPage() {
               header: 'Status',
               accessor: (p) =>
                 p.inStock ? (
-                  <StatusBadge label="In Stock" tone="green" />
+                  <Badge tone="green">In Stock</Badge>
                 ) : (
-                  <StatusBadge label="Out of Stock" tone="red" />
+                  <Badge tone="red">Out of Stock</Badge>
                 ),
             },
             {

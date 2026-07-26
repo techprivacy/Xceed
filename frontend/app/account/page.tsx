@@ -1,12 +1,12 @@
 import { User } from 'lucide-react';
-import SiteHeader from '@/components/SiteHeader';
+import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ComingSoon from '@/components/ComingSoon';
 
 export default function AccountPage() {
   return (
     <main>
-      <SiteHeader />
+      <Header />
       <ComingSoon
         icon={User}
         title="Customer accounts are launching soon"

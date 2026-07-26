@@ -6,7 +6,7 @@ const SECTIONS = [
     title: 'Company Details',
     fields: [
       { label: 'Company Name', value: 'XCEED India' },
-      { label: 'Support Email', value: 'sales@xceedonetouch.com' },
+      { label: 'Support Email', value: 'info@xceedindia.com' },
       { label: 'Support Phone', value: '+91 99096 11333' },
     ],
   },
@@ -42,7 +42,7 @@ const SECTIONS = [
     title: 'SMTP',
     fields: [
       { label: 'Host', value: 'Configured via backend .env' },
-      { label: 'From Address', value: 'sales@xceedonetouch.com' },
+      { label: 'From Address', value: 'info@xceedindia.com' },
     ],
   },
 ];

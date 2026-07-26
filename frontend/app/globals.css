@@ -4,12 +4,79 @@
 
 html {
   scroll-behavior: smooth;
+  background: var(--color-surface, #050505);
 }
 
 body {
-  color: #1a1a1a;
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: radial-gradient(circle at top, #111111 0%, var(--color-surface, #050505) 60%, #000000 100%);
+  color: var(--color-primary, #ffffff);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+  min-height: 100vh;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+input,
+textarea,
+select {
+  color: var(--color-primary, #ffffff);
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+::selection {
+  background: var(--color-primary, #ffffff);
+  color: #000000;
+}
+
+:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-primary, #ffffff) 35%, transparent);
+  outline-offset: 3px;
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@layer utilities {
+  .surface-grid {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .section-space {
+    @apply py-16 sm:py-20 lg:py-24;
+  }
+
+  .content-card {
+    @apply rounded-3xl border border-white/10 bg-black/70 shadow-[0_20px_60px_-24px_rgba(0,0,0,0.85)];
+  }
 }
 
 .container-x {
-  @apply mx-auto w-full max-w-[1280px] px-4 sm:px-6 lg:px-8;
+  @apply mx-auto w-full max-w-[1360px] px-4 sm:px-6 lg:px-8;
 }

@@ -17,20 +17,20 @@ module.exports = {
         brand: {
           red: 'var(--color-primary)',
           redDark: 'var(--color-primary-dark)',
-          black: '#171717',
-          charcoal: '#2A2A2A',
+          black: '#000000',
+          charcoal: '#111111',
           blue: 'var(--color-secondary)',
           blueDark: 'color-mix(in srgb, var(--color-secondary) 82%, black)',
           blueDarker: 'color-mix(in srgb, var(--color-secondary) 68%, black)',
           navy: 'var(--color-dark)',
-          border: '#E9EDF2',
-          footerText: '#D9DEE6',
+          border: '#2A2A2A',
+          footerText: '#F3F4F6',
           slate: 'var(--color-muted)',
           mist: 'var(--color-surface)',
         },
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'sans-serif'],
       },
       keyframes: {
         ring: {

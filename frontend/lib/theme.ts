@@ -4,12 +4,14 @@ import { ThemePalette } from '@/types';
 const HEX_PATTERN = /^#[0-9A-Fa-f]{6}$/;
 
 export const DEFAULT_THEME: ThemePalette = {
-  primary: '#E30613',
-  primaryDark: '#B8050F',
-  secondary: '#0F4AA6',
-  dark: '#071C3A',
-  surface: '#F4F6F8',
-  muted: '#5B6470',
+  // Keep this in sync with the backend default. This fallback is used while
+  // the theme API is unavailable during server rendering.
+  primary: '#FFFFFF',
+  primaryDark: '#D4D4D4',
+  secondary: '#111111',
+  dark: '#000000',
+  surface: '#050505',
+  muted: '#9CA3AF',
 };
 
 const CSS_VAR_NAMES: Record<keyof ThemePalette, string> = {

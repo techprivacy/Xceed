@@ -1,4 +1,6 @@
-import { Facebook, Instagram, Linkedin, Youtube, ShieldCheck, FileText, RefreshCcw } from 'lucide-react';
+import { Facebook, Instagram, Linkedin, Youtube, ShieldCheck, FileText, RefreshCcw, Phone, Mail, Clock } from 'lucide-react';
+import FloatingWhatsApp from '@/components/FloatingWhatsApp';
+import { PRODUCT_CATEGORIES } from '@/lib/staticData';
 
 const SOCIALS = [
   { icon: Facebook, label: 'Facebook', bg: 'bg-[#1877F2]' },
@@ -13,66 +15,113 @@ const LEGAL_LINKS = [
   { label: 'Refund Policy', icon: RefreshCcw },
 ];
 
+const COMPANY_LINKS = [
+  { label: 'Home', href: '/' },
+  { label: 'Industries We Serve', href: '/industries' },
+  { label: 'Membership', href: '/membership' },
+  { label: 'Tokyo Tour 2026', href: '/tokyo-tour-2026' },
+  { label: 'Contact Us', href: '/contact-us' },
+];
+
+const SUPPORT_LINKS = [
+  { label: 'Track Order', href: '/track-order' },
+  { label: 'Dealer Login', href: '/dealer-login' },
+  { label: 'Your Cart', href: '/cart' },
+];
+
 export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-brand-black text-white">
+      <FloatingWhatsApp />
       <div className="h-1 bg-brand-red" />
 
       <div className="relative">
-        <div
-          className="pointer-events-none absolute inset-y-0 left-0 hidden w-[32%] lg:block"
-          style={{
-            backgroundImage: 'radial-gradient(rgba(255,255,255,0.14) 1px, transparent 1px)',
-            backgroundSize: '14px 14px',
-            maskImage: 'linear-gradient(to right, black, transparent 85%)',
-            WebkitMaskImage: 'linear-gradient(to right, black, transparent 85%)',
-          }}
+        <span
+          className="pointer-events-none absolute -right-10 top-1/2 hidden -translate-y-1/2 select-none font-serif text-[18rem] font-black leading-none text-white/[0.04] lg:block"
           aria-hidden
         >
-          <svg viewBox="0 0 300 400" className="absolute inset-0 h-full w-full">
-            <path d="M95 90 C 45 160, 30 220, 68 258" stroke="#E53935" strokeWidth="1.5" fill="none" opacity="0.7" />
-            <path d="M68 258 C 88 300, 118 300, 112 250" stroke="#E53935" strokeWidth="1.5" fill="none" opacity="0.7" />
-            <path d="M95 90 C 132 158, 132 208, 112 250" stroke="#E53935" strokeWidth="1.5" fill="none" opacity="0.7" />
-            <circle cx="95" cy="90" r="9" fill="#E53935" opacity="0.25" />
-            <circle cx="68" cy="258" r="9" fill="#E53935" opacity="0.25" />
-            <circle cx="112" cy="250" r="9" fill="#E53935" opacity="0.25" />
-            <circle cx="95" cy="90" r="4" fill="#E53935" />
-            <circle cx="68" cy="258" r="4" fill="#E53935" />
-            <circle cx="112" cy="250" r="4" fill="#E53935" />
-          </svg>
-        </div>
+          X
+        </span>
 
-        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[34%] overflow-hidden lg:block" aria-hidden>
-          <div className="absolute inset-0 bg-gradient-to-l from-black via-brand-charcoal/70 to-transparent" />
-          <span className="absolute -right-10 top-1/2 -translate-y-1/2 select-none font-serif text-[20rem] font-black leading-none text-white/[0.05]">
-            X
-          </span>
-          <div className="absolute inset-0 rotate-12 bg-gradient-to-tr from-transparent via-brand-red/20 to-transparent" />
-          <div className="absolute inset-0 -rotate-6 bg-gradient-to-tr from-transparent via-brand-red/10 to-transparent" />
-        </div>
+        <div className="container-x relative z-10 grid grid-cols-1 gap-12 py-16 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1.2fr]">
+          <div>
+            <span className="font-serif text-3xl font-bold tracking-wide text-white">XCEED</span>
+            <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.35em] text-white/70">
+              Beyond Your Expectations
+            </p>
+            <div className="mt-4 h-0.5 w-10 rounded-full bg-brand-red" />
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-brand-footerText">
+              XCEED India delivers premium Japanese-quality industrial marking solutions, including
+              cast letters, holders, jigs, and magnetic tools, trusted by manufacturing industries
+              across India.
+            </p>
+            <div className="mt-6 flex gap-3">
+              {SOCIALS.map(({ icon: Icon, label, bg }) => (
+                <a
+                  key={label}
+                  href="#"
+                  aria-label={label}
+                  className={`flex h-10 w-10 items-center justify-center rounded-full text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 ${bg}`}
+                >
+                  <Icon size={17} />
+                </a>
+              ))}
+            </div>
+          </div>
 
-        <div className="container-x relative z-10 flex flex-col items-center py-14 text-center">
-          <span className="font-serif text-4xl font-bold tracking-wide text-white sm:text-5xl">XCEED</span>
-          <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.35em] text-white/70">
-            Beyond Your Expectations
-          </p>
-          <div className="mt-4 h-0.5 w-10 rounded-full bg-brand-red" />
-          <p className="mt-5 max-w-xl text-sm leading-relaxed text-brand-footerText">
-            XCEED India delivers premium Japanese-quality industrial marking solutions, including
-            cast letters, holders, jigs, and magnetic tools, trusted by manufacturing industries
-            across India.
-          </p>
-          <div className="mt-6 flex justify-center gap-3">
-            {SOCIALS.map(({ icon: Icon, label, bg }) => (
-              <a
-                key={label}
-                href="#"
-                aria-label={label}
-                className={`flex h-10 w-10 items-center justify-center rounded-full text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 ${bg}`}
-              >
-                <Icon size={17} />
-              </a>
-            ))}
+          <div>
+            <h3 className="text-xs font-bold uppercase tracking-[0.15em] text-white/50">Products</h3>
+            <ul className="mt-5 space-y-3 text-sm">
+              {PRODUCT_CATEGORIES.map((cat) => (
+                <li key={cat.urlSlug}>
+                  <a href={`/${cat.urlSlug}`} className="text-brand-footerText transition-colors hover:text-brand-red">
+                    {cat.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-xs font-bold uppercase tracking-[0.15em] text-white/50">Company</h3>
+            <ul className="mt-5 space-y-3 text-sm">
+              {COMPANY_LINKS.map((link) => (
+                <li key={link.href}>
+                  <a href={link.href} className="text-brand-footerText transition-colors hover:text-brand-red">
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+              {SUPPORT_LINKS.map((link) => (
+                <li key={link.href}>
+                  <a href={link.href} className="text-brand-footerText transition-colors hover:text-brand-red">
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-xs font-bold uppercase tracking-[0.15em] text-white/50">Get In Touch</h3>
+            <ul className="mt-5 space-y-4 text-sm">
+              <li>
+                <a href="tel:+919909611333" className="flex items-start gap-3 text-brand-footerText transition-colors hover:text-brand-red">
+                  <Phone size={16} className="mt-0.5 shrink-0 text-brand-red" />
+                  +91 99096 11333
+                </a>
+              </li>
+              <li>
+                <a href="mailto:info@xceedindia.com" className="flex items-start gap-3 text-brand-footerText transition-colors hover:text-brand-red">
+                  <Mail size={16} className="mt-0.5 shrink-0 text-brand-red" />
+                  info@xceedindia.com
+                </a>
+              </li>
+              <li className="flex items-start gap-3 text-brand-footerText">
+                <Clock size={16} className="mt-0.5 shrink-0 text-brand-red" />
+                Mon &ndash; Sat: 9:00 AM &ndash; 6:00 PM (IST)
+              </li>
+            </ul>
           </div>
         </div>
       </div>

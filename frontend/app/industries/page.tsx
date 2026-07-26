@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import SiteHeader from '@/components/SiteHeader';
+import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SectionHeading from '@/components/ui/SectionHeading';
 import Card from '@/components/ui/Card';
@@ -9,7 +9,7 @@ import { INDUSTRIES } from '@/lib/staticData';
 export default function IndustriesPage() {
   return (
     <main>
-      <SiteHeader />
+      <Header />
 
       <section className="bg-brand-mist py-14">
         <div className="container-x">

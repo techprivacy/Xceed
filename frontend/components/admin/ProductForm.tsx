@@ -15,13 +15,40 @@ import {
 } from '@/lib/api';
 import { toast } from '@/lib/toast';
 import Button from '@/components/ui/Button';
-import { Category, Product, ProductInput } from '@/types';
+import { Category, ConfiguratorType, HolderPriceMatrix, Product, ProductInput, SizePrice } from '@/types';
 
 const PRICE_UNITS: { value: ProductInput['priceUnit']; label: string }[] = [
   { value: 'per_piece', label: 'Per Piece' },
   { value: 'per_letter', label: 'Per Letter' },
   { value: 'per_set', label: 'Per Set' },
 ];
+
+const CONFIGURATOR_TYPES: { value: ConfiguratorType; label: string; hint: string }[] = [
+  { value: 'none', label: 'Standard Product', hint: 'Regular catalog listing — no interactive builder.' },
+  { value: 'cast_letters', label: 'Cast Letters Builder', hint: 'Powers the /cast-letters page — priced per size.' },
+  { value: 'cast_numbers', label: 'Cast Numbers Builder', hint: 'Powers the /cast-numbers page — priced per size.' },
+  { value: 'holder', label: 'Holder Configurator', hint: 'Powers the /holders page — letter price + holder price matrix.' },
+];
+
+const INSTALLATIONS: { key: string; label: string }[] = [
+  { key: 'GLUE', label: 'Glue' },
+  { key: 'SCREW', label: 'Screw' },
+];
+const CAPACITIES = [1, 2, 3, 4];
+
+const DEFAULT_SIZE_PRICING: SizePrice[] = [
+  { size: '5mm', price: 95 },
+  { size: '6mm', price: 100 },
+  { size: '7mm', price: 105 },
+  { size: '8mm', price: 115 },
+];
+
+const DEFAULT_HOLDER_MATRIX: HolderPriceMatrix = {
+  '5mm': { GLUE: { '1': 3900, '2': 4800, '3': 5200, '4': 5700 }, SCREW: { '1': 4000, '2': 5000, '3': 5300, '4': 5700 } },
+  '6mm': { GLUE: { '1': 3950, '2': 4900, '3': 5350, '4': 5750 }, SCREW: { '1': 4050, '2': 5100, '3': 5500, '4': 5850 } },
+  '7mm': { GLUE: { '1': 4000, '2': 5100, '3': 5400, '4': 5850 }, SCREW: { '1': 4050, '2': 5200, '3': 5600, '4': 5900 } },
+  '8mm': { GLUE: { '1': 4050, '2': 5120, '3': 5420, '4': 5780 }, SCREW: { '1': 4100, '2': 5300, '3': 5600, '4': 5960 } },
+};
 
 const INPUT_CLASSES =
   'w-full rounded-xl border border-brand-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue/20';
@@ -65,6 +92,38 @@ export default function ProductForm({ product }: ProductFormProps) {
   const [saving, setSaving] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState('');
+
+  const [configuratorType, setConfiguratorType] = useState<ConfiguratorType>(
+    product?.configuratorType ?? 'none'
+  );
+  const [sizePricing, setSizePricing] = useState<SizePrice[]>(
+    product?.sizePricing?.length ? product.sizePricing : DEFAULT_SIZE_PRICING
+  );
+  const [holderPriceMatrix, setHolderPriceMatrix] = useState<HolderPriceMatrix>(
+    product?.holderPriceMatrix ?? DEFAULT_HOLDER_MATRIX
+  );
+
+  const updateSizePricing = (index: number, field: 'size' | 'price', value: string) => {
+    setSizePricing((prev) =>
+      prev.map((row, i) => (i === index ? { ...row, [field]: field === 'price' ? Number(value) : value } : row))
+    );
+  };
+
+  const addSizeRow = () => setSizePricing((prev) => [...prev, { size: '', price: 0 }]);
+  const removeSizeRow = (index: number) => setSizePricing((prev) => prev.filter((_, i) => i !== index));
+
+  const setHolderMatrixValue = (size: string, installation: string, capacity: number, value: string) => {
+    setHolderPriceMatrix((prev) => ({
+      ...prev,
+      [size]: {
+        ...prev[size],
+        [installation]: {
+          ...prev[size]?.[installation],
+          [capacity]: Number(value),
+        },
+      },
+    }));
+  };
 
   useEffect(() => {
     getCategories()
@@ -144,6 +203,11 @@ export default function ProductForm({ product }: ProductFormProps) {
         .map((t) => t.trim())
         .filter(Boolean),
       images,
+      configuratorType,
+      ...(configuratorType !== 'none'
+        ? { sizePricing: sizePricing.filter((row) => row.size.trim()) }
+        : {}),
+      ...(configuratorType === 'holder' ? { holderPriceMatrix } : {}),
     };
 
     try {
@@ -276,6 +340,114 @@ export default function ProductForm({ product }: ProductFormProps) {
             className={INPUT_CLASSES}
           />
         </div>
+      </div>
+
+      <div className="rounded-xl border border-brand-border p-4">
+        <label className={LABEL_CLASSES}>Configurator</label>
+        <select
+          value={configuratorType}
+          onChange={(e) => setConfiguratorType(e.target.value as ConfiguratorType)}
+          className={`${INPUT_CLASSES} bg-white`}
+        >
+          {CONFIGURATOR_TYPES.map((c) => (
+            <option key={c.value} value={c.value}>
+              {c.label}
+            </option>
+          ))}
+        </select>
+        <p className="mt-1.5 text-[11px] text-brand-slate">
+          {CONFIGURATOR_TYPES.find((c) => c.value === configuratorType)?.hint}
+        </p>
+
+        {configuratorType !== 'none' && (
+          <div className="mt-4">
+            <div className="mb-2 flex items-center justify-between">
+              <span className={LABEL_CLASSES}>Letter/Number Price by Size</span>
+              <button
+                type="button"
+                onClick={addSizeRow}
+                className="text-xs font-semibold text-brand-blue hover:underline"
+              >
+                + Add Size
+              </button>
+            </div>
+            <div className="space-y-2">
+              {sizePricing.map((row, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <input
+                    value={row.size}
+                    onChange={(e) => updateSizePricing(index, 'size', e.target.value)}
+                    placeholder="e.g. 5mm"
+                    className={`${INPUT_CLASSES} max-w-[120px]`}
+                  />
+                  <input
+                    type="number"
+                    min={0}
+                    value={row.price}
+                    onChange={(e) => updateSizePricing(index, 'price', e.target.value)}
+                    placeholder="Price (₹)"
+                    className={INPUT_CLASSES}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeSizeRow(index)}
+                    aria-label="Remove size"
+                    className="shrink-0 rounded-full p-1.5 text-brand-slate hover:bg-red-50 hover:text-red-600"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {configuratorType === 'holder' && (
+          <div className="mt-6">
+            <span className={LABEL_CLASSES}>Holder Price Matrix</span>
+            <div className="mt-2 grid grid-cols-1 gap-4 lg:grid-cols-2">
+              {sizePricing
+                .filter((row) => row.size.trim())
+                .map((row) => (
+                  <div key={row.size} className="rounded-lg border border-brand-border/70 p-3">
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-brand-red">
+                      {row.size} Holder Pricing
+                    </p>
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="text-left text-[11px] font-semibold uppercase tracking-wide text-brand-slate">
+                          <th className="pb-1.5">Capacity</th>
+                          {INSTALLATIONS.map((inst) => (
+                            <th key={inst.key} className="pb-1.5">
+                              {inst.label}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {CAPACITIES.map((capacity) => (
+                          <tr key={capacity}>
+                            <td className="py-1 pr-2 text-xs font-semibold text-brand-charcoal">{capacity} Letter</td>
+                            {INSTALLATIONS.map((inst) => (
+                              <td key={inst.key} className="py-1 pr-2">
+                                <input
+                                  type="number"
+                                  min={0}
+                                  value={holderPriceMatrix[row.size]?.[inst.key]?.[capacity] ?? 0}
+                                  onChange={(e) => setHolderMatrixValue(row.size, inst.key, capacity, e.target.value)}
+                                  className={INPUT_CLASSES}
+                                />
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div>

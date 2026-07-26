@@ -1,5 +1,5 @@
 import { Phone, Mail, Clock, Truck, CheckCircle2, Star } from 'lucide-react';
-import SiteHeader from '@/components/SiteHeader';
+import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
 
@@ -14,8 +14,8 @@ const CONTACT_DETAILS = [
   {
     icon: Mail,
     label: 'Email Us',
-    value: 'sales@xceedonetouch.com',
-    href: 'mailto:sales@xceedonetouch.com',
+    value: 'info@xceedindia.com',
+    href: 'mailto:info@xceedindia.com',
     text: "Send us your requirements, RFQs, or product enquiries, and we'll respond promptly.",
   },
   {
@@ -45,7 +45,7 @@ const WHY_CHOOSE = [
 export default function ContactUsPage() {
   return (
     <main>
-      <SiteHeader />
+      <Header />
 
       <section className="bg-brand-navy py-16">
         <div className="container-x text-center">

@@ -49,11 +49,11 @@ export default function Hero() {
             Precision Marking Solutions
           </span>
           <h1 className="text-5xl font-bold leading-[1.08] tracking-tight text-white md:text-6xl lg:text-7xl">
-            Precision that leaves a <span className="text-brand-red">permanent mark.</span>
+            Precision that leaves a <span className="text-brand-red">lasting mark.</span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/70 md:text-xl">
             Japanese-quality industrial cast letters, numbers, holders and marking tools for
-            manufacturing, steel, fabrication and engineering industries.
+            manufacturing, steel, foundry, fabrication and engineering industries.
           </p>
 
           <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-3">

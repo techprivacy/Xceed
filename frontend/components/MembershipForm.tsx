@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { UserPlus, User, Building2, Mail, Phone, MessageCircle, MapPin, ChevronDown, ShieldCheck, ArrowRight } from 'lucide-react';
-import { submitQuoteRequest } from '@/lib/api';
+import { UserPlus, User, Building2, Mail, Phone, MessageCircle, MapPin, ChevronDown, ShieldCheck, ArrowRight, ImagePlus } from 'lucide-react';
+import { submitQuoteRequest, uploadCompanyLogo } from '@/lib/api';
 
 const INPUT_CLASSES =
   'w-full rounded-xl border border-brand-border bg-white py-2.5 pl-10 pr-4 text-sm text-brand-charcoal focus:outline-none focus:ring-2 focus:ring-brand-blue/20';
@@ -43,6 +43,8 @@ function IconField({
 
 export default function MembershipForm() {
   const [form, setForm] = useState(EMPTY_FORM);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string>('');
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -50,11 +52,23 @@ export default function MembershipForm() {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    setLogoFile(file);
+    setLogoPreview(file ? URL.createObjectURL(file) : '');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('submitting');
     setErrorMsg('');
     try {
+      let companyLogo: string | undefined;
+      if (logoFile) {
+        const uploaded = await uploadCompanyLogo(logoFile);
+        companyLogo = uploaded.data.url;
+      }
+
       await submitQuoteRequest({
         companyName: form.companyName,
         mobileNumber: form.mobileNumber,
@@ -65,9 +79,12 @@ export default function MembershipForm() {
         city: form.city,
         state: form.state,
         officeAddress: form.officeAddress,
+        companyLogo,
       });
       setStatus('success');
       setForm(EMPTY_FORM);
+      setLogoFile(null);
+      setLogoPreview('');
     } catch (err) {
       setStatus('error');
       setErrorMsg(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
@@ -168,6 +185,29 @@ export default function MembershipForm() {
             ))}
           </select>
           <ChevronDown size={16} className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-brand-slate" />
+        </div>
+
+        <div className="sm:col-span-2">
+          <label className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold text-brand-charcoal">
+            <ImagePlus size={14} className="text-brand-blue" />
+            Company Logo (optional)
+          </label>
+          <div className="flex items-center gap-4">
+            {logoPreview && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={logoPreview}
+                alt="Company logo preview"
+                className="h-14 w-14 shrink-0 rounded-xl border border-brand-border object-contain p-1"
+              />
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleLogoChange}
+              className="block w-full text-xs text-brand-slate file:mr-4 file:rounded-full file:border-0 file:bg-brand-blue/10 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-brand-blueDark hover:file:bg-brand-blue/20"
+            />
+          </div>
         </div>
 
         <div className="relative sm:col-span-2">

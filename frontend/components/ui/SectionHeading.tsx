@@ -3,8 +3,8 @@ import { ReactNode } from 'react';
 type Size = 'h1' | 'h2';
 
 const TITLE_CLASSES: Record<Size, string> = {
-  h1: 'text-4xl font-bold leading-[1.15] tracking-tight text-brand-black md:text-5xl',
-  h2: 'text-3xl font-bold leading-[1.15] tracking-tight text-brand-black',
+  h1: 'text-4xl font-bold leading-[1.08] tracking-[-0.035em] text-brand-black sm:text-5xl md:text-6xl',
+  h2: 'text-3xl font-bold leading-[1.12] tracking-[-0.03em] text-brand-black sm:text-4xl',
 };
 
 interface SectionHeadingProps {
@@ -29,13 +29,13 @@ export default function SectionHeading({
   className = '',
 }: SectionHeadingProps) {
   const Tag = size;
-  const eyebrowTypography = eyebrowClassName ?? 'text-xs font-semibold';
+  const eyebrowTypography = eyebrowClassName ?? 'text-[11px] font-bold uppercase tracking-[0.14em]';
   return (
     <div className={`${align === 'center' ? 'text-center' : 'text-left'} ${className}`}>
       {eyebrow && (
         <span
           className={`mb-3 inline-flex items-center rounded-full px-3 py-1 ${eyebrowTypography} ${
-            light ? 'bg-white/10 text-white' : 'bg-brand-red/10 text-brand-red'
+            light ? 'border border-white/15 bg-white/10 text-white' : 'border border-brand-red/10 bg-brand-red/10 text-brand-red'
           }`}
         >
           {eyebrow}
@@ -45,7 +45,7 @@ export default function SectionHeading({
         {title}
       </Tag>
       {subtitle && (
-        <p className={`mt-4 text-base leading-relaxed ${light ? 'text-white/70' : 'text-brand-slate'}`}>{subtitle}</p>
+        <p className={`mt-4 max-w-2xl text-base leading-relaxed ${align === 'center' ? 'mx-auto' : ''} ${light ? 'text-white/70' : 'text-brand-slate'}`}>{subtitle}</p>
       )}
     </div>
   );

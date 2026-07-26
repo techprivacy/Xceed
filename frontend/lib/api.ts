@@ -220,6 +220,20 @@ export const addQuoteNote = (token: string, id: string, text: string) =>
     body: JSON.stringify({ text }),
   });
 
+export const uploadCompanyLogo = async (file: File) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  const res = await fetch(`${API_URL}/quotes/upload-logo`, {
+    method: 'POST',
+    body: formData,
+  });
+  const json = await res.json();
+  if (!res.ok) {
+    throw new Error(json.message || 'Failed to upload logo');
+  }
+  return json as ApiResponse<{ url: string; originalName: string }>;
+};
+
 export const uploadQuoteDrawing = (token: string, file: File) => {
   const formData = new FormData();
   formData.append('file', file);

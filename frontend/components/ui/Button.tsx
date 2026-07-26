@@ -4,10 +4,11 @@ type Variant = 'primary' | 'secondary' | 'ghost' | 'ghost-light';
 type Size = 'sm' | 'md';
 
 const VARIANT_CLASSES: Record<Variant, string> = {
-  primary: 'bg-brand-red text-white shadow-md shadow-brand-red/25 hover:bg-brand-redDark hover:shadow-lg hover:shadow-brand-red/30',
-  secondary: 'bg-brand-black text-white shadow-md shadow-black/10 hover:bg-brand-charcoal',
-  ghost: 'border border-brand-border bg-white text-brand-charcoal hover:border-brand-slate hover:bg-brand-mist',
-  'ghost-light': 'border border-white/40 bg-white/5 text-white backdrop-blur-sm hover:border-white hover:bg-white hover:text-brand-black',
+  primary:
+    'bg-brand-red text-white shadow-[0_12px_24px_-12px_color-mix(in_srgb,var(--color-primary)_75%,transparent)] hover:-translate-y-0.5 hover:bg-brand-redDark hover:shadow-[0_18px_28px_-14px_color-mix(in_srgb,var(--color-primary)_90%,transparent)]',
+  secondary: 'bg-brand-navy text-white shadow-[0_12px_24px_-14px_rgba(7,28,58,0.7)] hover:-translate-y-0.5 hover:bg-brand-blueDarker',
+  ghost: 'border border-black/10 bg-white text-brand-charcoal shadow-sm hover:-translate-y-0.5 hover:border-brand-red/30 hover:bg-brand-mist',
+  'ghost-light': 'border border-white/40 bg-white/5 text-white backdrop-blur-sm hover:-translate-y-0.5 hover:border-white hover:bg-white hover:text-brand-black',
 };
 
 const SIZE_CLASSES: Record<Size, string> = {
@@ -16,7 +17,7 @@ const SIZE_CLASSES: Record<Size, string> = {
 };
 
 const BASE_CLASSES =
-  'inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50';
+  'inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all duration-200 ease-out disabled:cursor-not-allowed disabled:opacity-50';
 
 interface CommonProps {
   variant?: Variant;

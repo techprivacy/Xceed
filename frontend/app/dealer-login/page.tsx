@@ -1,12 +1,12 @@
 import { Building2 } from 'lucide-react';
-import SiteHeader from '@/components/SiteHeader';
+import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ComingSoon from '@/components/ComingSoon';
 
 export default function DealerLoginPage() {
   return (
     <main>
-      <SiteHeader />
+      <Header />
       <ComingSoon
         icon={Building2}
         title="The dealer portal is launching soon"

@@ -7,6 +7,16 @@ export interface Category {
   order?: number;
 }
 
+export type ConfiguratorType = 'none' | 'cast_letters' | 'cast_numbers' | 'holder';
+
+export interface SizePrice {
+  size: string;
+  price: number;
+}
+
+// { [size]: { GLUE | SCREW: { [capacity]: price } } }
+export type HolderPriceMatrix = Record<string, Record<string, Record<string, number>>>;
+
 export interface Product {
   _id: string;
   name: string;
@@ -23,6 +33,9 @@ export interface Product {
   isBestSeller: boolean;
   isTrending: boolean;
   tags?: string[];
+  configuratorType?: ConfiguratorType;
+  sizePricing?: SizePrice[];
+  holderPriceMatrix?: HolderPriceMatrix;
 }
 
 export interface ProductInput {
@@ -40,6 +53,9 @@ export interface ProductInput {
   isBestSeller?: boolean;
   isTrending?: boolean;
   tags?: string[];
+  configuratorType?: ConfiguratorType;
+  sizePricing?: SizePrice[];
+  holderPriceMatrix?: HolderPriceMatrix;
 }
 
 export interface QuoteRequestInput {
@@ -56,6 +72,7 @@ export interface QuoteRequestInput {
   contactPerson?: string;
   email?: string;
   source?: string;
+  companyLogo?: string;
 }
 
 export type QuoteStatus = 'new' | 'follow_up' | 'negotiation' | 'quotation_sent' | 'won' | 'lost';
@@ -86,6 +103,7 @@ export interface QuoteRequest {
   city?: string;
   state?: string;
   officeAddress?: string;
+  companyLogo?: string;
   productRequirement: string;
   quantity?: string;
   specialRequirement?: string;

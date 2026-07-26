@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import SiteHeader from '@/components/SiteHeader';
+import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SectionHeading from '@/components/ui/SectionHeading';
 import Button from '@/components/ui/Button';
@@ -9,7 +9,7 @@ import { HIGHLIGHTS, FOUNDRY_VISITS, ITINERARY, INCLUSIONS } from '@/lib/tokyoTo
 export default function TokyoTourPage() {
   return (
     <main>
-      <SiteHeader />
+      <Header />
 
       {/* Hero */}
       <section className="relative overflow-hidden bg-brand-navy">

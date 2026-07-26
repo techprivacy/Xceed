@@ -1,84 +1,23 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
-import { Search, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
-import { getAdminToken, getQuoteRequests, deleteQuoteRequest } from '@/lib/api';
+import { Search, Trash2 } from 'lucide-react';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import DataTable from '@/components/admin/DataTable';
-import StatusBadge from '@/components/admin/StatusBadge';
-import { QuoteRequest, QuoteStatus } from '@/types';
-
-const STATUS_OPTIONS: { value: QuoteStatus | ''; label: string }[] = [
-  { value: '', label: 'All Statuses' },
-  { value: 'new', label: 'New' },
-  { value: 'follow_up', label: 'Follow Up' },
-  { value: 'negotiation', label: 'Negotiation' },
-  { value: 'quotation_sent', label: 'Quotation Sent' },
-  { value: 'won', label: 'Won' },
-  { value: 'lost', label: 'Lost' },
-];
-
-const STATUS_TONE: Record<QuoteStatus, 'gray' | 'amber' | 'purple' | 'blue' | 'green' | 'red'> = {
-  new: 'gray',
-  follow_up: 'amber',
-  negotiation: 'purple',
-  quotation_sent: 'blue',
-  won: 'green',
-  lost: 'red',
-};
-
-const STATUS_LABELS: Record<QuoteStatus, string> = {
-  new: 'New',
-  follow_up: 'Follow Up',
-  negotiation: 'Negotiation',
-  quotation_sent: 'Quotation Sent',
-  won: 'Won',
-  lost: 'Lost',
-};
+import ListPagination from '@/components/admin/ListPagination';
+import Badge from '@/components/ui/Badge';
+import { useQuoteRequestList } from '@/lib/useQuoteRequestList';
+import { STATUS_OPTIONS, STATUS_TONE, STATUS_LABELS } from '@/lib/quoteStatus';
+import { QuoteStatus } from '@/types';
 
 export default function QuotesListPage() {
-  const [quotes, setQuotes] = useState<QuoteRequest[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const [status, setStatus] = useState<QuoteStatus | ''>('');
-  const [search, setSearch] = useState('');
-  const [page, setPage] = useState(1);
-  const [pages, setPages] = useState(1);
-  const [total, setTotal] = useState(0);
-
-  const load = useCallback(async () => {
-    const token = getAdminToken();
-    if (!token) return;
-    setLoading(true);
-    setError('');
-    try {
-      const res = await getQuoteRequests(token, { status, search, page, limit: 15 });
-      setQuotes(res.data);
-      setPages(res.pages ?? 1);
-      setTotal(res.total ?? res.data.length);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load quote requests');
-    } finally {
-      setLoading(false);
-    }
-  }, [status, search, page]);
-
-  useEffect(() => {
-    load();
-  }, [load]);
-
-  const handleDelete = async (id: string) => {
-    const token = getAdminToken();
-    if (!token) return;
-    if (!confirm('Delete this quote request? This cannot be undone.')) return;
-    try {
-      await deleteQuoteRequest(token, id);
-      load();
-    } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to delete');
-    }
-  };
+  const { rows, loading, error, search, setSearch, page, setPage, pages, total, remove } = useQuoteRequestList({
+    filters: { status: status || undefined },
+    deleteConfirmMessage: 'Delete this quote request? This cannot be undone.',
+    loadErrorMessage: 'Failed to load quote requests',
+  });
 
   return (
     <main className="p-6">
@@ -92,10 +31,7 @@ export default function QuotesListPage() {
           <Search size={16} className="text-brand-slate" />
           <input
             value={search}
-            onChange={(e) => {
-              setPage(1);
-              setSearch(e.target.value);
-            }}
+            onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by company, contact, phone or email..."
             className="w-full bg-transparent px-2 py-2.5 text-sm focus:outline-none"
           />
@@ -127,7 +63,7 @@ export default function QuotesListPage() {
       ) : (
         <DataTable
           keyField={(q) => q._id}
-          rows={quotes}
+          rows={rows}
           emptyMessage="No quote requests found."
           columns={[
             {
@@ -162,7 +98,7 @@ export default function QuotesListPage() {
             },
             {
               header: 'Status',
-              accessor: (q) => <StatusBadge label={STATUS_LABELS[q.status]} tone={STATUS_TONE[q.status]} />,
+              accessor: (q) => <Badge tone={STATUS_TONE[q.status]}>{STATUS_LABELS[q.status]}</Badge>,
             },
             {
               header: 'Received',
@@ -172,7 +108,7 @@ export default function QuotesListPage() {
               header: '',
               accessor: (q) => (
                 <button
-                  onClick={() => handleDelete(q._id)}
+                  onClick={() => remove(q._id)}
                   aria-label="Delete"
                   className="rounded-full p-1.5 text-brand-slate hover:bg-red-50 hover:text-red-600"
                 >
@@ -185,27 +121,7 @@ export default function QuotesListPage() {
         />
       )}
 
-      {pages > 1 && (
-        <div className="mt-4 flex items-center justify-center gap-3 text-sm">
-          <button
-            disabled={page <= 1}
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-            className="flex items-center gap-1 rounded-full border border-brand-border px-3 py-1.5 disabled:opacity-40"
-          >
-            <ChevronLeft size={14} /> Prev
-          </button>
-          <span className="text-brand-slate">
-            Page {page} of {pages}
-          </span>
-          <button
-            disabled={page >= pages}
-            onClick={() => setPage((p) => Math.min(pages, p + 1))}
-            className="flex items-center gap-1 rounded-full border border-brand-border px-3 py-1.5 disabled:opacity-40"
-          >
-            Next <ChevronRight size={14} />
-          </button>
-        </div>
-      )}
+      <ListPagination page={page} pages={pages} onChange={setPage} />
     </main>
   );
 }

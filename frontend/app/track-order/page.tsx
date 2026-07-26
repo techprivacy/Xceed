@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { CheckCircle2, Circle, PackageSearch, Truck, Home, ClipboardList } from 'lucide-react';
-import SiteHeader from '@/components/SiteHeader';
+import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
@@ -49,7 +49,7 @@ export default function TrackOrderPage() {
 
   return (
     <main>
-      <SiteHeader />
+      <Header />
 
       <section className="bg-brand-navy py-14">
         <div className="container-x text-center">

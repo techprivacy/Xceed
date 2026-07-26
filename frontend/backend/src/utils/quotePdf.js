@@ -49,7 +49,7 @@ function createQuotePdfDoc(quote) {
     .fillColor('#999999')
     .font('Helvetica')
     .text('This is a system-generated quotation summary from XCEED India.');
-  doc.text('Contact: +91 99096 11333 | sales@xceedonetouch.com');
+  doc.text('Contact: +91 99096 11333 | info@xceedindia.com');
 
   return doc;
 }

@@ -8,13 +8,16 @@ const {
   deleteQuoteRequest,
   addInternalNote,
   uploadDrawing,
+  uploadCompanyLogo,
   downloadQuotePdf,
   emailQuotePdf,
 } = require('../controllers/quoteController');
 const { protect, adminOnly } = require('../middlewares/auth');
 const upload = require('../middlewares/upload');
+const uploadLogo = require('../middlewares/uploadLogo');
 
 router.post('/', createQuoteRequest);
+router.post('/upload-logo', uploadLogo.single('file'), uploadCompanyLogo);
 router.get('/', protect, adminOnly, getQuoteRequests);
 router.post('/upload', protect, adminOnly, upload.single('file'), uploadDrawing);
 router.get('/:id', protect, adminOnly, getQuoteRequestById);

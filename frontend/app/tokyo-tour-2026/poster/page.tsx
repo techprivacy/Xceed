@@ -152,7 +152,7 @@ export default function TokyoTourPosterPage() {
                     <Phone size={12} /> +91 99096 11333
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <Mail size={12} /> sales@xceedonetouch.com
+                    <Mail size={12} /> info@xceedindia.com
                   </span>
                 </div>
               </div>
