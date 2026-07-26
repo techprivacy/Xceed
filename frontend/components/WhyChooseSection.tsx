@@ -10,12 +10,12 @@ const REASONS = [
   {
     icon: ShieldCheck,
     title: 'Industrial Ready',
-    text: 'Built with premium materials and engineered for tough industrial environments and heavy usage.',
+    text: 'Built with Japanese-quality materials and precision engineering to deliver outstanding durability, consistent accuracy, and long-lasting performance in the most demanding industrial environments.',
   },
   {
     icon: Truck,
     title: 'Reliable Delivery',
-    text: 'Pan-India delivery network with priority delivery and member shipping benefits.',
+    text: 'Fast and reliable delivery across India and Japan, supported by a trusted logistics network and priority service for manufacturers, foundries, and industrial businesses.',
   },
 ];
 

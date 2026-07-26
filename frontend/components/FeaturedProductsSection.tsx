@@ -4,16 +4,21 @@ import { ArrowRight } from 'lucide-react';
 import SectionHeading from '@/components/ui/SectionHeading';
 import { PRODUCT_CATEGORIES } from '@/lib/staticData';
 
-const HOMEPAGE_CATEGORY_SLUGS = ['cast-letters', 'cast-numbers', 'holders', 'magnetic-tools'];
-
-const CATEGORY_IMAGES: Record<string, string> = {
-  'cast-letters': 'https://images.unsplash.com/photo-1697281679290-ad7be1b10682?w=800&h=600&fit=crop',
-  'cast-numbers': 'https://images.unsplash.com/photo-1531053326607-9d349096d887?w=800&h=600&fit=crop',
-  holders: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&h=600&fit=crop',
-  'magnetic-tools': 'https://images.unsplash.com/photo-1529479627062-5f1f0b88912a?w=800&h=600&fit=crop',
+// The catalogue shots are wide (2:1–2.7:1) product photography on a white
+// backdrop, so they are contained rather than cropped — object-cover in a 4:3
+// frame would slice the outer characters clean off. The magnetic-tools photo is
+// already 4:3, so it fills the same frame edge to edge.
+const CATEGORY_IMAGES: Record<string, { src: string; contain: boolean }> = {
+  'cast-letters': { src: '/cast_letter.png', contain: true },
+  'cast-numbers': { src: '/cast_number.png', contain: true },
+  holders: { src: '/cast_holder.png', contain: true },
+  'magnetic-tools': {
+    src: 'https://images.unsplash.com/photo-1529479627062-5f1f0b88912a?w=800&h=600&fit=crop',
+    contain: false,
+  },
 };
 
-const CATEGORIES = HOMEPAGE_CATEGORY_SLUGS.map(
+const CATEGORIES = ['cast-letters', 'cast-numbers', 'holders', 'magnetic-tools'].map(
   (slug) => PRODUCT_CATEGORIES.find((c) => c.urlSlug === slug)!
 );
 
@@ -38,13 +43,15 @@ export default function FeaturedProductsSection() {
               href={`/${cat.urlSlug}`}
               className="group flex flex-col overflow-hidden rounded-2xl border border-black/[0.07] bg-white shadow-[0_12px_32px_-24px_rgba(7,28,58,0.28)] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-brand-red/20 hover:shadow-[0_24px_44px_-28px_rgba(7,28,58,0.36)]"
             >
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-brand-mist">
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-white">
                 <Image
-                  src={CATEGORY_IMAGES[cat.urlSlug]}
+                  src={CATEGORY_IMAGES[cat.urlSlug].src}
                   alt={cat.title}
                   fill
                   sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  className={`transition-transform duration-500 group-hover:scale-105 ${
+                    CATEGORY_IMAGES[cat.urlSlug].contain ? 'object-contain p-5' : 'object-cover'
+                  }`}
                 />
               </div>
               <div className="flex flex-1 flex-col p-6">
