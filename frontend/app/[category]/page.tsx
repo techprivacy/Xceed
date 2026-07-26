@@ -75,22 +75,28 @@ export default async function CategoryPage({ params }: { params: { category: str
       // Backend unreachable — render an empty state rather than crashing the page
     }
 
+    // Same canvas + card shell as the Holders configurator so the four
+    // category pages share one design language.
     return (
       <main>
         <Header />
-        {magneticProducts[0] ? (
-          <ProductDetail product={magneticProducts[0]} />
-        ) : (
-          <section className="container-x py-14">
-            <p className="rounded-2xl border border-black/5 bg-brand-mist p-8 text-center text-sm text-brand-slate">
-              No products listed in this category yet — check back soon, or{' '}
-              <a href="/contact-us" className="font-semibold text-brand-red hover:underline">
-                request a custom quote
-              </a>
-              .
-            </p>
-          </section>
-        )}
+        <div className="min-h-screen bg-[#f5f7fb]">
+          <div className="mx-auto max-w-7xl px-6 py-10">
+            <div className="rounded-2xl bg-white p-6 shadow-[0_5px_20px_rgba(0,0,0,0.08)] sm:p-8">
+              {magneticProducts[0] ? (
+                <ProductDetail product={magneticProducts[0]} bare />
+              ) : (
+                <p className="rounded-lg border border-dashed border-slate-200 p-8 text-center text-sm text-slate-400">
+                  No products listed in this category yet — check back soon, or{' '}
+                  <a href="/contact-us" className="font-semibold text-brand-red hover:underline">
+                    request a custom quote
+                  </a>
+                  .
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
         <Footer />
       </main>
     );

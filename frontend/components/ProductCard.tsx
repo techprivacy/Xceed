@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import { Product } from '@/types';
 import { getAssetUrl } from '@/lib/api';
-import { unitLabel, formatINR } from '@/lib/format';
 import Card from '@/components/ui/Card';
 import ProductImagePlaceholder from '@/components/ui/ProductImagePlaceholder';
 
@@ -27,13 +26,9 @@ export default function ProductCard({ product }: { product: Partial<Product> }) 
       </div>
       <h3 className="text-sm font-semibold text-brand-black">{product.name}</h3>
       <p className="mt-1 text-xs text-brand-slate">{product.shortDescription}</p>
-      <p className="mt-3 text-sm text-brand-slate">
-        Starting from <span className="font-semibold text-brand-black">{formatINR(product.price ?? 0)}</span>{' '}
-        {unitLabel(product.priceUnit)}
-      </p>
       <a
         href={`/products/${product.slug}`}
-        className="mt-2 inline-block text-xs font-semibold text-brand-red hover:text-brand-redDark"
+        className="mt-3 inline-block text-xs font-semibold text-brand-red hover:text-brand-redDark"
       >
         View Details →
       </a>

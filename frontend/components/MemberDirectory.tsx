@@ -18,28 +18,45 @@ const FILTER_OPTIONS: { value: FilterField; label: string }[] = [
   { value: 'location', label: 'Location' },
 ];
 
+function DetailRow({ icon: Icon, label, value }: { icon: typeof User; label: string; value: string }) {
+  return (
+    <div className="flex items-start gap-3">
+      <Icon size={16} className="mt-0.5 shrink-0 text-brand-red" />
+      <div className="min-w-0">
+        <dt className="text-[11px] font-semibold uppercase tracking-wide text-brand-slate">{label}</dt>
+        <dd className="text-sm font-medium text-brand-charcoal">{value}</dd>
+      </div>
+    </div>
+  );
+}
+
 function CompanyCard({ company }: { company: MemberCompany }) {
   return (
-    <Card className="flex items-start gap-4 p-5">
-      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-blue/10 text-brand-blue">
-        <Building2 size={22} />
-      </span>
-      <div className="min-w-0 flex-1">
-        <h3 className="truncate text-sm font-bold text-brand-black">{company.name}</h3>
-        <p className="mt-1 flex items-center gap-1.5 text-xs text-brand-slate">
-          <User size={12} /> {company.contactPerson}
-        </p>
-        <p className="mt-1 text-xs text-brand-slate">{company.industry}</p>
-        <p className="mt-1 flex items-center gap-1.5 text-xs text-brand-slate">
-          <Package size={12} /> {company.products}
-        </p>
-        <p className="mt-1 flex items-center gap-1.5 text-xs text-brand-slate">
-          <MapPin size={12} /> {company.location}
-        </p>
-        <Button href="/contact-us" size="sm" variant="ghost" className="mt-3">
-          View Profile
-        </Button>
+    <Card
+      accent
+      className="flex h-full flex-col p-6 shadow-[0_10px_30px_-18px_rgba(7,28,58,0.35)] hover:shadow-[0_22px_44px_-24px_rgba(7,28,58,0.4)]"
+    >
+      <div className="flex items-center gap-4">
+        <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-brand-red/10 text-brand-red">
+          <Building2 size={26} />
+        </span>
+        <h3 className="min-w-0 flex-1 text-base font-bold leading-snug text-brand-black">
+          {company.name}
+        </h3>
       </div>
+
+      <div className="my-5 h-px bg-black/[0.07]" />
+
+      <dl className="flex-1 space-y-4">
+        <DetailRow icon={User} label="Contact Person" value={company.contactPerson} />
+        <DetailRow icon={Building2} label="Industry" value={company.industry} />
+        <DetailRow icon={Package} label="Products" value={company.products} />
+        <DetailRow icon={MapPin} label="Location" value={company.location} />
+      </dl>
+
+      <Button href="/contact-us" size="sm" variant="ghost" className="mt-6 w-full">
+        View Profile
+      </Button>
     </Card>
   );
 }
@@ -71,8 +88,6 @@ export default function MemberDirectory() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
   const pageItems = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
-  const leftColumn = pageItems.slice(0, 5);
-  const rightColumn = pageItems.slice(5, 10);
 
   const handleSearchChange = (value: string) => {
     setQuery(value);
@@ -96,8 +111,10 @@ export default function MemberDirectory() {
           </h2>
         </div>
 
-        <div className="sticky top-20 z-30 mx-auto mt-8 max-w-2xl bg-white/95 py-3 backdrop-blur-sm lg:top-36">
-          <div className="flex flex-col gap-3 sm:flex-row">
+        {/* The frosted backdrop spans the full row so cards scrolling underneath
+            cannot show through beside the (narrower) search controls. */}
+        <div className="sticky top-20 z-30 -mx-4 mt-8 bg-white/95 px-4 py-3 backdrop-blur-sm sm:-mx-6 sm:px-6 lg:top-36">
+          <div className="mx-auto flex max-w-2xl flex-col gap-3 sm:flex-row">
             <div className="flex flex-1 items-center gap-3 rounded-full border border-brand-border bg-white px-5 py-3 shadow-sm focus-within:ring-2 focus-within:ring-brand-blue/20">
               <Search size={18} className="shrink-0 text-brand-slate" />
               <input
@@ -129,17 +146,12 @@ export default function MemberDirectory() {
             No member companies match &quot;{query}&quot;.
           </p>
         ) : (
-          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
-            <div className="space-y-4">
-              {leftColumn.map((company) => (
-                <CompanyCard key={company.id} company={company} />
-              ))}
-            </div>
-            <div className="space-y-4">
-              {rightColumn.map((company) => (
-                <CompanyCard key={company.id} company={company} />
-              ))}
-            </div>
+          // A single grid (rather than two manually-split columns) keeps card
+          // tops aligned row-by-row when descriptions differ in length.
+          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2">
+            {pageItems.map((company) => (
+              <CompanyCard key={company.id} company={company} />
+            ))}
           </div>
         )}
 

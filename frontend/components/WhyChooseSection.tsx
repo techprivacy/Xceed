@@ -4,8 +4,8 @@ import Card from '@/components/ui/Card';
 const REASONS = [
   {
     icon: Award,
-    title: 'Japanese Precision',
-    text: 'Every product is manufactured with Japanese quality standards to ensure accuracy, durability and consistency.',
+    title: '20+ Years of Trust',
+    text: 'Trusted by more than 2,000 manufacturers and foundries across India and Japan, XCEED delivers high-quality industrial marking solutions backed by over 20 years of expertise.',
   },
   {
     icon: ShieldCheck,
@@ -21,7 +21,7 @@ const REASONS = [
 
 export default function WhyChooseSection() {
   return (
-    <section className="bg-brand-mist py-14">
+    <section className="bg-white py-14">
       <div className="container-x">
         <div className="mb-10 text-center">
           <h2 className="text-3xl font-extrabold uppercase tracking-tight text-brand-black sm:text-4xl md:text-5xl">
@@ -36,11 +36,22 @@ export default function WhyChooseSection() {
           </div>
         </div>
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
-          {REASONS.map(({ icon: Icon, title, text }) => (
-            <Card key={title} className="relative p-10 text-center shadow-md">
-              <div className="mx-auto mb-6 flex h-32 w-32 items-center justify-center rounded-full bg-brand-red/10">
-                <div className="flex h-24 w-24 items-center justify-center rounded-full bg-brand-red/20">
-                  <Icon size={48} className="text-brand-red" />
+          {REASONS.map(({ icon: Icon, title, text }, i) => (
+            <Card key={title} className="group relative p-10 text-center shadow-md">
+              <div className="relative mx-auto mb-6 flex h-40 w-40 items-center justify-center sm:h-48 sm:w-48">
+                {/* Outer halo is decorative and animates on its own; the inner
+                    disc + glyph scale together on hover so they stay concentric. */}
+                <span
+                  className="absolute inset-0 rounded-full bg-brand-red/10 animate-haloPulse motion-reduce:animate-none"
+                  style={{ animationDelay: `${i * 0.4}s` }}
+                  aria-hidden
+                />
+                <div className="relative flex h-32 w-32 items-center justify-center rounded-full bg-brand-red/20 transition-transform duration-500 ease-out group-hover:scale-105 sm:h-36 sm:w-36">
+                  <Icon
+                    size={96}
+                    className="text-brand-red animate-floatSoft transition-transform duration-500 ease-out group-hover:scale-110 motion-reduce:animate-none"
+                    style={{ animationDelay: `${i * 0.4}s` }}
+                  />
                 </div>
               </div>
               <h3 className="text-lg font-bold uppercase tracking-wide text-brand-black">{title}</h3>

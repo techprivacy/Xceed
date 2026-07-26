@@ -7,12 +7,20 @@ import { getAssetUrl } from '@/lib/api';
 import { unitLabel, formatINR } from '@/lib/format';
 import { Category, Product } from '@/types';
 
-export default function ProductDetail({ product }: { product: Product }) {
+// `bare` drops the component's own container/padding so a caller can place it
+// inside an existing card shell (see the Magnetic Tools category page).
+export default function ProductDetail({
+  product,
+  bare = false,
+}: {
+  product: Product;
+  bare?: boolean;
+}) {
   const category = typeof product.category === 'object' ? (product.category as Category) : null;
   const images = product.images?.length ? product.images : [];
 
   return (
-    <section className="container-x py-10">
+    <section className={bare ? '' : 'container-x py-10'}>
       <nav className="mb-6 text-xs text-brand-slate">
         <Link href="/" className="hover:text-brand-red">
           Home
