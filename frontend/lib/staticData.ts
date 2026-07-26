@@ -37,12 +37,9 @@ export const PRODUCT_CATEGORIES: ProductCategoryLink[] = [
     title: 'Magnetic Tools',
     description: 'Strong magnetic-grip tools for fast, accurate marking on steel surfaces.',
   },
-  {
-    urlSlug: 'custom-marking',
-    apiSlug: 'custom-marking',
-    title: 'Custom Marking',
-    description: 'Bespoke marking solutions built to your specification.',
-  },
+  // Custom Marking was retired from the site navigation. It is dropped here too
+  // so it stops appearing as an empty filter chip on /products and in the
+  // sitemap, both of which derive from this list.
 ];
 
 export const FALLBACK_TRENDING: Partial<Product>[] = [

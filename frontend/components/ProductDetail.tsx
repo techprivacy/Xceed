@@ -4,6 +4,7 @@ import Badge from '@/components/ui/Badge';
 import ProductImagePlaceholder from '@/components/ui/ProductImagePlaceholder';
 import AddToCartBox from '@/components/AddToCartBox';
 import { getAssetUrl } from '@/lib/api';
+import { productImage, needsContain } from '@/lib/productDisplay';
 import { unitLabel, formatINR } from '@/lib/format';
 import { Category, Product } from '@/types';
 
@@ -18,6 +19,8 @@ export default function ProductDetail({
 }) {
   const category = typeof product.category === 'object' ? (product.category as Category) : null;
   const images = product.images?.length ? product.images : [];
+  // Falls back to category artwork when no image has been uploaded.
+  const heroImage = productImage(product);
 
   return (
     <section className={bare ? '' : 'container-x py-10'}>
@@ -37,14 +40,18 @@ export default function ProductDetail({
 
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
         <div>
-          <div className="relative mb-4 aspect-square w-full overflow-hidden rounded-2xl bg-brand-mist">
-            {images[0] ? (
+          <div
+            className={`relative mb-4 aspect-square w-full overflow-hidden rounded-2xl ${
+              needsContain(heroImage) ? 'bg-white' : 'bg-brand-mist'
+            }`}
+          >
+            {heroImage ? (
               <Image
-                src={getAssetUrl(images[0])}
+                src={heroImage}
                 alt={product.name}
                 fill
                 sizes="(min-width: 1024px) 500px, 100vw"
-                className="object-cover"
+                className={needsContain(heroImage) ? 'object-contain p-6' : 'object-cover'}
                 priority
               />
             ) : (
