@@ -3,36 +3,42 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import {
-  LayoutDashboard,
-  Package,
-  FolderTree,
-  ShieldCheck,
-  Settings,
-  LogOut,
-  Award,
-  MessageSquare,
-} from 'lucide-react';
+import { LayoutDashboard, Package, ShieldCheck, LogOut, Award, MessageSquare } from 'lucide-react';
+import { useCurrentAdmin } from '@/lib/useCurrentAdmin';
+import { can, Permission } from '@/lib/permissions';
 
 interface NavItem {
   label: string;
   href: string;
   icon: typeof LayoutDashboard;
+  // Omitted entirely => admin-only (mirrors routes still gated by the
+  // original adminOnly middleware rather than requirePermission).
+  permission?: Permission;
 }
 
+// Categories and Settings were removed from the admin navigation on request.
+// Their routes still exist under app/admin/ and remain reachable by direct URL
+// — deleting them is a separate call, since /admin/settings is the only UI for
+// the brand palette that drives every themed colour on the public site.
 const NAV_ITEMS: NavItem[] = [
-  { label: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
-  { label: 'Products', href: '/admin/products', icon: Package },
-  { label: 'Categories', href: '/admin/categories', icon: FolderTree },
+  { label: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard, permission: 'dashboard' },
+  { label: 'Products', href: '/admin/products', icon: Package, permission: 'products' },
   { label: 'Contact Enquiries', href: '/admin/contact', icon: MessageSquare },
-  { label: 'Membership', href: '/admin/membership', icon: Award },
+  { label: 'Directory', href: '/admin/membership', icon: Award, permission: 'directory' },
   { label: 'Users & Roles', href: '/admin/users', icon: ShieldCheck },
-  { label: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 
 export default function AdminSidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const { admin } = useCurrentAdmin();
+
+  // While /auth/me is loading, show every item rather than flashing an
+  // empty sidebar — the API is the real gate, this list only hides links a
+  // role can't use. Once the role is known, filter for real.
+  const visibleItems = admin
+    ? NAV_ITEMS.filter((item) => (item.permission ? can(admin.role, item.permission) : admin.role === 'admin'))
+    : NAV_ITEMS;
 
   const handleLogout = () => {
     localStorage.removeItem('xceed_admin_token');
@@ -46,11 +52,16 @@ export default function AdminSidebar() {
           <Image src="/logo.png" alt="XCEED India" width={280} height={126} priority className="h-9 w-auto object-contain" />
         </div>
         <p className="mt-2 text-[11px] text-white/50">Precision Marking Solutions</p>
+        {admin && (
+          <p className="mt-3 truncate text-xs font-semibold text-white/70">
+            {admin.username} <span className="text-white/40">&middot; {admin.role.replace('_', ' ')}</span>
+          </p>
+        )}
       </div>
 
       <nav className="flex-1 overflow-y-auto py-3">
         <ul className="space-y-0.5 px-3">
-          {NAV_ITEMS.map((item) => {
+          {visibleItems.map((item) => {
             const Icon = item.icon;
             const active = pathname?.startsWith(item.href);
             return (

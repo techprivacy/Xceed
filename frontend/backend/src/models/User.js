@@ -6,7 +6,13 @@ const userSchema = new mongoose.Schema(
     username: { type: String, required: true, unique: true, trim: true },
     email: { type: String, trim: true, lowercase: true },
     password: { type: String, required: true },
-    role: { type: String, enum: ['admin', 'staff'], default: 'admin' },
+    // Fixed-role RBAC — see src/config/permissions.js for what each non-admin
+    // role can access. 'admin' is always a superuser.
+    role: {
+      type: String,
+      enum: ['admin', 'staff', 'product_manager', 'directory_manager'],
+      default: 'admin',
+    },
   },
   { timestamps: true }
 );

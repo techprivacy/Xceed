@@ -77,11 +77,68 @@ export interface QuoteRequestInput {
 
 export type QuoteStatus = 'new' | 'follow_up' | 'negotiation' | 'quotation_sent' | 'won' | 'lost';
 
+// Keep in sync with backend/src/config/permissions.js ASSIGNABLE_ROLES (+'admin').
+export type AdminRole = 'admin' | 'staff' | 'product_manager' | 'directory_manager';
+
 export interface AdminUser {
   _id: string;
   username: string;
   email?: string;
-  role: 'admin' | 'staff';
+  role: AdminRole;
+}
+
+export type MemberStatus = 'pending' | 'approved' | 'rejected';
+export type SubscriptionStatus = 'none' | 'active' | 'expired';
+
+export interface Member {
+  _id: string;
+  companyName: string;
+  contactPerson: string;
+  email: string;
+  industry?: string;
+  products?: string;
+  location?: string;
+  companyLogo?: string;
+  mobileNumber?: string;
+  whatsappNumber?: string;
+  officeAddress?: string;
+  status: MemberStatus;
+  subscriptionStatus: SubscriptionStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Fields shown on the public directory only — no email, matching what
+// GET /api/members/directory actually returns.
+export type PublicMember = Pick<
+  Member,
+  'companyName' | 'contactPerson' | 'industry' | 'products' | 'location' | 'companyLogo'
+> & { _id: string };
+
+export interface MemberRegisterInput {
+  companyName: string;
+  contactPerson: string;
+  email: string;
+  password: string;
+  industry?: string;
+  products?: string;
+  location?: string;
+  companyLogo?: string;
+  mobileNumber?: string;
+  whatsappNumber?: string;
+  officeAddress?: string;
+}
+
+export interface MemberProfileInput {
+  companyName?: string;
+  contactPerson?: string;
+  industry?: string;
+  products?: string;
+  location?: string;
+  companyLogo?: string;
+  mobileNumber?: string;
+  whatsappNumber?: string;
+  officeAddress?: string;
 }
 
 export interface QuoteNote {

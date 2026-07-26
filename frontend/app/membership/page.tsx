@@ -52,6 +52,12 @@ export default function MembershipPage() {
             <p className="mt-4 text-xs text-white/60">
               Become part of India&apos;s &amp; Japan&apos;s fastest-growing manufacturing and foundry business network.
             </p>
+            <p className="mt-2 text-xs text-white/70">
+              Already a member?{' '}
+              <a href="/member/login" className="font-semibold text-white underline hover:text-white/90">
+                Log in to your portal
+              </a>
+            </p>
           </div>
         </div>
       </section>

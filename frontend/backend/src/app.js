@@ -9,6 +9,7 @@ const productRoutes = require('./routes/productRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const quoteRoutes = require('./routes/quoteRoutes');
 const themeRoutes = require('./routes/themeRoutes');
+const memberRoutes = require('./routes/memberRoutes');
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/quotes', quoteRoutes);
 app.use('/api/theme', themeRoutes);
+app.use('/api/members', memberRoutes);
 
 // 404 handler
 app.use((req, res) => {

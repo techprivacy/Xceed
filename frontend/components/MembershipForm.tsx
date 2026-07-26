@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { UserPlus, User, Building2, Mail, Phone, MessageCircle, MapPin, ChevronDown, ShieldCheck, ArrowRight, ImagePlus } from 'lucide-react';
-import { submitQuoteRequest, uploadCompanyLogo } from '@/lib/api';
+import { UserPlus, User, Building2, Mail, Lock, Phone, MessageCircle, MapPin, Briefcase, Package, ChevronDown, ShieldCheck, ArrowRight, ImagePlus } from 'lucide-react';
+import { registerMember, uploadCompanyLogo } from '@/lib/api';
 
 const INPUT_CLASSES =
   'w-full rounded-xl border border-brand-border bg-white py-2.5 pl-10 pr-4 text-sm text-brand-charcoal focus:outline-none focus:ring-2 focus:ring-brand-blue/20';
@@ -19,6 +19,9 @@ const EMPTY_FORM = {
   fullName: '',
   companyName: '',
   email: '',
+  password: '',
+  industry: '',
+  products: '',
   mobileNumber: '',
   whatsappNumber: '',
   city: '',
@@ -69,15 +72,16 @@ export default function MembershipForm() {
         companyLogo = uploaded.data.url;
       }
 
-      await submitQuoteRequest({
+      await registerMember({
         companyName: form.companyName,
-        mobileNumber: form.mobileNumber,
-        whatsappNumber: form.whatsappNumber,
-        productRequirement: 'Membership Application',
         contactPerson: form.fullName,
         email: form.email,
-        city: form.city,
-        state: form.state,
+        password: form.password,
+        industry: form.industry,
+        products: form.products,
+        location: [form.city, form.state].filter(Boolean).join(', '),
+        mobileNumber: form.mobileNumber,
+        whatsappNumber: form.whatsappNumber,
         officeAddress: form.officeAddress,
         companyLogo,
       });
@@ -132,6 +136,38 @@ export default function MembershipForm() {
             onChange={handleChange}
             required
             placeholder="Email Address*"
+            className={INPUT_CLASSES}
+          />
+        </IconField>
+        <IconField icon={Lock}>
+          <input
+            type="password"
+            name="password"
+            value={form.password}
+            onChange={handleChange}
+            required
+            minLength={6}
+            placeholder="Create Password (min. 6 characters)*"
+            className={INPUT_CLASSES}
+          />
+        </IconField>
+        <IconField icon={Briefcase}>
+          <input
+            name="industry"
+            value={form.industry}
+            onChange={handleChange}
+            required
+            placeholder="Industry*"
+            className={INPUT_CLASSES}
+          />
+        </IconField>
+        <IconField icon={Package}>
+          <input
+            name="products"
+            value={form.products}
+            onChange={handleChange}
+            required
+            placeholder="Products / Services You Offer*"
             className={INPUT_CLASSES}
           />
         </IconField>
@@ -239,7 +275,8 @@ export default function MembershipForm() {
 
         {status === 'success' && (
           <p className="text-sm font-medium text-green-600 sm:col-span-2">
-            Thanks! Your membership application has been received.
+            Thanks! Your application has been received. Once approved, you can log in with the email
+            and password above at the Member Portal.
           </p>
         )}
         {status === 'error' && <p className="text-sm font-medium text-red-600 sm:col-span-2">{errorMsg}</p>}

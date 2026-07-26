@@ -1,10 +1,11 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Search, Building2, User, Package, MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
-import { MEMBER_COMPANIES, MemberCompany } from '@/lib/memberDirectory';
+import { getPublicMemberDirectory } from '@/lib/api';
+import { PublicMember } from '@/types';
 
 const PAGE_SIZE = 10;
 
@@ -30,7 +31,7 @@ function DetailRow({ icon: Icon, label, value }: { icon: typeof User; label: str
   );
 }
 
-function CompanyCard({ company }: { company: MemberCompany }) {
+function CompanyCard({ company }: { company: PublicMember }) {
   return (
     <Card
       accent
@@ -40,18 +41,16 @@ function CompanyCard({ company }: { company: MemberCompany }) {
         <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-brand-red/10 text-brand-red">
           <Building2 size={26} />
         </span>
-        <h3 className="min-w-0 flex-1 text-base font-bold leading-snug text-brand-black">
-          {company.name}
-        </h3>
+        <h3 className="min-w-0 flex-1 text-base font-bold leading-snug text-brand-black">{company.companyName}</h3>
       </div>
 
       <div className="my-5 h-px bg-black/[0.07]" />
 
       <dl className="flex-1 space-y-4">
         <DetailRow icon={User} label="Contact Person" value={company.contactPerson} />
-        <DetailRow icon={Building2} label="Industry" value={company.industry} />
-        <DetailRow icon={Package} label="Products" value={company.products} />
-        <DetailRow icon={MapPin} label="Location" value={company.location} />
+        <DetailRow icon={Building2} label="Industry" value={company.industry || '—'} />
+        <DetailRow icon={Package} label="Products" value={company.products || '—'} />
+        <DetailRow icon={MapPin} label="Location" value={company.location || '—'} />
       </dl>
 
       <Button href="/contact-us" size="sm" variant="ghost" className="mt-6 w-full">
@@ -62,28 +61,37 @@ function CompanyCard({ company }: { company: MemberCompany }) {
 }
 
 export default function MemberDirectory() {
+  const [companies, setCompanies] = useState<PublicMember[]>([]);
+  const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
   const [filterField, setFilterField] = useState<FilterField>('all');
   const [page, setPage] = useState(1);
 
+  useEffect(() => {
+    getPublicMemberDirectory()
+      .then((res) => setCompanies(res.data))
+      .catch(() => setCompanies([]))
+      .finally(() => setLoading(false));
+  }, []);
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return MEMBER_COMPANIES;
+    if (!q) return companies;
 
-    return MEMBER_COMPANIES.filter((c) => {
+    return companies.filter((c) => {
       const fields =
         filterField === 'all'
-          ? [c.name, c.industry, c.products, c.location]
+          ? [c.companyName, c.industry, c.products, c.location]
           : filterField === 'name'
-            ? [c.name]
+            ? [c.companyName]
             : filterField === 'industry'
               ? [c.industry]
               : filterField === 'products'
                 ? [c.products]
                 : [c.location];
-      return fields.some((field) => field.toLowerCase().includes(q));
+      return fields.some((field) => (field || '').toLowerCase().includes(q));
     });
-  }, [query, filterField]);
+  }, [companies, query, filterField]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
@@ -141,16 +149,20 @@ export default function MemberDirectory() {
           </p>
         </div>
 
-        {pageItems.length === 0 ? (
+        {loading ? (
+          <p className="mt-10 text-center text-sm text-brand-slate">Loading member directory...</p>
+        ) : pageItems.length === 0 ? (
           <p className="mt-10 rounded-2xl border border-black/5 bg-brand-mist p-8 text-center text-sm text-brand-slate">
-            No member companies match &quot;{query}&quot;.
+            {companies.length === 0
+              ? 'No approved members yet — be the first to join.'
+              : `No member companies match "${query}".`}
           </p>
         ) : (
           // A single grid (rather than two manually-split columns) keeps card
           // tops aligned row-by-row when descriptions differ in length.
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2">
             {pageItems.map((company) => (
-              <CompanyCard key={company.id} company={company} />
+              <CompanyCard key={company._id} company={company} />
             ))}
           </div>
         )}
