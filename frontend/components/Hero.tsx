@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { ShieldCheck, Truck, Award, ArrowRight, FileText } from 'lucide-react';
+import { ShieldCheck, Truck, Award, ArrowRight } from 'lucide-react';
 import Button from '@/components/ui/Button';
 
 const FEATURES = [
@@ -71,9 +71,6 @@ export default function Hero() {
           <div className="mt-10 flex flex-wrap gap-5">
             <Button href="/products" variant="primary" size="md" className="uppercase tracking-wide">
               Explore Products <ArrowRight size={18} />
-            </Button>
-            <Button href="/contact-us" variant="ghost-light" size="md" className="uppercase tracking-wide">
-              <FileText size={18} /> Get Bulk Quote
             </Button>
           </div>
         </div>

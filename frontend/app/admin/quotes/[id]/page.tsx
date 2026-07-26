@@ -141,7 +141,7 @@ export default function QuoteDetailPage() {
     if (!token) return;
     if (!confirm('Delete this quote request? This cannot be undone.')) return;
     await deleteQuoteRequest(token, id);
-    router.push('/admin/quotes');
+    router.push(backHref);
   };
 
   const handleAddNote = async () => {
@@ -201,12 +201,12 @@ export default function QuoteDetailPage() {
 
   const isMembership = quote?.productRequirement === 'Membership Application';
   const isContact = quote?.source === 'Contact Us';
-  const backHref = isMembership ? '/admin/membership' : isContact ? '/admin/contact' : '/admin/quotes';
+  const backHref = isMembership ? '/admin/membership' : isContact ? '/admin/contact' : '/admin/dashboard';
   const backLabel = isMembership
     ? 'Back to Membership Applications'
     : isContact
       ? 'Back to Contact Enquiries'
-      : 'Back to Bulk Quote CRM';
+      : 'Back to Dashboard';
 
   const whatsappHref = quote
     ? `https://wa.me/${quote.mobileNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(

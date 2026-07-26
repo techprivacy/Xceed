@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Search, ShoppingCart, User, MessageCircleMore } from 'lucide-react';
+import { Menu, X, Search, ShoppingCart, User } from 'lucide-react';
 import { useCartCount } from '@/lib/useCartCount';
 import { WHATSAPP_GROUP_URL, PRODUCT_CATEGORIES } from '@/lib/staticData';
 import WhatsAppIcon from '@/components/icons/WhatsAppIcon';
@@ -90,14 +90,6 @@ export default function Header() {
               className="hidden h-10 w-10 items-center justify-center rounded-xl text-brand-charcoal transition hover:bg-brand-mist hover:text-brand-red sm:flex"
             >
               <User size={20} />
-            </a>
-
-            <a
-              href="/contact-us"
-              className="ml-1 hidden items-center gap-2 rounded-xl bg-brand-red px-4 py-2.5 text-xs font-semibold text-white shadow-sm shadow-brand-red/30 transition hover:-translate-y-0.5 hover:bg-brand-redDark lg:flex"
-            >
-              <MessageCircleMore size={17} />
-              Request a Quote
             </a>
           </div>
         </div>
