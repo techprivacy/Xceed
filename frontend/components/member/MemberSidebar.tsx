@@ -1,9 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, User, Users, CreditCard, LogOut } from 'lucide-react';
+import { LayoutDashboard, User, Users, CreditCard, LogOut, Menu, X } from 'lucide-react';
 
 const NAV_ITEMS = [
   { label: 'Dashboard', href: '/member/dashboard', icon: LayoutDashboard },
@@ -16,55 +17,97 @@ const NAV_ITEMS = [
 // — this is a logged-in member's own application area, using a separate
 // localStorage token (xceed_member_token) from both the public site and the
 // admin panel.
+//
+// Unlike the admin panel (internal staff, overwhelmingly desktop), members
+// are the public — real people who will open this from a phone. A fixed
+// 256px column with no mobile treatment left ~134px for content on a 390px
+// screen. Below lg, the sidebar becomes a slide-in drawer behind a top bar,
+// same idiom as components/Header.tsx's mobile menu.
 export default function MemberSidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const [open, setOpen] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem('xceed_member_token');
     router.push('/member/login');
   };
 
+  const NavList = (
+    <ul className="space-y-0.5 px-3">
+      {NAV_ITEMS.map((item) => {
+        const Icon = item.icon;
+        const active = pathname?.startsWith(item.href);
+        return (
+          <li key={item.label}>
+            <Link
+              href={item.href}
+              onClick={() => setOpen(false)}
+              className={`flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${
+                active ? 'bg-brand-red text-white shadow-sm' : 'text-white/80 hover:bg-white/10 hover:text-white'
+              }`}
+            >
+              <Icon size={16} />
+              {item.label}
+            </Link>
+          </li>
+        );
+      })}
+    </ul>
+  );
+
   return (
-    <aside className="flex h-screen w-64 shrink-0 flex-col bg-brand-navy text-white">
-      <div className="border-b border-white/10 px-5 py-5">
-        <div className="inline-block rounded-lg bg-white p-1.5">
-          <Image src="/logo.png" alt="XCEED India" width={280} height={126} priority className="h-9 w-auto object-contain" />
+    <>
+      {/* Mobile top bar: visible below lg, holds the menu toggle. The
+          sidebar itself is fixed off-screen at this width, not part of
+          normal flow, so this bar is what actually reserves layout space. */}
+      <div className="flex items-center justify-between border-b border-black/5 bg-brand-navy px-4 py-3 lg:hidden">
+        <div className="inline-block rounded-lg bg-white p-1">
+          <Image src="/logo.png" alt="XCEED India" width={280} height={126} className="h-7 w-auto object-contain" />
         </div>
-        <p className="mt-2 text-[11px] text-white/50">Member Portal</p>
-      </div>
-
-      <nav className="flex-1 overflow-y-auto py-3">
-        <ul className="space-y-0.5 px-3">
-          {NAV_ITEMS.map((item) => {
-            const Icon = item.icon;
-            const active = pathname?.startsWith(item.href);
-            return (
-              <li key={item.label}>
-                <Link
-                  href={item.href}
-                  className={`flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${
-                    active ? 'bg-brand-red text-white shadow-sm' : 'text-white/80 hover:bg-white/10 hover:text-white'
-                  }`}
-                >
-                  <Icon size={16} />
-                  {item.label}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-
-      <div className="border-t border-white/10 p-3">
         <button
-          onClick={handleLogout}
-          className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+          type="button"
+          aria-label={open ? 'Close menu' : 'Open menu'}
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
+          className="flex h-9 w-9 items-center justify-center rounded-lg text-white transition-colors hover:bg-white/10"
         >
-          <LogOut size={16} />
-          Logout
+          {open ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
-    </aside>
+
+      {open && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+          onClick={() => setOpen(false)}
+          aria-hidden
+        />
+      )}
+
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 flex h-screen w-64 shrink-0 -translate-x-full flex-col bg-brand-navy text-white transition-transform duration-200 ease-out lg:static lg:translate-x-0 ${
+          open ? 'translate-x-0' : ''
+        }`}
+      >
+        <div className="hidden border-b border-white/10 px-5 py-5 lg:block">
+          <div className="inline-block rounded-lg bg-white p-1.5">
+            <Image src="/logo.png" alt="XCEED India" width={280} height={126} priority className="h-9 w-auto object-contain" />
+          </div>
+          <p className="mt-2 text-[11px] text-white/50">Member Portal</p>
+        </div>
+
+        <nav className="flex-1 overflow-y-auto py-3">{NavList}</nav>
+
+        <div className="border-t border-white/10 p-3">
+          <button
+            onClick={handleLogout}
+            className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+          >
+            <LogOut size={16} />
+            Logout
+          </button>
+        </div>
+      </aside>
+    </>
   );
 }

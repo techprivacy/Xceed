@@ -42,7 +42,10 @@ export default function MemberPortalLayout({ children }: { children: React.React
   }
 
   return (
-    <div className="flex min-h-screen bg-brand-mist">
+    // Column below lg so MemberSidebar's mobile top bar sits above the
+    // content instead of squeezing beside it; row from lg up, where the
+    // sidebar goes back to being a static fixed-width column.
+    <div className="flex min-h-screen flex-col bg-brand-mist lg:flex-row">
       <MemberSidebar />
       <div className="flex-1 overflow-x-hidden">{children}</div>
       <ToastHost />
