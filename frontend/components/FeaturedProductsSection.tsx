@@ -21,8 +21,8 @@ export default async function FeaturedProductsSection() {
         <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
           <SectionHeading
             eyebrow="Featured"
-            title="Trending Products"
-            subtitle="Popular picks from our precision marking catalogue."
+            title="Our Products"
+            subtitle=""
           />
           <Link
             href="/products"

@@ -8,9 +8,13 @@ import { useCartCount } from '@/lib/useCartCount';
 import { WHATSAPP_GROUP_URL, PRODUCT_CATEGORIES } from '@/lib/staticData';
 import WhatsAppIcon from '@/components/icons/WhatsAppIcon';
 
+const MAIN_CATEGORIES = PRODUCT_CATEGORIES.filter(
+  (c) => ['cast-letters', 'cast-numbers', 'holders', 'magnetic-tools'].includes(c.urlSlug)
+);
+
 const NAV_ITEMS = [
   { label: 'Home', href: '/' },
-  ...PRODUCT_CATEGORIES.map((c) => ({ label: c.title, href: `/${c.urlSlug}` })),
+  ...MAIN_CATEGORIES.map((c) => ({ label: c.title, href: `/${c.urlSlug}` })),
   { label: 'Membership', href: '/membership' },
   { label: 'Contact Us', href: '/contact-us' },
 ];
@@ -64,12 +68,12 @@ export default function Header() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Join our WhatsApp group"
-              className="hidden items-center gap-2 rounded-xl px-3 py-2 text-brand-charcoal transition-colors hover:bg-brand-mist xl:flex"
+              className="hidden items-center gap-2 rounded-xl px-3 py-2 bg-[#25D366] text-white transition-all duration-200 hover:bg-[#1fa84f] hover:-translate-y-0.5 xl:flex"
             >
               <WhatsAppIcon size={22} />
               <span>
-                <span className="block text-[10px] font-semibold uppercase tracking-wide text-brand-slate">Quick help</span>
-                <span className="block text-xs font-semibold text-brand-charcoal">WhatsApp us</span>
+                <span className="block text-[10px] font-semibold uppercase tracking-wide text-white">Join Our</span>
+                <span className="block text-xs font-semibold text-white">WhatsApp Group</span>
               </span>
             </a>
 

@@ -2,8 +2,6 @@ import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import TrustBar from '@/components/TrustBar';
 import FeaturedProductsSection from '@/components/FeaturedProductsSection';
-import CategoriesSection from '@/components/CategoriesSection';
-import ConfiguratorShowcase from '@/components/ConfiguratorShowcase';
 import IndustriesSection from '@/components/IndustriesSection';
 import WhyChooseSection from '@/components/WhyChooseSection';
 import Footer from '@/components/Footer';
@@ -41,8 +39,6 @@ export default function HomePage() {
       <Hero />
       <TrustBar />
       <FeaturedProductsSection />
-      <CategoriesSection />
-      <ConfiguratorShowcase />
       <IndustriesSection />
       <WhyChooseSection />
       <Footer />
