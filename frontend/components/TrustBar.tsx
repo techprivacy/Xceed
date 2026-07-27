@@ -1,72 +1,43 @@
-import { CSSProperties } from 'react';
-import { Users, Medal, Package, Truck, Headset } from 'lucide-react';
-
-interface IconProps {
-  size?: number;
-  className?: string;
-  style?: CSSProperties;
-}
-
-function ToriiGate({ size = 20, className, style }: IconProps) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      className={className}
-      style={style}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M3 7h18" />
-      <path d="M4 5.5 3 9" />
-      <path d="M20 5.5 21 9" />
-      <path d="M6 9v11" />
-      <path d="M18 9v11" />
-      <path d="M4.5 11h15" />
-    </svg>
-  );
-}
-
 const STATS = [
-  { icon: ToriiGate, title: 'Japanese', subtitle: 'Technology' },
-  { icon: Users, title: '2000+', subtitle: 'Manufacturers & Foundries' },
-  { icon: Medal, title: '20+', subtitle: 'Years Experience' },
-  { icon: Package, title: '100+', subtitle: 'Products' },
-  { icon: Truck, title: 'Delivery Across', subtitle: 'India & Japan' },
-  { icon: Headset, title: 'Bulk Order', subtitle: 'Support' },
+  { title: 'Japanese', subtitle: 'Precision Technology' },
+  { title: '2,000+', subtitle: 'Trusted Manufacturers & Foundries' },
+  { title: '20+', subtitle: 'Years of Industry Experience' },
+  { title: '100+', subtitle: 'Precision Industrial Products' },
+  { title: 'India & Japan', subtitle: 'Fast & Reliable Delivery' },
+  { title: 'Bulk Orders', subtitle: 'Dedicated Business Support' },
 ];
 
 export default function TrustBar() {
   return (
-    <div className="container-x relative z-10 -mt-8 md:-mt-10">
-      <div className="grid grid-cols-2 gap-x-4 gap-y-6 rounded-3xl border border-black/5 bg-white px-6 py-6 shadow-xl shadow-black/10 sm:grid-cols-3 lg:flex lg:items-center lg:justify-between lg:gap-4 lg:px-8">
-        {STATS.map(({ icon: Icon, title, subtitle }, i) => (
-          <div key={subtitle} className="group flex min-w-0 items-center gap-3">
-            <span className="relative flex h-14 w-14 shrink-0 items-center justify-center md:h-16 md:w-16">
-              {/* Halo pulses behind the glyph; the stagger keeps the row from
-                  breathing in unison, which reads as a glitch rather than motion. */}
+    <section className="relative z-10 bg-white">
+      <div className="container-x" style={{ paddingTop: 'clamp(1.5rem, 1rem + 2vw, 3rem)', paddingBottom: 'clamp(2rem, 2rem + 2vw, 4rem)' }}>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 lg:grid-cols-6 lg:gap-4">
+          {STATS.map(({ title, subtitle }) => (
+            <div
+              key={subtitle}
+              className="group relative flex flex-col items-center justify-start gap-2 overflow-hidden rounded-2xl border border-gray-100 bg-white text-center transition-all duration-300 ease-out hover:-translate-y-1 hover:border-gray-200 hover:shadow-lg hover:shadow-black/5"
+              style={{ padding: 'clamp(1.5rem, 1.2rem + 1.5vw, 2.25rem) clamp(1rem, 0.8rem + 1vw, 1.5rem)' }}
+            >
               <span
-                className="absolute inset-0 rounded-full bg-brand-red/10 animate-haloPulse motion-reduce:animate-none"
-                style={{ animationDelay: `${i * 0.35}s` }}
                 aria-hidden
+                className="absolute inset-x-0 top-0 h-0.5 origin-center scale-x-0 bg-brand-blue transition-transform duration-300 ease-out group-hover:scale-x-100"
               />
-              <Icon
-                size={34}
-                className="relative text-brand-red animate-floatSoft transition-transform duration-300 ease-out group-hover:scale-110 motion-reduce:animate-none"
-                style={{ animationDelay: `${i * 0.35}s` }}
-              />
-            </span>
-            <div className="min-w-0 leading-tight">
-              <p className="text-base font-bold text-brand-black md:text-lg">{title}</p>
-              <p className="text-sm text-brand-slate">{subtitle}</p>
+              <p
+                className="font-extrabold tracking-tight text-[#111827]"
+                style={{ fontSize: 'clamp(1.375rem, 1rem + 1.6vw, 2rem)', lineHeight: 1.15 }}
+              >
+                {title}
+              </p>
+              <p
+                className="font-medium text-[#6B7280]"
+                style={{ fontSize: 'clamp(0.8125rem, 0.7rem + 0.4vw, 0.9375rem)', lineHeight: 1.4 }}
+              >
+                {subtitle}
+              </p>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
 }

@@ -26,9 +26,9 @@ const COLUMN_HEADING = 'text-sm font-bold uppercase tracking-[0.15em] text-brand
 const COLUMN_LINK = 'font-medium text-brand-charcoal transition-colors hover:text-brand-red';
 
 const LEGAL_LINKS = [
-  { label: 'Privacy Policy', icon: ShieldCheck },
-  { label: 'Terms & Conditions', icon: FileText },
-  { label: 'Refund Policy', icon: RefreshCcw },
+  { label: 'Privacy Policy', icon: ShieldCheck, href: '/privacy-policy' },
+  { label: 'Terms & Conditions', icon: FileText, href: '/terms-and-conditions' },
+  { label: 'Refund Policy', icon: RefreshCcw, href: '/refund-policy' },
 ];
 
 // Each wave repeats exactly every 1200 user units, so the `lavaDrift` keyframe
@@ -198,10 +198,10 @@ export default function Footer() {
         <div className="container-x flex flex-col items-center gap-3 pb-24 pt-4 text-center text-sm text-white/80 sm:flex-row sm:justify-between sm:pb-4">
           <p>© 2026 XCEED India. All Rights Reserved.</p>
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-            {LEGAL_LINKS.map(({ label, icon: Icon }, i) => (
+            {LEGAL_LINKS.map(({ label, icon: Icon, href }, i) => (
               <div key={label} className="flex items-center gap-4">
                 {i > 0 && <span className="hidden h-3 w-px bg-white/25 sm:block" aria-hidden />}
-                <a href="#" className="flex items-center gap-1.5 transition-colors hover:text-white hover:underline">
+                <a href={href} className="flex items-center gap-1.5 transition-colors hover:text-white hover:underline">
                   <Icon size={13} />
                   {label}
                 </a>

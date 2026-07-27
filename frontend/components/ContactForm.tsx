@@ -7,15 +7,6 @@ import Button from '@/components/ui/Button';
 const INPUT_CLASSES =
   'w-full rounded-xl border border-brand-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red/20';
 
-const PRODUCT_CATEGORIES = [
-  'General Enquiry',
-  'Cast Letters',
-  'Cast Numbers',
-  'Holders',
-  'Magnetic Tools',
-  'Custom Marking',
-];
-
 const EMPTY_FORM = {
   fullName: '',
   companyName: '',
@@ -23,9 +14,6 @@ const EMPTY_FORM = {
   email: '',
   city: '',
   state: '',
-  productCategory: PRODUCT_CATEGORIES[0],
-  productRequired: '',
-  quantity: '',
   message: '',
   consent: false,
 };
@@ -53,10 +41,7 @@ export default function ContactForm() {
         contactPerson: form.fullName,
         city: form.city,
         state: form.state,
-        industry: form.productCategory,
-        productRequirement: form.productRequired.trim() || form.message.trim() || form.productCategory,
-        quantity: form.quantity,
-        specialRequirement: form.message,
+        productRequirement: form.message.trim(),
         source: 'Contact Us',
       });
       setStatus('success');
@@ -109,38 +94,13 @@ export default function ContactForm() {
         />
         <input name="city" value={form.city} onChange={handleChange} placeholder="City" className={INPUT_CLASSES} />
         <input name="state" value={form.state} onChange={handleChange} placeholder="State" className={INPUT_CLASSES} />
-        <select
-          name="productCategory"
-          value={form.productCategory}
-          onChange={handleChange}
-          className={`${INPUT_CLASSES} bg-white`}
-        >
-          {PRODUCT_CATEGORIES.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
-        <input
-          name="quantity"
-          value={form.quantity}
-          onChange={handleChange}
-          placeholder="Quantity Required"
-          className={INPUT_CLASSES}
-        />
-        <input
-          name="productRequired"
-          value={form.productRequired}
-          onChange={handleChange}
-          placeholder="Product Required (Optional)"
-          className={`${INPUT_CLASSES} sm:col-span-2`}
-        />
         <textarea
           name="message"
           value={form.message}
           onChange={handleChange}
+          required
           rows={3}
-          placeholder="Your Message"
+          placeholder="Your Message*"
           className={`${INPUT_CLASSES} resize-none sm:col-span-2`}
         />
 
