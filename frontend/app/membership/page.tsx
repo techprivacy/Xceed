@@ -18,21 +18,30 @@ export default function MembershipPage() {
 
       <MemberDirectory />
 
-      <section className="bg-brand-navy py-6">
-        <div className="container-x flex flex-col items-center justify-between gap-6 sm:flex-row">
-          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
-            {STATS_BAR.map(({ icon: Icon, label }) => (
-              <span key={label} className="flex items-center gap-2 text-sm font-medium text-white/90">
-                <Icon size={16} className="text-brand-blue" />
-                {label}
-              </span>
-            ))}
-          </div>
-          <div className="text-right">
-            <p className="text-lg font-bold italic text-white">
-              XCEED INDIA<span className="text-brand-blue">↗</span>
-            </p>
-            <p className="text-[11px] uppercase tracking-wide text-white/60">Your Bridge to Japan</p>
+      <section className="bg-white py-14">
+        <div className="container-x">
+          <div className="rounded-2xl border-y-2 border-brand-red bg-white px-6 py-10 shadow-sm sm:px-10">
+            <div className="grid grid-cols-1 gap-10 text-center sm:grid-cols-2 lg:grid-cols-4">
+              {STATS_BAR.map(({ icon: Icon, label }, i) => (
+                <div key={label} className="flex flex-col items-center">
+                  <div className="relative mb-5 flex h-28 w-28 items-center justify-center">
+                    <span
+                      className="absolute inset-0 rounded-full bg-brand-red/10 animate-haloPulse motion-reduce:animate-none"
+                      style={{ animationDelay: `${i * 0.3}s` }}
+                      aria-hidden
+                    />
+                    <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-brand-red/20">
+                      <Icon
+                        size={48}
+                        className="text-brand-red animate-floatSoft motion-reduce:animate-none"
+                        style={{ animationDelay: `${i * 0.3}s` }}
+                      />
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-bold uppercase tracking-wide text-brand-black">{label}</h3>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -46,17 +55,11 @@ export default function MembershipPage() {
             <p className="mt-4 text-sm leading-relaxed text-white/80 sm:text-base">
               Connect with verified manufacturers, foundries, suppliers, buyers, and industrial partners.
             </p>
-            <Button href="/membership/register" variant="ghost-light" className="mt-8">
+            <Button href="/membership/register" variant="primary" size="lg" className="mt-8 shadow-xl">
               Register Today
             </Button>
             <p className="mt-4 text-xs text-white/60">
               Become part of India&apos;s &amp; Japan&apos;s fastest-growing manufacturing and foundry business network.
-            </p>
-            <p className="mt-2 text-xs text-white/70">
-              Already a member?{' '}
-              <a href="/member/login" className="font-semibold text-white underline hover:text-white/90">
-                Log in to your portal
-              </a>
             </p>
           </div>
         </div>

@@ -17,6 +17,7 @@ const MEMBER_LINKS = [
   { label: 'Membership', href: '/membership' },
   { label: 'Member Directory', href: '/membership#directory' },
   { label: 'Become a Member', href: '/membership/register' },
+  { label: 'Member Login', href: '/member/login' },
   { label: 'Tokyo Tour 2026', href: '/tokyo-tour-2026' },
 ];
 
@@ -117,7 +118,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className={COLUMN_HEADING}>Members</h3>
+            <h3 className={COLUMN_HEADING}>Our Services</h3>
             <ul className="mt-6 space-y-4 text-base">
               {MEMBER_LINKS.map((link) => (
                 <li key={link.href}>
@@ -194,11 +195,8 @@ export default function Footer() {
       <div className="relative z-10 bg-brand-redDark">
         {/* Extra bottom padding on small screens keeps the copyright clear of
             the fixed floating button, which sits above this bar. */}
-        <div className="container-x flex flex-col items-center gap-3 pb-24 pt-4 text-center text-xs text-white/80 sm:flex-row sm:justify-between sm:pb-4">
-          <p className="flex items-center gap-2">
-            <ShieldCheck size={14} className="text-white" />
-            © 2026 XCEED India. All Rights Reserved.
-          </p>
+        <div className="container-x flex flex-col items-center gap-3 pb-24 pt-4 text-center text-sm text-white/80 sm:flex-row sm:justify-between sm:pb-4">
+          <p>© 2026 XCEED India. All Rights Reserved.</p>
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
             {LEGAL_LINKS.map(({ label, icon: Icon }, i) => (
               <div key={label} className="flex items-center gap-4">

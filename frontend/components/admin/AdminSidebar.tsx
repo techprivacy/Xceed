@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Package, ShieldCheck, LogOut, Award, MessageSquare } from 'lucide-react';
+import { LayoutDashboard, Package, ShieldCheck, LogOut, Award, MessageSquare, Plane } from 'lucide-react';
 import { useCurrentAdmin } from '@/lib/useCurrentAdmin';
 import { can, Permission } from '@/lib/permissions';
 
@@ -25,6 +25,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Products', href: '/admin/products', icon: Package, permission: 'products' },
   { label: 'Contact Enquiries', href: '/admin/contact', icon: MessageSquare },
   { label: 'Directory', href: '/admin/membership', icon: Award, permission: 'directory' },
+  { label: 'Tokyo Tour', href: '/admin/tokyo-tour', icon: Plane },
   { label: 'Users & Roles', href: '/admin/users', icon: ShieldCheck },
 ];
 

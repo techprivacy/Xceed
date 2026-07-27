@@ -55,7 +55,7 @@ export default function TokyoTourPage() {
 
           <div className="mt-8 flex flex-wrap gap-4">
             <Button href="#enquiry" variant="primary">
-              Confirm Booking
+              Summit
             </Button>
             <Button href="#itinerary" variant="ghost-light">
               View Itinerary

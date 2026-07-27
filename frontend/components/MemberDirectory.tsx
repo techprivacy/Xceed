@@ -111,11 +111,8 @@ export default function MemberDirectory() {
     <section className="bg-white py-16">
       <div className="container-x">
         <div className="mx-auto max-w-2xl text-center">
-          <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-blue/20 bg-brand-blue/5 px-4 py-1.5 text-xs font-semibold text-brand-blueDark">
-            20+ Years of Experience
-          </span>
           <h2 className="text-2xl font-bold tracking-tight text-brand-black sm:text-3xl">
-            India &amp; Japan&apos;s Trusted Manufacturing &amp; Foundry Network
+            Trusted 2,000+ Manufacturers &amp; Suppliers Across India &amp; Japan
           </h2>
         </div>
 

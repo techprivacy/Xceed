@@ -132,19 +132,6 @@ export const updateProduct = (token: string, id: string, payload: Partial<Produc
 export const deleteProduct = (token: string, id: string) =>
   adminRequest<null>(`/products/${id}`, token, { method: 'DELETE' });
 
-export interface AiDescriptionParams {
-  name: string;
-  categoryName?: string;
-  tags?: string[];
-  priceUnit?: string;
-}
-
-export const generateProductDescription = (token: string, params: AiDescriptionParams) =>
-  adminRequest<{ shortDescription: string; description: string }>('/products/ai/description', token, {
-    method: 'POST',
-    body: JSON.stringify(params),
-  });
-
 export const uploadProductImages = (token: string, files: File[]) => {
   const formData = new FormData();
   files.forEach((file) => formData.append('images', file));

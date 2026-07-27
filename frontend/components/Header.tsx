@@ -80,20 +80,20 @@ export default function Header() {
             <a
               href="/cart"
               aria-label="Cart"
-              className="relative flex h-10 w-10 items-center justify-center rounded-xl text-brand-charcoal transition hover:bg-brand-mist hover:text-brand-red sm:h-auto sm:w-auto sm:gap-2 sm:px-3 sm:py-2"
+              className="relative flex h-11 w-11 items-center justify-center rounded-xl text-brand-charcoal transition hover:bg-brand-mist hover:text-brand-red sm:h-auto sm:w-auto sm:gap-2 sm:px-3 sm:py-2"
             >
               <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-red px-1 text-[10px] font-bold text-white sm:static sm:order-2">
                 {cartCount}
               </span>
-              <ShoppingCart size={22} className="sm:order-1" />
+              <ShoppingCart size={28} className="sm:order-1" />
             </a>
 
             <a
               href="/admin/login"
               aria-label="Admin login"
-              className="hidden h-10 w-10 items-center justify-center rounded-xl text-brand-charcoal transition hover:bg-brand-mist hover:text-brand-red sm:flex"
+              className="hidden h-11 w-11 items-center justify-center rounded-xl text-brand-charcoal transition hover:bg-brand-mist hover:text-brand-red sm:flex"
             >
-              <User size={20} />
+              <User size={26} />
             </a>
           </div>
         </div>
@@ -119,8 +119,12 @@ export default function Header() {
             <li>
               <a
                 href={TOUR_ITEM.href}
-                className="flex items-center gap-1.5 rounded-lg bg-brand-red px-3.5 py-1.5 text-white shadow-sm shadow-brand-red/30 transition-all hover:-translate-y-0.5 hover:bg-brand-redDark"
+                className="relative flex items-center gap-1.5 rounded-lg bg-brand-red px-3.5 py-1.5 text-white shadow-sm shadow-brand-red/30 transition-all hover:-translate-y-0.5 hover:bg-brand-redDark"
               >
+                <span className="absolute -right-1.5 -top-1.5 flex h-3.5 w-3.5" aria-hidden>
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
+                  <span className="relative inline-flex h-3.5 w-3.5 rounded-full bg-white" />
+                </span>
                 {TOUR_ITEM.label}
               </a>
             </li>
@@ -136,7 +140,7 @@ export default function Header() {
                 <a
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className={`flex items-center justify-between gap-1 rounded-xl px-3.5 py-3 transition-colors ${
+                  className={`relative flex items-center justify-between gap-1 rounded-xl px-3.5 py-3 transition-colors ${
                     item === TOUR_ITEM
                       ? 'bg-brand-red text-white'
                       : pathname === item.href
@@ -145,6 +149,12 @@ export default function Header() {
                   }`}
                 >
                   {item.label}
+                  {item === TOUR_ITEM && (
+                    <span className="relative flex h-3.5 w-3.5 shrink-0" aria-hidden>
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
+                      <span className="relative inline-flex h-3.5 w-3.5 rounded-full bg-white" />
+                    </span>
+                  )}
                 </a>
               </li>
             ))}

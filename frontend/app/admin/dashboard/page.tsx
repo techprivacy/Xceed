@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Package, Building2, UserCheck, Users } from 'lucide-react';
+import { Package, Building2, UserCheck, Users, Plane } from 'lucide-react';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import StatCard from '@/components/admin/StatCard';
-import { getAdminToken, getProducts, getMemberStats } from '@/lib/api';
+import { getAdminToken, getProducts, getMemberStats, getQuoteRequests } from '@/lib/api';
 import { useCurrentAdmin } from '@/lib/useCurrentAdmin';
 import { can } from '@/lib/permissions';
 
@@ -21,6 +21,7 @@ export default function AdminDashboardPage() {
     approvedMembers: number;
     pendingApprovals: number;
   } | null>(null);
+  const [tokyoTourCount, setTokyoTourCount] = useState<number | null>(null);
 
   useEffect(() => {
     const token = getAdminToken();
@@ -36,9 +37,17 @@ export default function AdminDashboardPage() {
         .then((res) => setMemberStats(res.data))
         .catch(() => setMemberStats({ totalMembers: 0, approvedMembers: 0, pendingApprovals: 0 }));
     }
+    // /api/quotes is gated by adminOnly on the backend (not the permission
+    // system), same as the "Tokyo Tour" sidebar link — so only fetch for the
+    // admin role, matching AdminSidebar's `admin.role === 'admin'` fallback.
+    if (admin.role === 'admin') {
+      getQuoteRequests(token, { source: 'Tokyo Tour', limit: 1 })
+        .then((res) => setTokyoTourCount(res.total ?? 0))
+        .catch(() => setTokyoTourCount(0));
+    }
   }, [admin]);
 
-  const tiles: { label: string; value: string | number; icon: typeof Package }[] = [];
+  const tiles: { label: string; value: string | number; icon: typeof Package; href?: string }[] = [];
   if (!admin || can(admin.role, 'products')) {
     tiles.push({ label: 'Total Live Products', value: products ?? '—', icon: Package });
   }
@@ -48,6 +57,14 @@ export default function AdminDashboardPage() {
       { label: 'Pending Member Approvals', value: memberStats?.pendingApprovals ?? '—', icon: UserCheck },
       { label: 'Total Registered Members', value: memberStats?.totalMembers ?? '—', icon: Users }
     );
+  }
+  if (!admin || admin.role === 'admin') {
+    tiles.push({
+      label: 'Tokyo Tour Interested',
+      value: tokyoTourCount ?? '—',
+      icon: Plane,
+      href: '/admin/tokyo-tour',
+    });
   }
 
   return (

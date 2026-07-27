@@ -2,12 +2,8 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { Users } from 'lucide-react';
 import { submitQuoteRequest } from '@/lib/api';
 import Button from '@/components/ui/Button';
-
-const TOTAL_SEATS = 25;
-const SEATS_BOOKED = 6;
 
 const INPUT_CLASSES =
   'w-full rounded-xl border border-brand-border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red/20';
@@ -40,6 +36,7 @@ export default function TokyoTourEnquiryForm() {
         productRequirement: form.interestedIn,
         contactPerson: form.fullName,
         email: form.email,
+        source: 'Tokyo Tour',
       });
       setStatus('success');
       setForm({ fullName: '', email: '', companyName: '', mobileNumber: '', interestedIn: INTEREST_OPTIONS[0] });
@@ -65,17 +62,6 @@ export default function TokyoTourEnquiryForm() {
       <div className="relative">
         <h3 className="text-xl font-bold tracking-tight text-brand-black">Reserve Your Seat for Japan 2026</h3>
         <p className="mt-2 text-sm text-brand-slate">Complete the form below to confirm your seat.</p>
-
-        <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-brand-red/10 px-4 py-2 text-sm font-bold text-brand-red">
-          <Users size={16} />
-          Only {TOTAL_SEATS} Exclusive Seats <span className="text-brand-red/40">&bull;</span> {SEATS_BOOKED} Already Booked
-        </div>
-        <div className="mt-2 h-1.5 w-48 max-w-full overflow-hidden rounded-full bg-brand-red/10">
-          <div
-            className="h-full rounded-full bg-brand-red"
-            style={{ width: `${(SEATS_BOOKED / TOTAL_SEATS) * 100}%` }}
-          />
-        </div>
 
         <p className="mt-3 text-xs italic text-brand-slate">
           *Our team will contact you within 24 hours to confirm your registration.
@@ -125,7 +111,7 @@ export default function TokyoTourEnquiryForm() {
 
         <div className="flex justify-center sm:col-span-2">
           <Button type="submit" disabled={status === 'submitting'} variant="primary">
-            {status === 'submitting' ? 'Booking...' : 'Confirm Booking'}
+            {status === 'submitting' ? 'Booking...' : 'Summit'}
           </Button>
         </div>
 

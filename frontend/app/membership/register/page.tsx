@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { Handshake, Crown, TrendingUp, Package, Building2, Percent, Globe2, Users, Ship, Lightbulb, Link2, Plane } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -15,12 +14,11 @@ const BENEFITS = [
   { icon: Lightbulb, text: 'Expert guidance for expanding in Japan' },
 ];
 
-const QUICK_LINKS = [
+const BENEFIT_CARDS = [
   { icon: Link2, label: 'Connect' },
   { icon: Users, label: 'Collaborate' },
   { icon: Package, label: 'Import' },
   { icon: Plane, label: 'Export' },
-  { icon: TrendingUp, label: 'Grow with Japan' },
 ];
 
 export default function MembershipRegisterPage() {
@@ -28,66 +26,81 @@ export default function MembershipRegisterPage() {
     <main>
       <Header />
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#EAF2FF] via-white to-[#DCEAFE] pb-16 pt-14">
-        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 lg:block" aria-hidden>
-          <Image
-            src="https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=1200&h=1400&fit=crop"
-            alt=""
-            fill
-            sizes="50vw"
-            className="object-cover object-left opacity-25"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/40 to-transparent" />
-        </div>
-
-        <div className="container-x relative">
-          <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-blue/20 bg-white/80 px-4 py-1.5 text-xs font-semibold text-brand-blueDark shadow-sm">
-            <Handshake size={14} className="text-brand-blue" />
-            India – Japan Business Connection
-          </span>
-          <h1 className="max-w-2xl text-3xl font-bold italic leading-[1.15] tracking-tight text-brand-black sm:text-4xl md:text-5xl">
-            Grow Your Business with{' '}
-            <span className="relative inline-block text-brand-blue">
-              Japan
-              <span className="absolute inset-x-0 -bottom-1 h-0.5 rounded-full bg-brand-red" aria-hidden />
+      <section className="bg-gradient-to-br from-[#EAF2FF] via-white to-[#DCEAFE] pb-16 pt-14">
+        <div className="container-x text-center">
+          <div className="mx-auto flex max-w-2xl flex-col items-center gap-4">
+            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-blue/10 text-brand-blue">
+              <Handshake size={32} />
             </span>
-            , Together.
-          </h1>
-          <p className="mt-4 max-w-xl text-sm leading-relaxed text-brand-slate sm:text-base">
-            Join XCEED India Membership and unlock global opportunities.
-          </p>
+            <h1 className="text-4xl font-bold italic leading-[1.15] tracking-tight text-brand-black sm:text-5xl md:text-6xl">
+              India &ndash; Japan Business Connection
+            </h1>
+          </div>
 
-          <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-[1fr_420px] lg:items-start">
-            <div>
-              <div className="rounded-3xl border border-black/5 bg-white/90 p-6 shadow-lg backdrop-blur-sm sm:p-8">
-                <div className="mb-6 flex items-center gap-2.5">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-400/15 text-amber-500">
-                    <Crown size={18} />
-                  </span>
-                  <h2 className="text-xl font-bold tracking-tight text-brand-black">Membership Benefits</h2>
-                </div>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  {BENEFITS.map(({ icon: Icon, text }) => (
-                    <div key={text} className="flex items-start gap-3">
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-blue/10 text-brand-blue">
-                        <Icon size={18} />
-                      </span>
-                      <p className="pt-1.5 text-sm leading-snug text-brand-charcoal">{text}</p>
-                    </div>
-                  ))}
-                </div>
+          <div className="mx-auto mt-6 max-w-xl">
+            <p className="text-lg font-semibold leading-relaxed text-brand-charcoal sm:text-xl">
+              Grow Your Business with Japan &amp; India, Together.
+            </p>
+            <p className="mt-3 text-base leading-relaxed text-brand-slate">
+              Join XCEED India Membership and unlock global opportunities.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-white py-14">
+        <div className="container-x">
+          <div className="mx-auto max-w-4xl">
+            <div className="rounded-3xl border border-black/5 bg-white p-6 shadow-lg sm:p-8">
+              <div className="mb-6 flex items-center justify-center gap-2.5">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-400/15 text-amber-500">
+                  <Crown size={18} />
+                </span>
+                <h2 className="text-xl font-bold tracking-tight text-brand-black">Membership Benefits</h2>
               </div>
-
-              <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 rounded-full bg-white/70 px-6 py-3 text-xs font-semibold text-brand-charcoal shadow-sm">
-                {QUICK_LINKS.map(({ icon: Icon, label }) => (
-                  <span key={label} className="flex items-center gap-1.5">
-                    <Icon size={14} className="text-brand-blue" />
-                    {label}
-                  </span>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {BENEFITS.map(({ icon: Icon, text }) => (
+                  <div key={text} className="flex items-start gap-3">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-blue/10 text-brand-blue">
+                      <Icon size={18} />
+                    </span>
+                    <p className="pt-1.5 text-sm leading-snug text-brand-charcoal">{text}</p>
+                  </div>
                 ))}
               </div>
             </div>
 
+            <div className="mt-10 grid grid-cols-2 gap-6 sm:grid-cols-4">
+              {BENEFIT_CARDS.map(({ icon: Icon, label }, i) => (
+                <div
+                  key={label}
+                  className="flex h-full flex-col items-center rounded-2xl border border-black/[0.07] bg-white p-6 text-center shadow-[0_12px_32px_-24px_rgba(7,28,58,0.28)]"
+                >
+                  <div className="relative mb-5 flex h-20 w-20 items-center justify-center">
+                    <span
+                      className="absolute inset-0 rounded-full bg-brand-red/10 animate-haloPulse motion-reduce:animate-none"
+                      style={{ animationDelay: `${i * 0.3}s` }}
+                      aria-hidden
+                    />
+                    <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-brand-red/20">
+                      <Icon
+                        size={32}
+                        className="text-brand-red animate-floatSoft motion-reduce:animate-none"
+                        style={{ animationDelay: `${i * 0.3}s` }}
+                      />
+                    </div>
+                  </div>
+                  <h3 className="text-base font-bold uppercase tracking-wide text-brand-black">{label}</h3>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-brand-mist py-14">
+        <div className="container-x">
+          <div className="mx-auto max-w-2xl">
             <MembershipForm />
           </div>
         </div>

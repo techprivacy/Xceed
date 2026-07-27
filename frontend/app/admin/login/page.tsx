@@ -31,13 +31,12 @@ export default function AdminLoginPage() {
   return (
     <main>
       <Header />
-      <div className="flex min-h-[70vh] items-center justify-center bg-brand-navy px-4 py-16">
+      <div className="flex min-h-[70vh] items-center justify-center bg-gradient-to-br from-[#EAF2FF] via-white to-[#DCEAFE] px-4 py-16">
         <form
           onSubmit={handleSubmit}
-          className="w-full max-w-sm rounded-3xl bg-white p-8 shadow-2xl"
+          className="w-full max-w-sm rounded-3xl bg-white p-8 text-center shadow-2xl"
         >
-          <Image src="/logo.png" alt="XCEED India" width={280} height={126} priority className="mb-3 h-10 w-auto object-contain" />
-          <p className="mb-6 text-sm text-brand-slate">Sign in to manage products &amp; quote requests.</p>
+          <Image src="/logo.png" alt="XCEED India" width={280} height={126} priority className="mx-auto mb-6 h-10 w-auto object-contain" />
 
           <label className="mb-1 block text-xs font-semibold text-brand-charcoal">Username</label>
           <input
@@ -45,7 +44,7 @@ export default function AdminLoginPage() {
             onChange={(e) => setUsername(e.target.value)}
             required
             placeholder="admin"
-            className="mb-4 w-full rounded-xl border border-brand-border px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brand-blue"
+            className="mb-4 w-full rounded-xl border border-brand-border px-3 py-2.5 text-center text-sm focus:outline-none focus:ring-1 focus:ring-brand-red"
           />
 
           <label className="mb-1 block text-xs font-semibold text-brand-charcoal">Password</label>
@@ -55,7 +54,7 @@ export default function AdminLoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             required
             placeholder="••••••••"
-            className="mb-6 w-full rounded-xl border border-brand-border px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-brand-blue"
+            className="mb-6 w-full rounded-xl border border-brand-border px-3 py-2.5 text-center text-sm focus:outline-none focus:ring-1 focus:ring-brand-red"
           />
 
           {error && <p className="mb-4 text-sm text-red-600">{error}</p>}

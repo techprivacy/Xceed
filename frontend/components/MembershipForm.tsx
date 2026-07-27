@@ -5,7 +5,7 @@ import { UserPlus, User, Building2, Mail, Lock, Phone, MessageCircle, MapPin, Br
 import { registerMember, uploadCompanyLogo } from '@/lib/api';
 
 const INPUT_CLASSES =
-  'w-full rounded-xl border border-brand-border bg-white py-2.5 pl-10 pr-4 text-sm text-brand-charcoal focus:outline-none focus:ring-2 focus:ring-brand-blue/20';
+  'w-full rounded-xl border border-brand-border bg-white py-3.5 pl-11 pr-4 text-base text-brand-charcoal focus:outline-none focus:ring-2 focus:ring-brand-red/20';
 
 const INDIAN_STATES = [
   'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat',
@@ -38,7 +38,7 @@ function IconField({
 }) {
   return (
     <div className="relative">
-      <Icon size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-blue" />
+      <Icon size={18} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-brand-red" />
       {children}
     </div>
   );
@@ -97,17 +97,17 @@ export default function MembershipForm() {
 
   return (
     <div className="overflow-hidden rounded-3xl border border-black/5 bg-white shadow-xl">
-      <div className="flex items-center gap-3 bg-gradient-to-r from-brand-blue to-brand-blueDark px-6 py-5 sm:px-8">
-        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/15 text-white">
-          <UserPlus size={22} />
+      <div className="flex flex-col items-center gap-3 bg-gradient-to-r from-brand-red to-brand-redDark px-6 py-8 text-center sm:px-8">
+        <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-white/15 text-white">
+          <UserPlus size={28} />
         </span>
         <div>
-          <h3 className="text-lg font-bold text-white">Become a Member Today</h3>
-          <p className="text-xs text-white/80">Fill in the form below to apply for membership.</p>
+          <h3 className="text-2xl font-bold text-white">Become a Member Today</h3>
+          <p className="mt-1 text-sm text-white/80">Fill in the form below to apply for membership.</p>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 p-6 sm:grid-cols-2 sm:p-8">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6 p-8 sm:grid-cols-2 sm:p-10">
         <IconField icon={User}>
           <input
             name="fullName"
@@ -203,7 +203,7 @@ export default function MembershipForm() {
         </IconField>
 
         <div className="relative sm:col-span-2">
-          <MapPin size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-blue" />
+          <MapPin size={18} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-brand-red" />
           <select
             name="state"
             value={form.state}
@@ -220,12 +220,12 @@ export default function MembershipForm() {
               </option>
             ))}
           </select>
-          <ChevronDown size={16} className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-brand-slate" />
+          <ChevronDown size={18} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-brand-slate" />
         </div>
 
         <div className="sm:col-span-2">
-          <label className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold text-brand-charcoal">
-            <ImagePlus size={14} className="text-brand-blue" />
+          <label className="mb-2 flex items-center gap-1.5 text-sm font-semibold text-brand-charcoal">
+            <ImagePlus size={16} className="text-brand-red" />
             Company Logo (optional)
           </label>
           <div className="flex items-center gap-4">
@@ -241,13 +241,13 @@ export default function MembershipForm() {
               type="file"
               accept="image/*"
               onChange={handleLogoChange}
-              className="block w-full text-xs text-brand-slate file:mr-4 file:rounded-full file:border-0 file:bg-brand-blue/10 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-brand-blueDark hover:file:bg-brand-blue/20"
+              className="block w-full text-sm text-brand-slate file:mr-4 file:rounded-full file:border-0 file:bg-brand-red/10 file:px-4 file:py-2.5 file:text-sm file:font-semibold file:text-brand-redDark hover:file:bg-brand-red/20"
             />
           </div>
         </div>
 
         <div className="relative sm:col-span-2">
-          <Building2 size={16} className="pointer-events-none absolute left-3.5 top-3.5 text-brand-blue" />
+          <Building2 size={18} className="pointer-events-none absolute left-4 top-4 text-brand-red" />
           <textarea
             name="officeAddress"
             value={form.officeAddress}
@@ -255,21 +255,21 @@ export default function MembershipForm() {
             required
             rows={3}
             placeholder="Office Address*"
-            className={`${INPUT_CLASSES} resize-none pt-3`}
+            className={`${INPUT_CLASSES} resize-none pt-3.5`}
           />
         </div>
 
         <button
           type="submit"
           disabled={status === 'submitting'}
-          className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand-blue to-brand-blueDark px-6 py-3.5 text-sm font-semibold text-white shadow-md shadow-brand-blue/25 transition-all duration-200 hover:shadow-lg hover:shadow-brand-blue/30 disabled:cursor-not-allowed disabled:opacity-50 sm:col-span-2"
+          className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand-red to-brand-redDark px-8 py-4 text-base font-semibold text-white shadow-md shadow-brand-red/25 transition-all duration-200 hover:shadow-lg hover:shadow-brand-red/30 disabled:cursor-not-allowed disabled:opacity-50 sm:col-span-2"
         >
           {status === 'submitting' ? 'Submitting...' : 'Submit Membership Application'}
-          <ArrowRight size={16} />
+          <ArrowRight size={18} />
         </button>
 
         <p className="flex items-center justify-center gap-1.5 text-center text-xs italic text-brand-slate sm:col-span-2">
-          <ShieldCheck size={13} className="shrink-0 text-brand-blue" />
+          <ShieldCheck size={13} className="shrink-0 text-brand-red" />
           Our team will contact you within 24 hours to confirm your membership.
         </p>
 

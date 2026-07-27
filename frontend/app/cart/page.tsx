@@ -50,43 +50,46 @@ export default function CartPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_320px]">
-            <div className="space-y-4">
+            <div className="space-y-6">
               {items.map((item) => (
-                <Card key={item.id} className="p-5">
+                <div
+                  key={item.id}
+                  className="rounded-2xl border-2 border-brand-red/15 bg-white p-6 shadow-sm transition-colors hover:border-brand-red/30 sm:p-7"
+                >
                   {item.kind === 'product' ? (
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex items-start gap-4">
-                        <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-brand-mist">
+                    <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+                      <div className="flex items-start gap-5">
+                        <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-brand-mist sm:h-28 sm:w-28">
                           {item.image ? (
-                            <Image src={item.image} alt={item.name ?? ''} fill sizes="64px" className="object-cover" />
+                            <Image src={item.image} alt={item.name ?? ''} fill sizes="112px" className="object-cover" />
                           ) : (
                             <div className="flex h-full items-center justify-center">
-                              <ProductImagePlaceholder size={28} />
+                              <ProductImagePlaceholder size={36} />
                             </div>
                           )}
                         </div>
                         <div>
-                          <p className="text-sm font-semibold text-brand-black">{item.name}</p>
-                          <p className="mt-1 text-xs text-brand-slate">
+                          <p className="text-lg font-bold text-brand-black">{item.name}</p>
+                          <p className="mt-1.5 text-sm text-brand-slate">
                             {formatINR(item.price ?? 0)} × Qty {item.quantity}
                           </p>
-                          <p className="mt-1 text-xs text-brand-slate">Incl. GST {formatINR(item.gst ?? 0)}</p>
+                          <p className="mt-1 text-sm text-brand-slate">Incl. GST {formatINR(item.gst ?? 0)}</p>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <p className="text-lg font-bold text-brand-black">{formatINR(item.total)}</p>
+                      <div className="flex items-center justify-between sm:flex-col sm:items-end sm:justify-start">
+                        <p className="text-2xl font-bold text-brand-black">{formatINR(item.total)}</p>
                         <button
                           onClick={() => handleRemove(item.id)}
-                          className="mt-2 text-xs font-semibold text-brand-red hover:underline"
+                          className="text-sm font-semibold text-brand-red hover:underline sm:mt-3"
                         >
                           Remove
                         </button>
                       </div>
                     </div>
                   ) : (
-                    <div className="flex items-start justify-between gap-4">
+                    <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
                       <div>
-                        <p className="text-sm font-semibold text-brand-black">
+                        <p className="text-lg font-bold text-brand-black">
                           {item.kind === 'holder'
                             ? 'Holder Configuration'
                             : item.kind === 'numbers'
@@ -94,39 +97,39 @@ export default function CartPage() {
                               : 'Cast Letters'}{' '}
                           — {item.size} · {item.type}
                         </p>
-                        <p className="mt-1 text-xs text-brand-slate">
+                        <p className="mt-1.5 text-sm text-brand-slate">
                           {item.kind === 'numbers' ? 'Numbers' : 'Letters'}: {item.letters?.join(', ')} ({item.letterCount})
                         </p>
                         {item.kind === 'holder' ? (
                           <>
-                            <p className="mt-1 text-xs text-brand-slate">
+                            <p className="mt-1 text-sm text-brand-slate">
                               {item.shape === 'OVAL' ? 'Oval' : 'Square'} Holder · {item.installation === 'SCREW' ? 'Screw' : 'Glue'} Type
                               · Capacity {item.capacity}
                             </p>
-                            <p className="mt-1 text-xs text-brand-slate">
+                            <p className="mt-1 text-sm text-brand-slate">
                               Letters {formatINR((item.pricePerLetter ?? 0) * (item.letterCount ?? 0))} + Holders{' '}
                               {formatINR(item.holderPrice ?? 0)} + GST {formatINR(item.gst ?? 0)} × Qty {item.quantity}
                             </p>
                           </>
                         ) : (
-                          <p className="mt-1 text-xs text-brand-slate">
+                          <p className="mt-1 text-sm text-brand-slate">
                             {formatINR(item.pricePerLetter ?? 0)} / {item.kind === 'numbers' ? 'number' : 'letter'} × Qty {item.quantity}{' '}
                             · Incl. GST {formatINR(item.gst ?? 0)}
                           </p>
                         )}
                       </div>
-                      <div className="text-right">
-                        <p className="text-lg font-bold text-brand-black">{formatINR(item.total)}</p>
+                      <div className="flex items-center justify-between sm:flex-col sm:items-end sm:justify-start">
+                        <p className="text-2xl font-bold text-brand-black">{formatINR(item.total)}</p>
                         <button
                           onClick={() => handleRemove(item.id)}
-                          className="mt-2 text-xs font-semibold text-brand-red hover:underline"
+                          className="text-sm font-semibold text-brand-red hover:underline sm:mt-3"
                         >
                           Remove
                         </button>
                       </div>
                     </div>
                   )}
-                </Card>
+                </div>
               ))}
             </div>
 

@@ -1,7 +1,7 @@
 import { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from 'react';
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'ghost-light';
-type Size = 'sm' | 'md';
+type Size = 'sm' | 'md' | 'lg';
 
 const VARIANT_CLASSES: Record<Variant, string> = {
   primary:
@@ -14,6 +14,7 @@ const VARIANT_CLASSES: Record<Variant, string> = {
 const SIZE_CLASSES: Record<Size, string> = {
   sm: 'px-4 py-2 text-sm',
   md: 'px-6 py-3.5 text-sm',
+  lg: 'px-10 py-5 text-lg',
 };
 
 const BASE_CLASSES =
