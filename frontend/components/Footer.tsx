@@ -78,17 +78,9 @@ export default function Footer() {
             </p>
             <div className="mt-4 h-0.5 w-10 rounded-full bg-brand-red" />
             <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-brand-slate">
-              <strong className="font-semibold text-brand-black">XCEED India</strong> delivers{' '}
-              <strong className="font-semibold text-brand-black">
-                Japanese-quality industrial marking solutions
-              </strong>{' '}
-              backed by <strong className="font-semibold text-brand-black">20+ years of expertise</strong>, a
-              trusted network of{' '}
-              <strong className="font-semibold text-brand-black">
-                2,000+ manufacturers &amp; foundries
-              </strong>
-              , and <strong className="font-semibold text-brand-black">100+ precision tools</strong> across{' '}
-              <strong className="font-semibold text-brand-black">India and Japan</strong>.
+              XCEED India delivers Japanese-quality industrial marking solutions backed by 20+ years of
+              expertise, a trusted network of 2,000+ manufacturers &amp; foundries, and 100+ precision tools
+              across India and Japan.
             </p>
             <div className="mt-6 flex gap-3">
               {SOCIALS.map(({ icon: Icon, label, bg }) => (
