@@ -7,10 +7,15 @@ const MAIN_CATEGORIES = PRODUCT_CATEGORIES.filter((c) =>
 );
 
 const SOCIALS = [
-  { icon: Facebook, label: 'Facebook', bg: 'bg-[#1877F2]' },
-  { icon: Instagram, label: 'Instagram', bg: 'bg-gradient-to-tr from-[#F58529] via-[#DD2A7B] to-[#8134AF]' },
-  { icon: Linkedin, label: 'LinkedIn', bg: 'bg-[#0A66C2]' },
-  { icon: Youtube, label: 'YouTube', bg: 'bg-[#FF0000]' },
+  { icon: Facebook, label: 'Facebook', bg: 'bg-[#1877F2]', href: '#' },
+  {
+    icon: Instagram,
+    label: 'Instagram',
+    bg: 'bg-gradient-to-tr from-[#F58529] via-[#DD2A7B] to-[#8134AF]',
+    href: 'https://www.instagram.com/xceed_india',
+  },
+  { icon: Linkedin, label: 'LinkedIn', bg: 'bg-[#0A66C2]', href: 'https://www.linkedin.com/company/xceedindia' },
+  { icon: Youtube, label: 'YouTube', bg: 'bg-[#FF0000]', href: '#' },
 ];
 
 const MEMBER_LINKS = [
@@ -83,10 +88,12 @@ export default function Footer() {
               across India and Japan.
             </p>
             <div className="mt-6 flex gap-3">
-              {SOCIALS.map(({ icon: Icon, label, bg }) => (
+              {SOCIALS.map(({ icon: Icon, label, bg, href }) => (
                 <a
                   key={label}
-                  href="#"
+                  href={href}
+                  target={href !== '#' ? '_blank' : undefined}
+                  rel={href !== '#' ? 'noopener noreferrer' : undefined}
                   aria-label={label}
                   className={`flex h-10 w-10 items-center justify-center rounded-full text-white shadow-md transition-transform duration-200 hover:-translate-y-0.5 ${bg}`}
                 >

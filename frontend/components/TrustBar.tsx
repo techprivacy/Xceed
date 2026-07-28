@@ -10,7 +10,7 @@ const STATS = [
 export default function TrustBar() {
   return (
     <section className="relative z-10 bg-white">
-      <div className="container-x" style={{ paddingTop: 'clamp(1.5rem, 1rem + 2vw, 3rem)', paddingBottom: 'clamp(2rem, 2rem + 2vw, 4rem)' }}>
+      <div className="container-x" style={{ paddingTop: 0, paddingBottom: 'clamp(2rem, 2rem + 2vw, 4rem)' }}>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 lg:grid-cols-6 lg:gap-4">
           {STATS.map(({ title, subtitle }) => (
             <div

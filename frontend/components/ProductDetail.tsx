@@ -24,19 +24,21 @@ export default function ProductDetail({
 
   return (
     <section className={bare ? '' : 'container-x py-10'}>
-      <nav className="mb-6 text-xs text-brand-slate">
-        <Link href="/" className="hover:text-brand-red">
-          Home
-        </Link>
-        {category && (
-          <>
-            {' / '}
-            <span>{category.name}</span>
-          </>
-        )}
-        {' / '}
-        <span className="text-brand-black">{product.name}</span>
-      </nav>
+      {!bare && (
+        <nav className="mb-6 text-xs text-brand-slate">
+          <Link href="/" className="hover:text-brand-red">
+            Home
+          </Link>
+          {category && (
+            <>
+              {' / '}
+              <span>{category.name}</span>
+            </>
+          )}
+          {' / '}
+          <span className="text-brand-black">{product.name}</span>
+        </nav>
+      )}
 
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
         <div>

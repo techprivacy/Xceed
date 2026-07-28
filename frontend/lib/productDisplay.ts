@@ -31,8 +31,7 @@ const CATEGORY_FALLBACK_IMAGES: Record<string, string> = {
   'cast-numbers': '/cast_number.png',
   holders: '/cast_holder.png',
   // Matches the magnetic-tools artwork used on the homepage category card.
-  'magnetic-tool':
-    'https://images.unsplash.com/photo-1529479627062-5f1f0b88912a?w=800&h=600&fit=crop',
+  'magnetic-tool': '/magtool.jpeg',
 };
 
 // Only the local catalogue shots need containing — they are wide products on a

@@ -12,7 +12,7 @@ const CATEGORY_IMAGES: Record<string, { src: string; contain: boolean }> = {
   'cast-numbers': { src: '/cast_number.png', contain: true },
   holders: { src: '/cast_holder.png', contain: true },
   'magnetic-tools': {
-    src: 'https://images.unsplash.com/photo-1529479627062-5f1f0b88912a?w=800&h=600&fit=crop',
+    src: '/magtool.jpeg',
     contain: false,
   },
 };
