@@ -66,18 +66,18 @@ export default function ContactUsPage() {
             {CONTACT_DETAILS.map(({ icon: Icon, label, value, href, text }, i) => (
               <div
                 key={label}
-                className="group flex items-center gap-4 rounded-2xl border border-black/5 bg-white p-5 shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:border-brand-red/20 hover:shadow-lg"
+                className="group flex items-center gap-4 rounded-2xl border border-black/5 bg-white p-5 shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:border-brand-blue/20 hover:shadow-lg"
               >
                 <span className="relative flex h-16 w-16 shrink-0 items-center justify-center">
                   <span
-                    className="absolute inset-0 rounded-xl bg-brand-red/10 animate-haloPulse motion-reduce:animate-none"
+                    className="absolute inset-0 rounded-xl bg-brand-blue/10 animate-haloPulse motion-reduce:animate-none"
                     style={{ animationDelay: `${i * 0.3}s` }}
                     aria-hidden
                   />
-                  <span className="relative flex h-16 w-16 items-center justify-center rounded-xl bg-brand-red/20 transition-transform duration-500 ease-out group-hover:scale-105">
+                  <span className="relative flex h-16 w-16 items-center justify-center rounded-xl bg-brand-blue/20 transition-transform duration-500 ease-out group-hover:scale-105">
                     <Icon
                       size={30}
-                      className="text-brand-red animate-floatSoft motion-reduce:animate-none"
+                      className="text-brand-blue animate-floatSoft motion-reduce:animate-none"
                       style={{ animationDelay: `${i * 0.3}s` }}
                     />
                   </span>
