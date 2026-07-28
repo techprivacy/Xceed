@@ -9,7 +9,7 @@ const EXCLUDED_PRODUCT_SLUGS = ['hr-801-magnetic-marking-pen'];
 // Query params: category, trending, bestSeller, search, page, limit
 exports.getProducts = async (req, res) => {
   try {
-    const { category, trending, bestSeller, search, page = 1, limit = 20 } = req.query;
+    const { category, trending, bestSeller, search, includeInactive, page = 1, limit = 20 } = req.query;
     const filter = {};
 
     if (category) {
@@ -19,6 +19,10 @@ exports.getProducts = async (req, res) => {
     if (trending === 'true') filter.isTrending = true;
     if (bestSeller === 'true') filter.isBestSeller = true;
     if (search) filter.$text = { $search: search };
+    // Admin's product list passes includeInactive=true to manage disabled listings;
+    // every public-facing page (category/product pages, homepage) omits it and
+    // only ever sees active products.
+    if (includeInactive !== 'true') filter.isActive = { $ne: false };
     filter.slug = { $nin: EXCLUDED_PRODUCT_SLUGS };
 
     const skip = (Number(page) - 1) * Number(limit);

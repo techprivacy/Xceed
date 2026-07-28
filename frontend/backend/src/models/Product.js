@@ -35,6 +35,7 @@ const productSchema = new mongoose.Schema(
 
     minOrderQty: { type: Number, default: 1 },
     inStock: { type: Boolean, default: true },
+    isActive: { type: Boolean, default: true },
     isBestSeller: { type: Boolean, default: false },
     isTrending: { type: Boolean, default: false },
     tags: [{ type: String }],

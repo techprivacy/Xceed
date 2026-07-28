@@ -30,6 +30,7 @@ export interface Product {
   currency: string;
   minOrderQty: number;
   inStock: boolean;
+  isActive: boolean;
   isBestSeller: boolean;
   isTrending: boolean;
   tags?: string[];
@@ -50,6 +51,7 @@ export interface ProductInput {
   currency?: string;
   minOrderQty?: number;
   inStock?: boolean;
+  isActive?: boolean;
   isBestSeller?: boolean;
   isTrending?: boolean;
   tags?: string[];

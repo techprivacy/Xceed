@@ -99,6 +99,7 @@ export interface ProductListParams {
   search?: string;
   page?: number;
   limit?: number;
+  includeInactive?: boolean;
 }
 
 export const getProducts = (params: ProductListParams = {}) => {

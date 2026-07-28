@@ -129,6 +129,7 @@ export default function ProductForm({ product }: ProductFormProps) {
   );
   const [minOrderQty, setMinOrderQty] = useState(product?.minOrderQty?.toString() ?? '1');
   const [inStock, setInStock] = useState(product?.inStock ?? true);
+  const [isActive, setIsActive] = useState(product?.isActive ?? true);
   const [isBestSeller, setIsBestSeller] = useState(product?.isBestSeller ?? false);
   const [isTrending, setIsTrending] = useState(product?.isTrending ?? false);
   const [tags, setTags] = useState(product?.tags?.join(', ') ?? '');
@@ -215,6 +216,7 @@ export default function ProductForm({ product }: ProductFormProps) {
       priceUnit,
       minOrderQty: Number(minOrderQty) || 1,
       inStock,
+      isActive,
       isBestSeller,
       isTrending,
       tags: tags
@@ -364,10 +366,16 @@ export default function ProductForm({ product }: ProductFormProps) {
         <div>
           <label className={LABEL_CLASSES}>Visibility & Flags</label>
           <div className="flex flex-wrap gap-2.5">
+            <ToggleChip checked={isActive} onChange={setIsActive} label={isActive ? 'Active' : 'Inactive'} />
             <ToggleChip checked={inStock} onChange={setInStock} label="In Stock" />
             <ToggleChip checked={isBestSeller} onChange={setIsBestSeller} label="Best Seller" />
             <ToggleChip checked={isTrending} onChange={setIsTrending} label="Trending" />
           </div>
+          {!isActive && (
+            <p className="mt-2 text-xs text-brand-slate">
+              Inactive products are hidden from the storefront but stay editable here.
+            </p>
+          )}
         </div>
       </FormSection>
 

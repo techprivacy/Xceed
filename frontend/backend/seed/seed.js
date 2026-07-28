@@ -108,7 +108,7 @@ const run = async () => {
       slug: 'magnetic-tool-standard',
       category: categories['magnetic-tool']._id,
       shortDescription: 'Strong magnetic grip for accurate marking',
-      price: 2500,
+      price: 8500,
       priceUnit: 'per_piece',
       minOrderQty: 1,
       isTrending: true,
