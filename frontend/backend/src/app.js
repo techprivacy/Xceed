@@ -10,6 +10,8 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const quoteRoutes = require('./routes/quoteRoutes');
 const themeRoutes = require('./routes/themeRoutes');
 const memberRoutes = require('./routes/memberRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+const savedCartRoutes = require('./routes/savedCartRoutes');
 
 const app = express();
 
@@ -39,6 +41,8 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/quotes', quoteRoutes);
 app.use('/api/theme', themeRoutes);
 app.use('/api/members', memberRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/saved-carts', savedCartRoutes);
 
 // 404 handler
 app.use((req, res) => {

@@ -10,9 +10,13 @@ import Card from '@/components/ui/Card';
 import ProductImagePlaceholder from '@/components/ui/ProductImagePlaceholder';
 import { CartItem, getCart, removeFromCart, CART_UPDATED_EVENT } from '@/lib/cart';
 import { formatINR } from '@/lib/format';
+import CheckoutModal from '@/components/CheckoutModal';
+import SaveCartModal from '@/components/SaveCartModal';
 
 export default function CartPage() {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [showSaveCart, setShowSaveCart] = useState(false);
 
   useEffect(() => {
     const load = () => setItems(getCart());
@@ -152,8 +156,15 @@ export default function CartPage() {
                 <span>Total</span>
                 <span>{formatINR(grandTotal)}</span>
               </div>
-              <Button href="/contact-us" className="mt-6 w-full">
-                Pay Now
+              <Button onClick={() => setShowCheckout(true)} className="mt-6 w-full">
+                Place Order
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() => setShowSaveCart(true)}
+                className="mt-3 w-full"
+              >
+                Save Cart
               </Button>
             </Card>
           </div>
@@ -161,6 +172,20 @@ export default function CartPage() {
       </section>
 
       <Footer />
+
+      {showCheckout && (
+        <CheckoutModal
+          items={items}
+          subtotal={subtotal}
+          gstTotal={gstTotal}
+          grandTotal={grandTotal}
+          onClose={() => setShowCheckout(false)}
+          onPlaced={() => setItems([])}
+        />
+      )}
+      {showSaveCart && (
+        <SaveCartModal items={items} grandTotal={grandTotal} onClose={() => setShowSaveCart(false)} />
+      )}
     </main>
   );
 }

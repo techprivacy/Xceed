@@ -175,6 +175,87 @@ export interface QuoteRequest {
   updatedAt: string;
 }
 
+export type OrderItemKind = 'letters' | 'numbers' | 'holder' | 'product';
+
+export interface OrderItem {
+  kind: OrderItemKind;
+  name: string;
+  quantity: number;
+  total: number;
+  productId?: string;
+  image?: string;
+  details?: Record<string, unknown>;
+}
+
+export type OrderStatus = 'new' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+
+export interface Order {
+  _id: string;
+  items: OrderItem[];
+  subtotal: number;
+  gstTotal: number;
+  grandTotal: number;
+  customerName: string;
+  companyName?: string;
+  email?: string;
+  mobileNumber: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  notes?: string;
+  status: OrderStatus;
+  source: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface OrderInput {
+  items: OrderItem[];
+  subtotal: number;
+  gstTotal: number;
+  grandTotal: number;
+  customerName: string;
+  companyName?: string;
+  email?: string;
+  mobileNumber: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  notes?: string;
+  source?: string;
+}
+
+export type SavedCartStatus = 'new' | 'contacted' | 'converted';
+
+export interface SavedCartItem {
+  kind: OrderItemKind;
+  name: string;
+  quantity: number;
+  total: number;
+  image?: string;
+  details?: Record<string, unknown>;
+}
+
+export interface SavedCart {
+  _id: string;
+  items: SavedCartItem[];
+  grandTotal: number;
+  name: string;
+  email: string;
+  mobileNumber: string;
+  status: SavedCartStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SavedCartInput {
+  items: SavedCartItem[];
+  grandTotal: number;
+  name: string;
+  email: string;
+  mobileNumber: string;
+}
+
 export interface ThemePalette {
   primary: string;
   primaryDark: string;

@@ -69,3 +69,33 @@ export function getCartCount(): number {
 export function getCartTotal(): number {
   return read().reduce((sum, item) => sum + item.total, 0);
 }
+
+export function clearCart(): void {
+  write([]);
+}
+
+// Human-readable line description, shared between the cart page display and
+// the order/saved-cart snapshot sent to the backend (which has no idea what a
+// "holder configurator" is — it just stores whatever name it's given).
+export function describeCartItem(item: CartItem): string {
+  if (item.kind === 'product') return item.name ?? 'Product';
+  const kindLabel =
+    item.kind === 'holder' ? 'Holder Configuration' : item.kind === 'numbers' ? 'Cast Numbers' : 'Cast Letters';
+  const parts = [item.size, item.type].filter(Boolean);
+  return parts.length ? `${kindLabel} — ${parts.join(' · ')}` : kindLabel;
+}
+
+// Strips each cart line down to the {kind, name, quantity, total, image,
+// details} shape both /api/orders and /api/saved-carts expect — everything
+// configurator-specific (letters, capacity, installation...) rides along in
+// `details` purely for the admin view, never re-parsed by the frontend.
+export function cartItemsToOrderItems(items: CartItem[]) {
+  return items.map(({ id, kind, quantity, total, image, productId, ...details }) => ({
+    kind,
+    name: describeCartItem({ id, kind, quantity, total, image, productId, ...details } as CartItem),
+    quantity,
+    total,
+    ...(kind === 'product' ? { productId, image } : {}),
+    details,
+  }));
+}

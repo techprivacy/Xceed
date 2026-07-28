@@ -11,6 +11,10 @@ import {
   PublicMember,
   MemberRegisterInput,
   MemberProfileInput,
+  Order,
+  OrderInput,
+  SavedCart,
+  SavedCartInput,
 } from '@/types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
@@ -382,6 +386,80 @@ export const uploadQuoteDrawing = (token: string, file: File) => {
 
 export const emailQuotePdf = (token: string, id: string) =>
   adminRequest<null>(`/quotes/${id}/email`, token, { method: 'POST' });
+
+// --- Orders (cart checkout) ---
+
+export const createOrder = (payload: OrderInput) =>
+  request<Order>('/orders', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+    next: undefined,
+    cache: 'no-store',
+  });
+
+export interface OrderListParams {
+  status?: string;
+  search?: string;
+  page?: number;
+  limit?: number;
+}
+
+export const getOrders = (token: string, params: OrderListParams = {}) => {
+  const query = new URLSearchParams(
+    Object.entries(params).reduce<Record<string, string>>((acc, [k, v]) => {
+      if (v !== undefined && v !== '') acc[k] = String(v);
+      return acc;
+    }, {})
+  ).toString();
+  return adminRequest<Order[]>(`/orders${query ? `?${query}` : ''}`, token);
+};
+
+export const getOrder = (token: string, id: string) => adminRequest<Order>(`/orders/${id}`, token);
+
+export const updateOrder = (token: string, id: string, payload: { status: Order['status'] }) =>
+  adminRequest<Order>(`/orders/${id}`, token, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  });
+
+export const deleteOrder = (token: string, id: string) =>
+  adminRequest<null>(`/orders/${id}`, token, { method: 'DELETE' });
+
+// --- Saved Carts ("Save Cart" popup) ---
+
+export const createSavedCart = (payload: SavedCartInput) =>
+  request<SavedCart>('/saved-carts', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+    next: undefined,
+    cache: 'no-store',
+  });
+
+export interface SavedCartListParams {
+  status?: string;
+  search?: string;
+  page?: number;
+  limit?: number;
+}
+
+export const getSavedCarts = (token: string, params: SavedCartListParams = {}) => {
+  const query = new URLSearchParams(
+    Object.entries(params).reduce<Record<string, string>>((acc, [k, v]) => {
+      if (v !== undefined && v !== '') acc[k] = String(v);
+      return acc;
+    }, {})
+  ).toString();
+  return adminRequest<SavedCart[]>(`/saved-carts${query ? `?${query}` : ''}`, token);
+};
+
+export const updateSavedCart = (token: string, id: string, payload: { status: SavedCart['status'] }) =>
+  adminRequest<SavedCart>(`/saved-carts/${id}`, token, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  });
+
+export const deleteSavedCart = (token: string, id: string) =>
+  adminRequest<null>(`/saved-carts/${id}`, token, { method: 'DELETE' });
 
 export const downloadQuotePdf = async (token: string, id: string) => {
   const res = await fetch(`${API_URL}/quotes/${id}/pdf`, {

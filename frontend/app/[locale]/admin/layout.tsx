@@ -5,12 +5,16 @@ import { usePathname, useRouter } from 'next/navigation';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import ToastHost from '@/components/admin/ToastHost';
 import { getAdminToken } from '@/lib/api';
+import { useCurrentAdmin } from '@/lib/useCurrentAdmin';
+import { useAdminNotifications } from '@/lib/useAdminNotifications';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [checked, setChecked] = useState(false);
   const isLoginPage = pathname === '/admin/login';
+  const { admin } = useCurrentAdmin();
+  useAdminNotifications(admin?.role);
 
   useEffect(() => {
     if (isLoginPage) return;
