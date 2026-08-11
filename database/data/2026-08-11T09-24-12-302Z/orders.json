@@ -1,0 +1,23 @@
+[
+  {
+    "_id": "6a6919b34beb31cfbd599724",
+    "items": [
+      {
+        "kind": "product",
+        "name": "Test Item",
+        "quantity": 1,
+        "total": 100
+      }
+    ],
+    "subtotal": 100,
+    "gstTotal": 18,
+    "grandTotal": 118,
+    "customerName": "Test User",
+    "mobileNumber": "9999999999",
+    "status": "new",
+    "source": "website",
+    "createdAt": "2026-07-28T21:05:55.204Z",
+    "updatedAt": "2026-07-28T21:05:55.204Z",
+    "__v": 0
+  }
+]

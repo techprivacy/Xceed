@@ -1,0 +1,52 @@
+[
+  {
+    "_id": "6a4a445e084302b3e276c7a4",
+    "name": "Cast Letters",
+    "slug": "cast-letters",
+    "parent": null,
+    "order": 1,
+    "createdAt": "2026-07-05T11:47:42.203Z",
+    "updatedAt": "2026-07-05T19:03:20.224Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a4a445e084302b3e276c7b6",
+    "name": "Magnetic Tool",
+    "slug": "magnetic-tool",
+    "parent": null,
+    "order": 4,
+    "createdAt": "2026-07-05T11:47:42.221Z",
+    "updatedAt": "2026-07-05T19:03:20.270Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a4aaa78ca1174bb3ce135dc",
+    "name": "Cast Numbers",
+    "slug": "cast-numbers",
+    "parent": null,
+    "order": 2,
+    "createdAt": "2026-07-05T19:03:20.248Z",
+    "updatedAt": "2026-07-05T19:03:20.248Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a4aaa78ca1174bb3ce135df",
+    "name": "Holders",
+    "slug": "holders",
+    "parent": null,
+    "order": 3,
+    "createdAt": "2026-07-05T19:03:20.258Z",
+    "updatedAt": "2026-07-05T19:03:20.258Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a4aaa78ca1174bb3ce135e2",
+    "name": "Custom Marking",
+    "slug": "custom-marking",
+    "parent": null,
+    "order": 5,
+    "createdAt": "2026-07-05T19:03:20.264Z",
+    "updatedAt": "2026-07-05T19:03:20.264Z",
+    "__v": 0
+  }
+]

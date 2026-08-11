@@ -1,0 +1,248 @@
+[
+  {
+    "_id": "6a653fb59511a25cf748892c",
+    "name": "HR-801 Magnetic Marking Pen",
+    "slug": "hr-801-magnetic-marking-pen",
+    "category": "6a4a445e084302b3e276c7b6",
+    "description": "The HR-801 Magnetic Marking Pen is a compact, detachable-body marking tool with a durable knurled-grip aluminum housing and a braided wrist lanyard for secure handling on the shop floor.",
+    "shortDescription": "Compact HR-801 magnetic marking pen with detachable body and wrist lanyard.",
+    "images": [],
+    "price": 15000,
+    "priceUnit": "per_piece",
+    "currency": "INR",
+    "minOrderQty": 1,
+    "inStock": true,
+    "isBestSeller": false,
+    "isTrending": false,
+    "tags": [
+      "magnetic",
+      "marking pen",
+      "HR-801"
+    ],
+    "variants": [],
+    "createdAt": "2026-07-25T22:59:01.211Z",
+    "updatedAt": "2026-07-25T22:59:01.211Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a65c73b1010cf8dca63b565",
+    "name": "Cast Letters",
+    "slug": "cast-letters-configurator",
+    "category": "6a4a445e084302b3e276c7a4",
+    "shortDescription": "Precision cast steel letters — build your own set",
+    "images": [],
+    "price": 95,
+    "priceUnit": "per_letter",
+    "currency": "INR",
+    "configuratorType": "cast_letters",
+    "sizePricing": [
+      {
+        "size": "5mm",
+        "price": 95,
+        "_id": "6a65c73b1010cf8dca63b566"
+      },
+      {
+        "size": "6mm",
+        "price": 100,
+        "_id": "6a65c73b1010cf8dca63b567"
+      },
+      {
+        "size": "7mm",
+        "price": 105,
+        "_id": "6a65c73b1010cf8dca63b568"
+      },
+      {
+        "size": "8mm",
+        "price": 115,
+        "_id": "6a65c73b1010cf8dca63b569"
+      }
+    ],
+    "minOrderQty": 100,
+    "inStock": true,
+    "isBestSeller": true,
+    "isTrending": true,
+    "tags": [
+      "cast letters",
+      "alphabets"
+    ],
+    "variants": [],
+    "createdAt": "2026-07-26T08:37:15.097Z",
+    "updatedAt": "2026-07-26T08:37:15.097Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a65c73b1010cf8dca63b56d",
+    "name": "Cast Numbers",
+    "slug": "cast-numbers-configurator",
+    "category": "6a4aaa78ca1174bb3ce135dc",
+    "shortDescription": "Precision cast steel numbers — build your own set",
+    "images": [],
+    "price": 95,
+    "priceUnit": "per_letter",
+    "currency": "INR",
+    "configuratorType": "cast_numbers",
+    "sizePricing": [
+      {
+        "size": "5mm",
+        "price": 95,
+        "_id": "6a65c73b1010cf8dca63b56e"
+      },
+      {
+        "size": "6mm",
+        "price": 100,
+        "_id": "6a65c73b1010cf8dca63b56f"
+      },
+      {
+        "size": "7mm",
+        "price": 105,
+        "_id": "6a65c73b1010cf8dca63b570"
+      },
+      {
+        "size": "8mm",
+        "price": 115,
+        "_id": "6a65c73b1010cf8dca63b571"
+      }
+    ],
+    "minOrderQty": 100,
+    "inStock": true,
+    "isBestSeller": false,
+    "isTrending": true,
+    "tags": [
+      "cast numbers"
+    ],
+    "variants": [],
+    "createdAt": "2026-07-26T08:37:15.111Z",
+    "updatedAt": "2026-07-26T08:37:15.111Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a65c73b1010cf8dca63b574",
+    "name": "Holders",
+    "slug": "holders-configurator",
+    "category": "6a4aaa78ca1174bb3ce135df",
+    "shortDescription": "Square & oval holders for secure marking — build your own",
+    "images": [],
+    "price": 3900,
+    "priceUnit": "per_piece",
+    "currency": "INR",
+    "configuratorType": "holder",
+    "sizePricing": [
+      {
+        "size": "5mm",
+        "price": 95,
+        "_id": "6a65c73b1010cf8dca63b575"
+      },
+      {
+        "size": "6mm",
+        "price": 100,
+        "_id": "6a65c73b1010cf8dca63b576"
+      },
+      {
+        "size": "7mm",
+        "price": 105,
+        "_id": "6a65c73b1010cf8dca63b577"
+      },
+      {
+        "size": "8mm",
+        "price": 115,
+        "_id": "6a65c73b1010cf8dca63b578"
+      }
+    ],
+    "holderPriceMatrix": {
+      "5mm": {
+        "GLUE": {
+          "1": 3900,
+          "2": 4800,
+          "3": 5200,
+          "4": 5700
+        },
+        "SCREW": {
+          "1": 4000,
+          "2": 5000,
+          "3": 5300,
+          "4": 5700
+        }
+      },
+      "6mm": {
+        "GLUE": {
+          "1": 3950,
+          "2": 4900,
+          "3": 5350,
+          "4": 5750
+        },
+        "SCREW": {
+          "1": 4050,
+          "2": 5100,
+          "3": 5500,
+          "4": 5850
+        }
+      },
+      "7mm": {
+        "GLUE": {
+          "1": 4000,
+          "2": 5100,
+          "3": 5400,
+          "4": 5850
+        },
+        "SCREW": {
+          "1": 4050,
+          "2": 5200,
+          "3": 5600,
+          "4": 5900
+        }
+      },
+      "8mm": {
+        "GLUE": {
+          "1": 4050,
+          "2": 5120,
+          "3": 5420,
+          "4": 5780
+        },
+        "SCREW": {
+          "1": 4100,
+          "2": 5300,
+          "3": 5600,
+          "4": 5960
+        }
+      }
+    },
+    "minOrderQty": 1,
+    "inStock": true,
+    "isBestSeller": false,
+    "isTrending": true,
+    "tags": [
+      "holders"
+    ],
+    "variants": [],
+    "createdAt": "2026-07-26T08:37:15.118Z",
+    "updatedAt": "2026-07-26T08:37:15.118Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a65c73b1010cf8dca63b57b",
+    "name": "Magnetic Tool",
+    "slug": "magnetic-tool-standard",
+    "category": "6a4a445e084302b3e276c7b6",
+    "shortDescription": "Strong magnetic grip for accurate marking",
+    "images": [
+      "/uploads/products/1785270311971-170870793.jpeg"
+    ],
+    "price": 8500,
+    "priceUnit": "per_piece",
+    "currency": "INR",
+    "configuratorType": "none",
+    "minOrderQty": 1,
+    "inStock": true,
+    "isBestSeller": false,
+    "isTrending": true,
+    "tags": [
+      "magnetic",
+      "tools"
+    ],
+    "variants": [],
+    "sizePricing": [],
+    "createdAt": "2026-07-26T08:37:15.124Z",
+    "updatedAt": "2026-07-28T20:32:43.025Z",
+    "__v": 0
+  }
+]

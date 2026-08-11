@@ -1,0 +1,12 @@
+[
+  {
+    "_id": "6a4a445e084302b3e276c7a0",
+    "username": "admin",
+    "email": "admin@xceedindia.com",
+    "password": "$2a$10$YP.ygJFSJJFNTzsJF/PZa.SeGppH3q7DLbUE9qBUJpsZPwO0hW5ai",
+    "role": "admin",
+    "createdAt": "2026-07-05T11:47:42.068Z",
+    "updatedAt": "2026-07-16T11:50:27.873Z",
+    "__v": 0
+  }
+]

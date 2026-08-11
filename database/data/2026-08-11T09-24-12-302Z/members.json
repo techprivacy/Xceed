@@ -1,0 +1,47 @@
+[
+  {
+    "_id": "6a6657ba039afd21374d37bf",
+    "companyName": "Anand Auto Components",
+    "contactPerson": "Suresh Joshi",
+    "email": "suresh@anandauto.example.com",
+    "password": "$2a$10$BYKcg5V0WaCvWhIVVzG9kuArlKv9lgCd3NGixtTZJGOg4DBDoJSFK",
+    "industry": "Automotive",
+    "products": "Magnetic Tools",
+    "location": "Chennai, India",
+    "status": "approved",
+    "subscriptionStatus": "active",
+    "createdAt": "2026-07-26T18:53:46.748Z",
+    "updatedAt": "2026-07-26T18:53:46.748Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a6657ba039afd21374d37c2",
+    "companyName": "Shakti Engineering Works",
+    "contactPerson": "Anita Kulkarni",
+    "email": "anita@shaktiengineering.example.com",
+    "password": "$2a$10$uMszyzp1EPwNtlmuSO4TeOiti7lP/xjAnyn97NlJRU.OVOn3QwcyG",
+    "industry": "Machine Tools",
+    "products": "Detachable Jigs",
+    "location": "Coimbatore, India",
+    "status": "approved",
+    "subscriptionStatus": "active",
+    "createdAt": "2026-07-26T18:53:46.822Z",
+    "updatedAt": "2026-07-26T18:53:46.822Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a6657ba039afd21374d37c5",
+    "companyName": "Vishwakarma Castings",
+    "contactPerson": "Vikram Rao",
+    "email": "vikram@vishwakarmacastings.example.com",
+    "password": "$2a$10$YtwdmNlKfkvrV1n5h.1Kj.iEUUrWFXds0kP1BFK0xVUMo0kxdwZXy",
+    "industry": "Sheet Metal",
+    "products": "Custom Marking Solutions",
+    "location": "Rajkot, India",
+    "status": "pending",
+    "subscriptionStatus": "none",
+    "createdAt": "2026-07-26T18:53:46.879Z",
+    "updatedAt": "2026-07-26T19:20:13.361Z",
+    "__v": 0
+  }
+]

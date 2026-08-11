@@ -1,0 +1,24 @@
+[
+  {
+    "_id": "6a57ed47f49d0eb67b9a1470",
+    "__v": 0,
+    "createdAt": "2026-07-15T20:27:51.648Z",
+    "draft": {
+      "primary": "#E30613",
+      "primaryDark": "#B8050F",
+      "secondary": "#0F4AA6",
+      "dark": "#071C3A",
+      "surface": "#F4F6F8",
+      "muted": "#5B6470"
+    },
+    "live": {
+      "primary": "#E30613",
+      "primaryDark": "#B8050F",
+      "secondary": "#0F4AA6",
+      "dark": "#071C3A",
+      "surface": "#F4F6F8",
+      "muted": "#5B6470"
+    },
+    "updatedAt": "2026-07-15T20:56:28.476Z"
+  }
+]

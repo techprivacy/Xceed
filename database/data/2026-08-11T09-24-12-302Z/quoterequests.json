@@ -1,0 +1,77 @@
+[
+  {
+    "_id": "6a4a445e084302b3e276c7d7",
+    "companyName": "Bharat Steel Fabricators",
+    "gstNumber": "27AAECB1234F1Z5",
+    "industry": "Steel Plants",
+    "contactPerson": "Rajesh Mehta",
+    "email": "rajesh@bharatsteel.example.com",
+    "mobileNumber": "+91 98200 11223",
+    "city": "Pune",
+    "state": "Maharashtra",
+    "productRequirement": "6mm Cast Letters, Detachable Jigs",
+    "quantity": "2000 letters, 10 jigs",
+    "specialRequirement": "Need concave marking for curved steel sheets",
+    "status": "follow_up",
+    "source": "website",
+    "internalNotes": [],
+    "createdAt": "2026-07-05T11:47:42.274Z",
+    "updatedAt": "2026-07-05T11:47:42.274Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a4a445e084302b3e276c7da",
+    "companyName": "Anand Auto Components",
+    "gstNumber": "24AATCA5678G1Z2",
+    "industry": "Automotive",
+    "contactPerson": "Priya Shah",
+    "email": "priya@anandauto.example.com",
+    "mobileNumber": "+91 99250 44556",
+    "city": "Ahmedabad",
+    "state": "Gujarat",
+    "productRequirement": "Screw Type Holders, 5mm Cast Numbers",
+    "quantity": "500 letters, 25 holders",
+    "status": "new",
+    "source": "website",
+    "internalNotes": [],
+    "createdAt": "2026-07-05T11:47:42.280Z",
+    "updatedAt": "2026-07-05T11:47:42.280Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a4a445e084302b3e276c7dd",
+    "companyName": "Konkan Foundries Pvt Ltd",
+    "gstNumber": "27AAFCK9012H1Z8",
+    "industry": "Foundries",
+    "contactPerson": "Suresh Naik",
+    "email": "suresh@konkanfoundries.example.com",
+    "mobileNumber": "+91 90210 77889",
+    "city": "Kolhapur",
+    "state": "Maharashtra",
+    "productRequirement": "Powerful Detachable Jigs, Magnetic Tools",
+    "quantity": "5 jigs, 8 magnetic tools",
+    "status": "negotiation",
+    "source": "website",
+    "internalNotes": [
+      {
+        "text": "Called customer, awaiting drawing file.",
+        "addedBy": "6a4a445e084302b3e276c7a0",
+        "_id": "6a4a44f32ef683f3483ca955",
+        "createdAt": "2026-07-05T11:50:11.504Z",
+        "updatedAt": "2026-07-05T11:50:11.504Z"
+      },
+      {
+        "text": "Playwright E2E test note",
+        "addedBy": "6a4a445e084302b3e276c7a0",
+        "_id": "6a4a48042ef683f3483ca986",
+        "createdAt": "2026-07-05T12:03:16.841Z",
+        "updatedAt": "2026-07-05T12:03:16.841Z"
+      }
+    ],
+    "createdAt": "2026-07-05T11:47:42.285Z",
+    "updatedAt": "2026-07-05T12:03:17.943Z",
+    "__v": 2,
+    "drawingUrl": "",
+    "specialRequirement": ""
+  }
+]
