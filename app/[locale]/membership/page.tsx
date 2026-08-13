@@ -1,14 +1,25 @@
-import { Handshake, Building2, Globe2, Gem } from 'lucide-react';
+import { Handshake, Globe2, Factory, Settings, Megaphone, TrendingUp } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import MemberDirectory from '@/components/MemberDirectory';
 import Button from '@/components/ui/Button';
+import SectionHeading from '@/components/ui/SectionHeading';
 
-const STATS_BAR = [
-  { icon: Building2, label: 'Global Business Network' },
-  { icon: Handshake, label: 'Trusted Partnership' },
-  { icon: Gem, label: 'Exclusive Opportunities' },
-  { icon: Globe2, label: 'India – Japan Growth' },
+const MEMBERSHIP_BENEFITS = [
+  { icon: Globe2, label: 'Japan–India Business Connections' },
+  { icon: Factory, label: 'Industrial Company Network' },
+  { icon: Handshake, label: 'Business & Partnership Opportunities' },
+  { icon: Settings, label: 'Technology & Supplier Discovery' },
+  { icon: Megaphone, label: 'Company & Product Visibility' },
+  { icon: TrendingUp, label: 'India Market Opportunities' },
+];
+
+const WHO_CAN_JOIN = [
+  'Foundries',
+  'Manufacturers',
+  'Japanese Technology Companies',
+  'Machinery Suppliers',
+  'Industrial Solution Providers',
 ];
 
 export default function MembershipPage() {
@@ -18,30 +29,62 @@ export default function MembershipPage() {
 
       <MemberDirectory />
 
-      <section className="bg-white py-14">
+      <section className="bg-brand-mist py-14">
         <div className="container-x">
-          <div className="rounded-2xl border-y-2 border-brand-red bg-white px-6 py-10 shadow-sm sm:px-10">
-            <div className="grid grid-cols-1 gap-10 text-center sm:grid-cols-2 lg:grid-cols-4">
-              {STATS_BAR.map(({ icon: Icon, label }, i) => (
-                <div key={label} className="flex flex-col items-center">
-                  <div className="relative mb-5 flex h-28 w-28 items-center justify-center">
-                    <span
-                      className="absolute inset-0 rounded-full bg-brand-red/10 animate-haloPulse motion-reduce:animate-none"
-                      style={{ animationDelay: `${i * 0.3}s` }}
-                      aria-hidden
-                    />
-                    <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-brand-red/20">
-                      <Icon
-                        size={48}
-                        className="text-brand-red animate-floatSoft motion-reduce:animate-none"
-                        style={{ animationDelay: `${i * 0.3}s` }}
-                      />
-                    </div>
-                  </div>
-                  <h3 className="text-xl font-bold uppercase tracking-wide text-brand-black">{label}</h3>
-                </div>
+          <SectionHeading
+            eyebrow="Membership"
+            title="Join XCEED India"
+            subtitle={
+              <>
+                <span className="mb-2 block text-sm font-bold uppercase tracking-[0.14em] text-brand-blue">
+                  Connect. Discover. Grow.
+                </span>
+                Become part of the{' '}
+                <strong className="font-semibold text-brand-black">Japan–India industrial network</strong> and connect
+                with companies across casting, foundry, manufacturing, machinery, automation, and industrial
+                technology.
+              </>
+            }
+            align="center"
+            size="h1"
+            className="mx-auto max-w-2xl"
+          />
+
+          <div className="mx-auto mt-12 grid max-w-5xl grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {MEMBERSHIP_BENEFITS.map(({ icon: Icon, label }) => (
+              <div
+                key={label}
+                className="flex items-center gap-4 rounded-2xl border border-black/5 bg-white p-5 shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:border-brand-blue/20 hover:shadow-lg"
+              >
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-blue/10 text-brand-blue">
+                  <Icon size={22} />
+                </span>
+                <p className="text-sm font-semibold text-brand-charcoal">{label}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mx-auto mt-14 max-w-3xl text-center">
+            <h2 className="text-xl font-bold tracking-tight text-brand-black">Who Can Join?</h2>
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+              {WHO_CAN_JOIN.map((who) => (
+                <span
+                  key={who}
+                  className="rounded-full border border-brand-blue/20 bg-brand-blue/5 px-4 py-2 text-sm font-semibold text-brand-blue"
+                >
+                  {who}
+                </span>
               ))}
             </div>
+          </div>
+
+          <div className="mx-auto mt-14 max-w-xl text-center">
+            <p className="text-base font-semibold text-brand-black">
+              Join XCEED India and build valuable industry connections.
+            </p>
+            <Button href="/membership/register" variant="primary" size="lg" className="mt-6">
+              Become a Member
+            </Button>
           </div>
         </div>
       </section>
