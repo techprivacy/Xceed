@@ -7,9 +7,9 @@ import { getLiveTheme, themeToCssVars, DEFAULT_THEME } from '@/lib/theme';
 import { routing } from '@/i18n/routing';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-const SITE_TITLE = 'XCEED India | Precision Marking Solutions';
+const SITE_TITLE = 'Japan–India Casting & Foundry Business Platform | XCEED India';
 const SITE_DESCRIPTION =
-  'Japanese-quality industrial cast letters, numbers, holders and marking tools for manufacturing, steel, foundry, fabrication and engineering industries.';
+  'XCEED India connects Japanese casting technology, foundry equipment, manufacturers and expertise with Indian foundries and industrial companies for sourcing, business development and partnerships.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -22,13 +22,38 @@ export const metadata: Metadata = {
     icon: '/favicon.png',
   },
   keywords: [
-    'cast letters',
-    'cast numbers',
-    'marking holders',
-    'magnetic marking tools',
-    'industrial marking solutions',
-    'steel stamps India',
-    'foundry marking tools',
+    'Japan India Casting',
+    'Japan India Foundry',
+    'Japan India Foundry Business',
+    'Casting Industry India',
+    'Foundry Industry India',
+    'Japanese Foundry Technology',
+    'Japanese Casting Technology',
+    'Japanese Foundry Equipment',
+    'Foundry Equipment India',
+    'Casting Equipment India',
+    'Casting Machinery India',
+    'Foundry Machinery India',
+    'Japanese Machinery India',
+    'Japan India Business Partnership',
+    'Japan India Business Platform',
+    'Japan India Industrial Partnership',
+    'Japan India Business Development',
+    'Foundry Technology',
+    'Casting Technology',
+    'Metal Casting India',
+    'Foundry Solutions India',
+    'Casting Manufacturers India',
+    'Indian Foundries',
+    'Japanese Manufacturers India',
+    'Japan India Industrial Trade',
+    'Foundry Sourcing India',
+    'Casting Sourcing India',
+    'Foundry Automation',
+    'Casting Automation',
+    'Robotic Deburring',
+    'Foundry Engineering',
+    'Japanese Industrial Technology',
   ],
   openGraph: {
     type: 'website',

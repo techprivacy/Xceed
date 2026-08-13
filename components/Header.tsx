@@ -3,10 +3,9 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Search, ShoppingCart, User } from 'lucide-react';
+import { Menu, X, ShoppingCart, User, ChevronDown } from 'lucide-react';
 import { useCartCount } from '@/lib/useCartCount';
-import { WHATSAPP_GROUP_URL, PRODUCT_CATEGORIES } from '@/lib/staticData';
-import WhatsAppIcon from '@/components/icons/WhatsAppIcon';
+import { PRODUCT_CATEGORIES } from '@/lib/staticData';
 
 const MAIN_CATEGORIES = PRODUCT_CATEGORIES.filter(
   (c) => ['cast-letters', 'cast-numbers', 'holders', 'magnetic-tools'].includes(c.urlSlug)
@@ -14,7 +13,12 @@ const MAIN_CATEGORIES = PRODUCT_CATEGORIES.filter(
 
 const NAV_ITEMS = [
   { label: 'Home', href: '/' },
-  ...MAIN_CATEGORIES.map((c) => ({ label: c.title, href: `/${c.urlSlug}` })),
+  { label: 'About Us', href: '/about-us' },
+  {
+    label: 'Products',
+    href: '/products',
+    children: MAIN_CATEGORIES.map((c) => ({ label: c.title, href: `/${c.urlSlug}` })),
+  },
   { label: 'Membership', href: '/membership' },
   { label: 'Contact Us', href: '/contact-us' },
 ];
@@ -27,15 +31,15 @@ export default function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-40 shadow-sm">
+    <header className="sticky top-0 z-50 shadow-sm">
       <div className="bg-white">
-        <div className="container-x flex items-center gap-4 py-3 lg:gap-8 lg:py-4">
+        <div className="container-x flex items-center gap-4 py-3 lg:gap-6 lg:py-4 xl:gap-10 2xl:gap-14">
           <button
             type="button"
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-brand-charcoal transition hover:bg-brand-mist lg:hidden"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-brand-charcoal transition hover:bg-brand-mist xl:hidden"
           >
             {open ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -44,39 +48,63 @@ export default function Header() {
             <Image src="/logo.png" alt="XCEED India" fill sizes="220px" className="object-contain" priority />
           </a>
 
-          <form action="/products" className="hidden min-w-0 flex-1 items-stretch lg:flex">
-            <label className="sr-only" htmlFor="catalog-search">Search the product catalogue</label>
-            <input
-              id="catalog-search"
-              name="q"
-              type="search"
-              placeholder="Search letters, holders, jigs and marking tools"
-              className="w-full rounded-l-2xl border border-r-0 border-black/10 bg-brand-mist/60 px-5 py-3 text-sm outline-none transition focus:bg-white focus:ring-2 focus:ring-brand-red/20"
-            />
-            <button
-              type="submit"
-              aria-label="Search catalogue"
-              className="flex items-center justify-center rounded-r-2xl bg-brand-red px-5 text-white transition-colors hover:bg-brand-redDark"
-            >
-              <Search size={19} />
-            </button>
-          </form>
+          <ul className="hidden min-w-0 flex-1 items-center justify-center gap-2 text-sm font-bold uppercase tracking-[0.03em] text-brand-charcoal/70 xl:flex 2xl:gap-4 2xl:text-[15px]">
+            {NAV_ITEMS.map((item) => {
+              const isActive = item.children
+                ? pathname === item.href || item.children.some((c) => c.href === pathname)
+                : pathname === item.href;
+
+              return (
+                <li key={item.label} className="group relative shrink-0">
+                  <a
+                    href={item.href}
+                    className={`relative flex items-center gap-1 whitespace-nowrap rounded-md px-2 py-2 transition-colors after:absolute after:bottom-0 after:left-2 after:h-0.5 after:rounded-full after:bg-brand-red after:transition-all after:duration-300 xl:px-2.5 2xl:px-3 ${
+                      isActive
+                        ? 'text-brand-charcoal after:w-[calc(100%-1rem)]'
+                        : 'hover:text-brand-charcoal after:w-0 hover:after:w-[calc(100%-1rem)]'
+                    }`}
+                  >
+                    {item.label}
+                    {item.children && (
+                      <ChevronDown size={14} className="shrink-0 transition-transform duration-200 group-hover:rotate-180" />
+                    )}
+                  </a>
+
+                  {item.children && (
+                    <div className="invisible absolute left-0 top-full z-[60] min-w-[190px] translate-y-1 rounded-xl border border-black/5 bg-white py-2 opacity-0 shadow-lg transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                      {item.children.map((child) => (
+                        <a
+                          key={child.href}
+                          href={child.href}
+                          className={`block px-4 py-2 text-xs normal-case tracking-normal transition-colors xl:text-sm ${
+                            pathname === child.href
+                              ? 'bg-brand-mist text-brand-red'
+                              : 'text-brand-charcoal/80 hover:bg-brand-mist hover:text-brand-red'
+                          }`}
+                        >
+                          {child.label}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </li>
+              );
+            })}
+            <li className="shrink-0">
+              <a
+                href={TOUR_ITEM.href}
+                className="relative flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-brand-red px-3 py-1.5 text-white shadow-sm shadow-brand-red/30 transition-all hover:-translate-y-0.5 hover:bg-brand-redDark xl:px-4 xl:py-2"
+              >
+                <span className="absolute -right-1.5 -top-1.5 flex h-3.5 w-3.5" aria-hidden>
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
+                  <span className="relative inline-flex h-3.5 w-3.5 rounded-full bg-white" />
+                </span>
+                {TOUR_ITEM.label}
+              </a>
+            </li>
+          </ul>
 
           <div className="ml-auto flex shrink-0 items-center gap-1">
-            <a
-              href={WHATSAPP_GROUP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Join our WhatsApp group"
-              className="hidden items-center gap-2 rounded-xl px-3 py-2 bg-[#25D366] text-white transition-all duration-200 hover:bg-[#1fa84f] hover:-translate-y-0.5 xl:flex"
-            >
-              <WhatsAppIcon size={22} />
-              <span>
-                <span className="block text-[10px] font-semibold uppercase tracking-wide text-white">Join Our</span>
-                <span className="block text-xs font-semibold text-white">WhatsApp Group</span>
-              </span>
-            </a>
-
             <a
               href="/cart"
               aria-label="Cart"
@@ -99,42 +127,9 @@ export default function Header() {
         </div>
       </div>
 
-      <nav className="hidden bg-brand-black lg:block">
-        <div className="container-x">
-          <ul className="flex items-center justify-between py-2.5 text-[12.5px] font-bold uppercase tracking-[0.045em] text-white/70">
-            {NAV_ITEMS.map((item) => (
-              <li key={item.label}>
-                <a
-                  href={item.href}
-                  className={`relative flex items-center gap-1.5 rounded-md px-1 py-2 transition-colors after:absolute after:bottom-0 after:left-1 after:h-0.5 after:rounded-full after:bg-brand-red after:transition-all after:duration-300 ${
-                    pathname === item.href
-                      ? 'text-white after:w-full'
-                      : 'after:w-0 hover:text-white hover:after:w-full'
-                  }`}
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
-            <li>
-              <a
-                href={TOUR_ITEM.href}
-                className="relative flex items-center gap-1.5 rounded-lg bg-brand-red px-3.5 py-1.5 text-white shadow-sm shadow-brand-red/30 transition-all hover:-translate-y-0.5 hover:bg-brand-redDark"
-              >
-                <span className="absolute -right-1.5 -top-1.5 flex h-3.5 w-3.5" aria-hidden>
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
-                  <span className="relative inline-flex h-3.5 w-3.5 rounded-full bg-white" />
-                </span>
-                {TOUR_ITEM.label}
-              </a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-
       {open && (
-        <div className="animate-fadeIn border-t border-white/10 bg-brand-black lg:hidden">
-          <ul className="container-x flex flex-col gap-1 py-3 text-xs font-semibold uppercase tracking-wide text-white/80">
+        <div className="animate-fadeIn border-t border-white/10 bg-brand-black xl:hidden">
+          <ul className="container-x flex flex-col gap-1 py-3 text-sm font-semibold uppercase tracking-wide text-white/80">
             {[...NAV_ITEMS, TOUR_ITEM].map((item) => (
               <li key={item.label}>
                 <a
@@ -156,17 +151,29 @@ export default function Header() {
                     </span>
                   )}
                 </a>
+
+                {'children' in item && item.children && (
+                  <ul className="ml-3 mt-1 flex flex-col gap-1 border-l border-white/10 pl-3">
+                    {item.children.map((child) => (
+                      <li key={child.href}>
+                        <a
+                          href={child.href}
+                          onClick={() => setOpen(false)}
+                          className={`block rounded-lg px-3 py-2 text-xs normal-case tracking-normal transition-colors ${
+                            pathname === child.href
+                              ? 'bg-white/10 text-white'
+                              : 'text-white/60 hover:bg-white/5 hover:text-white'
+                          }`}
+                        >
+                          {child.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             ))}
             <li className="mt-2 flex items-center gap-2 border-t border-white/10 pt-3">
-              <a
-                href={WHATSAPP_GROUP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-white/5 px-3.5 py-3 normal-case tracking-normal text-white/80"
-              >
-                <WhatsAppIcon size={18} /> WhatsApp
-              </a>
               <a
                 href="/admin/login"
                 className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-white/5 px-3.5 py-3 normal-case tracking-normal text-white/80"
