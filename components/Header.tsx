@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Menu, X, ShoppingCart, User, ChevronDown } from 'lucide-react';
 import { useCartCount } from '@/lib/useCartCount';
-import { PRODUCT_CATEGORIES } from '@/lib/staticData';
+import { PRODUCT_CATEGORIES, INDUSTRIES } from '@/lib/staticData';
 
 const MAIN_CATEGORIES = PRODUCT_CATEGORIES.filter(
   (c) => ['cast-letters', 'cast-numbers', 'holders', 'magnetic-tools'].includes(c.urlSlug)
@@ -14,6 +14,11 @@ const MAIN_CATEGORIES = PRODUCT_CATEGORIES.filter(
 const NAV_ITEMS = [
   { label: 'Home', href: '/' },
   { label: 'About Us', href: '/about-us' },
+  {
+    label: 'Industries',
+    href: '/industries',
+    children: INDUSTRIES.map((i) => ({ label: i.name, href: `/industries/${i.urlSlug}` })),
+  },
   {
     label: 'Products',
     href: '/products',

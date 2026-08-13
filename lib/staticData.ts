@@ -102,34 +102,42 @@ export const FALLBACK_TRENDING: Partial<Product>[] = [
 export const INDUSTRIES = [
   {
     name: 'Steel Plants',
+    urlSlug: 'steel-plants',
     image: 'https://images.unsplash.com/photo-1697281679290-ad7be1b10682?w=300&h=200&fit=crop',
   },
   {
     name: 'Fabrication Units',
+    urlSlug: 'fabrication-units',
     image: 'https://images.unsplash.com/photo-1531053326607-9d349096d887?w=300&h=200&fit=crop',
   },
   {
     name: 'Automotive',
+    urlSlug: 'automotive',
     image: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=300&h=200&fit=crop',
   },
   {
     name: 'Foundries',
+    urlSlug: 'foundries',
     image: 'https://images.unsplash.com/photo-1529479627062-5f1f0b88912a?w=300&h=200&fit=crop',
   },
   {
     name: 'Warehouses',
+    urlSlug: 'warehouses',
     image: 'https://images.unsplash.com/photo-1553413077-190dd305871c?w=300&h=200&fit=crop',
   },
   {
     name: 'Engineering Units',
+    urlSlug: 'engineering-units',
     image: 'https://images.unsplash.com/photo-1764114441123-586d13fc6ece?w=300&h=200&fit=crop',
   },
   {
     name: 'Packaging Lines',
+    urlSlug: 'packaging-lines',
     image: 'https://images.unsplash.com/photo-1779517226310-00e5c43554f3?w=300&h=200&fit=crop',
   },
   {
     name: 'Manufacturing Facilities',
+    urlSlug: 'manufacturing-facilities',
     image: 'https://images.unsplash.com/photo-1716191299980-a6e8827ba10b?w=300&h=200&fit=crop',
   },
 ];
