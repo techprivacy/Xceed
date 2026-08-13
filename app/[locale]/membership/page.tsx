@@ -3,7 +3,6 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import MemberDirectory from '@/components/MemberDirectory';
 import Button from '@/components/ui/Button';
-import SectionHeading from '@/components/ui/SectionHeading';
 
 const MEMBERSHIP_BENEFITS = [
   { icon: Globe2, label: 'Japan–India Business Connections' },
@@ -31,26 +30,7 @@ export default function MembershipPage() {
 
       <section className="bg-brand-mist py-14">
         <div className="container-x">
-          <SectionHeading
-            eyebrow="Membership"
-            title="Join XCEED India"
-            subtitle={
-              <>
-                <span className="mb-2 block text-sm font-bold uppercase tracking-[0.14em] text-brand-blue">
-                  Connect. Discover. Grow.
-                </span>
-                Become part of the{' '}
-                <strong className="font-semibold text-brand-black">Japan–India industrial network</strong> and connect
-                with companies across casting, foundry, manufacturing, machinery, automation, and industrial
-                technology.
-              </>
-            }
-            align="center"
-            size="h1"
-            className="mx-auto max-w-2xl"
-          />
-
-          <div className="mx-auto mt-12 grid max-w-5xl grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mx-auto grid max-w-5xl grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {MEMBERSHIP_BENEFITS.map(({ icon: Icon, label }) => (
               <div
                 key={label}
@@ -76,15 +56,6 @@ export default function MembershipPage() {
                 </span>
               ))}
             </div>
-          </div>
-
-          <div className="mx-auto mt-14 max-w-xl text-center">
-            <p className="text-base font-semibold text-brand-black">
-              Join XCEED India and build valuable industry connections.
-            </p>
-            <Button href="/membership/register" variant="primary" size="lg" className="mt-6">
-              Become a Member
-            </Button>
           </div>
         </div>
       </section>
