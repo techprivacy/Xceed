@@ -28,7 +28,7 @@ const MEMBER_LINKS = [
 
 // Shared so the three link columns keep identical hierarchy and spacing.
 const COLUMN_HEADING = 'text-sm font-bold uppercase tracking-[0.15em] text-brand-slate';
-const COLUMN_LINK = 'font-medium text-brand-charcoal transition-colors hover:text-brand-red';
+const COLUMN_LINK = 'font-medium text-brand-charcoal transition-colors hover:text-brand-blue';
 
 const LEGAL_LINKS = [
   { label: 'Privacy Policy', icon: ShieldCheck, href: '/privacy-policy' },
@@ -42,19 +42,19 @@ const LEGAL_LINKS = [
 const WAVES = [
   {
     d: 'M0,70 C150,35 300,105 600,70 C900,35 1050,105 1200,70 C1350,35 1500,105 1800,70 C2100,35 2250,105 2400,70 L2400,200 L0,200 Z',
-    fill: 'var(--color-primary)',
+    fill: 'var(--color-secondary)',
     opacity: 0.35,
     duration: '19s',
   },
   {
     d: 'M0,95 C200,60 400,130 600,95 C800,60 1000,130 1200,95 C1400,60 1600,130 1800,95 C2000,60 2200,130 2400,95 L2400,200 L0,200 Z',
-    fill: 'var(--color-primary)',
+    fill: 'var(--color-secondary)',
     opacity: 0.7,
     duration: '13s',
   },
   {
     d: 'M0,120 C180,95 360,145 600,120 C840,95 1020,145 1200,120 C1380,95 1560,145 1800,120 C2040,95 2220,145 2400,120 L2400,200 L0,200 Z',
-    fill: 'var(--color-primary-dark)',
+    fill: 'var(--color-dark)',
     opacity: 1,
     duration: '9s',
   },
@@ -81,7 +81,7 @@ export default function Footer() {
             <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.35em] text-brand-slate">
               Beyond Your Expectations
             </p>
-            <div className="mt-4 h-0.5 w-10 rounded-full bg-brand-red" />
+            <div className="mt-4 h-0.5 w-10 rounded-full bg-brand-blue" />
             <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-brand-slate">
               XCEED India delivers Japanese-quality industrial marking solutions backed by 20+ years of
               expertise, a trusted network of 2,000+ manufacturers &amp; foundries, and 100+ precision tools
@@ -135,23 +135,23 @@ export default function Footer() {
               <li>
                 <a
                   href="tel:+919909611333"
-                  className="flex items-start gap-3.5 font-medium text-brand-charcoal transition-colors hover:text-brand-red"
+                  className="flex items-start gap-3.5 font-medium text-brand-charcoal transition-colors hover:text-brand-blue"
                 >
-                  <Phone size={20} className="mt-0.5 shrink-0 text-brand-red" />
+                  <Phone size={20} className="mt-0.5 shrink-0 text-brand-blue" />
                   +91 99096 11333
                 </a>
               </li>
               <li>
                 <a
                   href="mailto:info@xceedindia.com"
-                  className="flex items-start gap-3.5 break-all font-medium text-brand-charcoal transition-colors hover:text-brand-red"
+                  className="flex items-start gap-3.5 break-all font-medium text-brand-charcoal transition-colors hover:text-brand-blue"
                 >
-                  <Mail size={20} className="mt-0.5 shrink-0 text-brand-red" />
+                  <Mail size={20} className="mt-0.5 shrink-0 text-brand-blue" />
                   info@xceedindia.com
                 </a>
               </li>
               <li className="flex items-start gap-3.5 font-medium text-brand-charcoal">
-                <Clock size={20} className="mt-0.5 shrink-0 text-brand-red" />
+                <Clock size={20} className="mt-0.5 shrink-0 text-brand-blue" />
                 Mon &ndash; Sat: 9:00 AM &ndash; 6:00 PM (IST)
               </li>
             </ul>
@@ -170,8 +170,8 @@ export default function Footer() {
         >
           <defs>
             <linearGradient id="lavaHeat" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#FF9A3C" stopOpacity="0.55" />
-              <stop offset="55%" stopColor="#FF9A3C" stopOpacity="0" />
+              <stop offset="0%" stopColor="#7FB8FF" stopOpacity="0.55" />
+              <stop offset="55%" stopColor="#7FB8FF" stopOpacity="0" />
             </linearGradient>
           </defs>
 
@@ -185,13 +185,13 @@ export default function Footer() {
             />
           ))}
 
-          {/* Warm crest highlight sells the "molten" read without pulling the
-              palette away from XCEED red. */}
+          {/* Cool crest highlight sells the "wave" read while staying inside
+              the XCEED blue palette. */}
           <rect x="0" y="60" width="1200" height="140" fill="url(#lavaHeat)" />
         </svg>
       </div>
 
-      <div className="relative z-10 bg-brand-redDark">
+      <div className="relative z-10 bg-brand-blueDark">
         {/* Extra bottom padding on small screens keeps the copyright clear of
             the fixed floating button, which sits above this bar. */}
         <div className="container-x flex flex-col items-center gap-3 pb-24 pt-4 text-center text-sm text-white/80 sm:flex-row sm:justify-between sm:pb-4">
