@@ -64,8 +64,8 @@ export default function RefundPolicyPage() {
                 info@xceedindia.com
               </a>{' '}
               or call{' '}
-              <a href="tel:+919909611333" className="font-medium text-brand-red hover:underline">
-                +91 99096 11333
+              <a href="tel:+919537511777" className="font-medium text-brand-red hover:underline">
+                +91 95375 11777
               </a>
               .
             </p>

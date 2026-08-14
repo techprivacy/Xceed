@@ -1,6 +1,6 @@
 import WhatsAppIcon from '@/components/icons/WhatsAppIcon';
 
-const WHATSAPP_CHAT_NUMBER = '919909611333';
+const WHATSAPP_CHAT_NUMBER = '919537511777';
 
 export default function FloatingWhatsApp() {
   return (

@@ -7,8 +7,8 @@ const CONTACT_DETAILS = [
   {
     icon: Phone,
     label: 'Call Us',
-    value: '+91 99096 11333',
-    href: 'tel:+919909611333',
+    value: '+91 95375 11777',
+    href: 'tel:+919537511777',
     text: undefined,
   },
   {

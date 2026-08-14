@@ -7,7 +7,7 @@ const SECTIONS = [
     fields: [
       { label: 'Company Name', value: 'XCEED India' },
       { label: 'Support Email', value: 'info@xceedindia.com' },
-      { label: 'Support Phone', value: '+91 99096 11333' },
+      { label: 'Support Phone', value: '+91 95375 11777' },
     ],
   },
   {
@@ -34,7 +34,7 @@ const SECTIONS = [
   {
     title: 'WhatsApp API',
     fields: [
-      { label: 'Business Number', value: '+91 99096 11333' },
+      { label: 'Business Number', value: '+91 95375 11777' },
       { label: 'API Status', value: 'Not connected' },
     ],
   },

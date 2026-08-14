@@ -149,7 +149,7 @@ export default function TokyoTourPosterPage() {
                 </div>
                 <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-[11px] text-white/80">
                   <span className="flex items-center gap-1.5">
-                    <Phone size={12} /> +91 99096 11333
+                    <Phone size={12} /> +91 95375 11777
                   </span>
                   <span className="flex items-center gap-1.5">
                     <Mail size={12} /> info@xceedindia.com

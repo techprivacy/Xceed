@@ -22,7 +22,7 @@ const ORGANIZATION_JSON_LD = {
   },
   contactPoint: {
     '@type': 'ContactPoint',
-    telephone: '+91-99096-11333',
+    telephone: '+91-95375-11777',
     contactType: 'sales',
     email: 'info@xceedindia.com',
   },
