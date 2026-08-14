@@ -92,6 +92,14 @@ export interface AdminUser {
 export type MemberStatus = 'pending' | 'approved' | 'rejected';
 export type SubscriptionStatus = 'none' | 'active' | 'expired';
 
+// Mirrors backend/src/models/Member.js MEMBERSHIP_TYPES.
+export type MembershipType =
+  | 'Indian Company'
+  | 'Japanese Company'
+  | 'Foundry / Manufacturer'
+  | 'Technology / Machinery Supplier'
+  | 'Industry Professional';
+
 export interface Member {
   _id: string;
   companyName: string;
@@ -100,6 +108,9 @@ export interface Member {
   industry?: string;
   products?: string;
   location?: string;
+  country?: string;
+  website?: string;
+  membershipType?: MembershipType | '';
   companyLogo?: string;
   mobileNumber?: string;
   whatsappNumber?: string;
@@ -121,10 +132,12 @@ export interface MemberRegisterInput {
   companyName: string;
   contactPerson: string;
   email: string;
-  password: string;
   industry?: string;
   products?: string;
   location?: string;
+  country?: string;
+  website?: string;
+  membershipType?: MembershipType | '';
   companyLogo?: string;
   mobileNumber?: string;
   whatsappNumber?: string;
@@ -137,6 +150,9 @@ export interface MemberProfileInput {
   industry?: string;
   products?: string;
   location?: string;
+  country?: string;
+  website?: string;
+  membershipType?: MembershipType | '';
   companyLogo?: string;
   mobileNumber?: string;
   whatsappNumber?: string;
@@ -273,4 +289,7 @@ export interface ApiResponse<T> {
   total?: number;
   page?: number;
   pages?: number;
+  // Set by PUT /api/members/:id/approve only.
+  emailStatus?: 'sent' | 'not_configured' | 'failed' | 'skipped';
+  temporaryPassword?: string;
 }

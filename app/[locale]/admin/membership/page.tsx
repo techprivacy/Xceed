@@ -36,8 +36,19 @@ export default function DirectoryPage() {
     const token = getAdminToken();
     if (!token) return;
     try {
-      await approveMember(token, member._id);
-      toast.success(`${member.companyName} approved — they can now log in.`);
+      const res = await approveMember(token, member._id);
+      if (res.temporaryPassword) {
+        // Email wasn't delivered (SMTP not configured, or the send failed) —
+        // this is the only place the generated password is ever surfaced, so
+        // hand it to the admin via a copyable prompt rather than a toast
+        // that auto-dismisses in 3.5s.
+        toast.success(`${member.companyName} approved. Email delivery unavailable — share this password manually.`);
+        window.prompt(`Temporary password for ${member.email}:`, res.temporaryPassword);
+      } else if (res.emailStatus === 'sent') {
+        toast.success(`${member.companyName} approved — login details emailed to them.`);
+      } else {
+        toast.success(`${member.companyName} approved — they can now log in.`);
+      }
       reload();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Failed to approve');

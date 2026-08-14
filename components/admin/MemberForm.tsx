@@ -25,6 +25,9 @@ export default function MemberForm({ member }: { member: Member }) {
   const [industry, setIndustry] = useState(member.industry ?? '');
   const [products, setProducts] = useState(member.products ?? '');
   const [location, setLocation] = useState(member.location ?? '');
+  const [country, setCountry] = useState(member.country ?? '');
+  const [website, setWebsite] = useState(member.website ?? '');
+  const [membershipType, setMembershipType] = useState(member.membershipType ?? '');
   const [status, setStatus] = useState(member.status);
   const [subscriptionStatus, setSubscriptionStatus] = useState(member.subscriptionStatus);
   const [saving, setSaving] = useState(false);
@@ -44,6 +47,9 @@ export default function MemberForm({ member }: { member: Member }) {
       industry,
       products,
       location,
+      country,
+      website,
+      membershipType,
       status,
       subscriptionStatus,
     };
@@ -103,9 +109,37 @@ export default function MemberForm({ member }: { member: Member }) {
         </div>
       </div>
 
-      <div>
-        <label className={LABEL_CLASSES}>Location</label>
-        <input value={location} onChange={(e) => setLocation(e.target.value)} className={INPUT_CLASSES} />
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <label className={LABEL_CLASSES}>Location</label>
+          <input value={location} onChange={(e) => setLocation(e.target.value)} className={INPUT_CLASSES} />
+        </div>
+        <div>
+          <label className={LABEL_CLASSES}>Country</label>
+          <input value={country} onChange={(e) => setCountry(e.target.value)} className={INPUT_CLASSES} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <label className={LABEL_CLASSES}>Website</label>
+          <input value={website} onChange={(e) => setWebsite(e.target.value)} className={INPUT_CLASSES} />
+        </div>
+        <div>
+          <label className={LABEL_CLASSES}>Membership Type</label>
+          <select
+            value={membershipType}
+            onChange={(e) => setMembershipType(e.target.value as typeof membershipType)}
+            className={INPUT_CLASSES}
+          >
+            <option value="">—</option>
+            <option value="Indian Company">Indian Company</option>
+            <option value="Japanese Company">Japanese Company</option>
+            <option value="Foundry / Manufacturer">Foundry / Manufacturer</option>
+            <option value="Technology / Machinery Supplier">Technology / Machinery Supplier</option>
+            <option value="Industry Professional">Industry Professional</option>
+          </select>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

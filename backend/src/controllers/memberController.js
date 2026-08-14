@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const Member = require('../models/Member');
+const { getTransporter, isConfigured } = require('../config/mailer');
 
 const issueToken = (id) =>
   jwt.sign({ id, kind: 'member' }, process.env.JWT_SECRET, {
@@ -15,6 +17,9 @@ const SELF_EDITABLE_FIELDS = [
   'industry',
   'products',
   'location',
+  'country',
+  'website',
+  'membershipType',
   'companyLogo',
   'mobileNumber',
   'whatsappNumber',
@@ -30,14 +35,14 @@ const pick = (source, fields) =>
 // --- Public ---
 
 // @route POST /api/members/register
+// No password is collected here — applying to join is not an account
+// signup. A login password is generated and emailed once an admin
+// approves the application (see approveMember below).
 exports.registerMember = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      return res.status(400).json({ success: false, message: 'Email and password are required' });
-    }
-    if (password.length < 6) {
-      return res.status(400).json({ success: false, message: 'Password must be at least 6 characters' });
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'Email is required' });
     }
     const { companyName, contactPerson } = req.body;
     if (!companyName || !contactPerson) {
@@ -47,7 +52,6 @@ exports.registerMember = async (req, res) => {
     const member = await Member.create({
       ...pick(req.body, SELF_EDITABLE_FIELDS),
       email,
-      password,
     });
 
     res.status(201).json({
@@ -72,10 +76,14 @@ exports.loginMember = async (req, res) => {
     }
 
     const member = await Member.findOne({ email: email.trim().toLowerCase() });
-    if (!member || !(await member.comparePassword(password))) {
+    if (!member) {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
+    // Status is checked before the password compare on purpose: a pending
+    // (or rejected) member has no password yet — see registerMember — so
+    // comparePassword would be given an undefined hash instead of a useful
+    // "still pending" message.
     if (member.status === 'pending') {
       return res.status(403).json({
         success: false,
@@ -87,6 +95,10 @@ exports.loginMember = async (req, res) => {
         success: false,
         message: 'Your membership application was not approved. Contact us for details.',
       });
+    }
+
+    if (!(await member.comparePassword(password))) {
+      return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
     const token = issueToken(member._id);
@@ -216,15 +228,56 @@ exports.updateMember = async (req, res) => {
 };
 
 // @route PUT /api/members/:id/approve (admin)
+// A member applies with no password (see registerMember). Approving is the
+// moment they actually get portal access, so — the first time a member is
+// approved — this generates a random password, saves it (hashed by the
+// model's pre('save') hook, since we use .save() rather than
+// findByIdAndUpdate here), and emails it to them. Re-approving an
+// already-approved member does not rotate an existing password.
 exports.approveMember = async (req, res) => {
   try {
-    const member = await Member.findByIdAndUpdate(
-      req.params.id,
-      { status: 'approved' },
-      { new: true }
-    ).select('-password');
+    const member = await Member.findById(req.params.id);
     if (!member) return res.status(404).json({ success: false, message: 'Member not found' });
-    res.json({ success: true, data: member });
+
+    let temporaryPassword;
+    if (!member.password) {
+      temporaryPassword = crypto.randomBytes(9).toString('base64url');
+      member.password = temporaryPassword;
+    }
+    member.status = 'approved';
+    await member.save();
+
+    let emailStatus = 'skipped';
+    if (temporaryPassword) {
+      if (!isConfigured()) {
+        emailStatus = 'not_configured';
+      } else {
+        try {
+          const transporter = getTransporter();
+          await transporter.sendMail({
+            from: process.env.SMTP_FROM || process.env.SMTP_USER,
+            to: member.email,
+            subject: 'Your XCEED India Membership Has Been Approved',
+            text: `Dear ${member.contactPerson},\n\nYour XCEED India membership application has been approved.\n\nYou can now log in to the Member Portal at the XCEED India website with:\n\nEmail: ${member.email}\nPassword: ${temporaryPassword}\n\nWe recommend changing your password after logging in.\n\nRegards,\nXCEED India Team`,
+          });
+          emailStatus = 'sent';
+        } catch (mailErr) {
+          emailStatus = 'failed';
+        }
+      }
+    }
+
+    const data = member.toObject();
+    delete data.password;
+
+    res.json({
+      success: true,
+      data,
+      emailStatus,
+      // Only surfaced when the applicant won't receive it by email, so an
+      // admin can relay it manually instead of it being lost.
+      ...(temporaryPassword && emailStatus !== 'sent' ? { temporaryPassword } : {}),
+    });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });
   }
