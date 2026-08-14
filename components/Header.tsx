@@ -11,7 +11,10 @@ const MAIN_CATEGORIES = PRODUCT_CATEGORIES.filter(
   (c) => ['cast-letters', 'cast-numbers', 'holders', 'magnetic-tools'].includes(c.urlSlug)
 );
 
-const NAV_ITEMS = [
+type NavChild = { label: string; href: string };
+type NavItem = { label: string; href: string; children?: NavChild[] };
+
+const NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: '/' },
   { label: 'About Us', href: '/about-us' },
   {
@@ -28,7 +31,7 @@ const NAV_ITEMS = [
   { label: 'Contact Us', href: '/contact-us' },
 ];
 
-const TOUR_ITEM = { label: 'Tokyo Tour 2026', href: '/tokyo-tour-2026' };
+const TOUR_ITEM: NavItem = { label: 'Tokyo Tour 2026', href: '/tokyo-tour-2026' };
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -157,7 +160,7 @@ export default function Header() {
                   )}
                 </a>
 
-                {'children' in item && item.children && (
+                {item.children && (
                   <ul className="ml-3 mt-1 flex flex-col gap-1 border-l border-white/10 pl-3">
                     {item.children.map((child) => (
                       <li key={child.href}>
