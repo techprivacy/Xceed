@@ -5,7 +5,6 @@ import { notFound } from 'next/navigation';
 import './globals.css';
 import { getLiveTheme, themeToCssVars, DEFAULT_THEME } from '@/lib/theme';
 import { routing } from '@/i18n/routing';
-import GoogleTranslateLoader from '@/components/GoogleTranslateLoader';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 const SITE_TITLE = 'Japan–India Casting & Foundry Business Platform | XCEED India';
@@ -105,7 +104,6 @@ export default async function LocaleLayout({
         <style dangerouslySetInnerHTML={{ __html: themeToCssVars(theme) }} />
       </head>
       <body className="font-sans">
-        <GoogleTranslateLoader />
         <NextIntlClientProvider locale={locale} messages={messages}>
           {children}
         </NextIntlClientProvider>

@@ -18,34 +18,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Google Website Translator (lib/googleTranslate.ts) is driven entirely
-   from Header's own language dropdown — its default banner, highlight
-   colors and top-of-page offset are all unwanted chrome we suppress here. */
-.goog-te-banner-frame,
-.goog-te-balloon-frame,
-.skiptranslate iframe {
-  display: none !important;
-}
-
-body {
-  top: 0 !important;
-}
-
-body.translated-ltr,
-body.translated-rtl {
-  top: 0 !important;
-}
-
-.goog-text-highlight {
-  background: none !important;
-  box-shadow: none !important;
-}
-
 /* Header's desktop nav (components/Header.tsx) falls back to horizontal
-   scroll rather than overflowing or wrapping once labels are translated
-   into a language whose words run longer than English. The scrollbar
-   itself is hidden since the row is short and wide, not a content list —
-   a visible bar there reads as a rendering glitch, not a feature. */
+   scroll rather than clipping if it ever runs out of room, instead of
+   silently overflowing or wrapping. The scrollbar itself is hidden since
+   the row is short and wide, not a content list — a visible bar there
+   reads as a rendering glitch, not a feature. */
 .no-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;

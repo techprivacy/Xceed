@@ -6,31 +6,7 @@ import { usePathname } from 'next/navigation';
 import { Menu, X, ShoppingCart, User, ChevronDown } from 'lucide-react';
 import { useCartCount } from '@/lib/useCartCount';
 import { getMemberToken } from '@/lib/api';
-import { getActiveGoogleTranslateLang, translateTo, clearGoogleTranslateCookie } from '@/lib/googleTranslate';
 import { PRODUCT_CATEGORIES, INDUSTRIES } from '@/lib/staticData';
-
-// EN is the real underlying content (see i18n/routing.ts + messages/en) —
-// clicking it navigates like any other link. Every other language is driven
-// live by the Google Website Translator widget instead (see
-// lib/googleTranslate.ts + components/GoogleTranslateLoader.tsx): `google:
-// true` marks that. JA has its own /ja route via next-intl too, but no page
-// actually calls useTranslations() — messages/ja/*.json covers two strings,
-// so that route silently rendered English. Google Translate is what
-// actually makes Japanese (and the rest) show translated content. `flag`
-// picks which drawn flag (not an emoji — Windows renders flag emoji as bare
-// "IN"/"JP" text) shows next to it; `native` is the name in that language's
-// own script.
-const LANGUAGES = [
-  { code: 'en' as const, native: 'English', flag: 'in' as const, google: false },
-  { code: 'ja' as const, native: '日本語', flag: 'jp' as const, google: true },
-  { code: 'hi' as const, native: 'हिन्दी', flag: 'in' as const, google: true },
-  { code: 'ta' as const, native: 'தமிழ்', flag: 'in' as const, google: true },
-  { code: 'te' as const, native: 'తెలుగు', flag: 'in' as const, google: true },
-  { code: 'kn' as const, native: 'ಕನ್ನಡ', flag: 'in' as const, google: true },
-  { code: 'ml' as const, native: 'മലയാളം', flag: 'in' as const, google: true },
-  { code: 'bn' as const, native: 'বাংলা', flag: 'in' as const, google: true },
-  { code: 'mr' as const, native: 'मराठी', flag: 'in' as const, google: true },
-] as const;
 
 // Precomputed once at module load, not inline per render: Math.cos/sin can
 // return a value that differs from the browser's in the last couple of
@@ -46,19 +22,12 @@ const CHAKRA_SPOKES = Array.from({ length: 24 }, (_, i) => {
   return { x2: (15 + 2.6 * Math.cos(a)).toFixed(3), y2: (10 + 2.6 * Math.sin(a)).toFixed(3) };
 });
 
-// Small drawn flag chips — deliberately not emoji. Windows (this user's OS)
-// renders 🇮🇳/🇯🇵 as plain "IN"/"JP" text instead of a flag glyph, so an
-// actual India/Japan graphic needs to be real markup, not a codepoint.
-function FlagIcon({ country, className }: { country: 'in' | 'jp'; className?: string }) {
-  if (country === 'jp') {
-    return (
-      <svg viewBox="0 0 30 20" className={className} aria-hidden>
-        <rect width="30" height="20" rx="2" fill="#fff" />
-        <rect width="30" height="20" rx="2" fill="none" stroke="#00000014" strokeWidth="1" />
-        <circle cx="15" cy="10" r="6" fill="#BC002D" />
-      </svg>
-    );
-  }
+// Drawn India flag chip — deliberately not the 🇮🇳 emoji. Windows (this
+// user's OS) renders regional-indicator flag emoji as bare "IN" text
+// instead of a flag glyph, so an actual graphic needs to be real markup,
+// not a codepoint. Site is English-only for now (see LANGUAGES history in
+// git log if multi-language returns), so this is the one flag left.
+function IndiaFlagIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 30 20" className={className} aria-hidden>
       <rect width="30" height="20" rx="2" fill="#fff" />
@@ -72,23 +41,6 @@ function FlagIcon({ country, className }: { country: 'in' | 'jp'; className?: st
       ))}
     </svg>
   );
-}
-
-const LOCALE_COOKIE = 'NEXT_LOCALE';
-
-function currentLocaleOf(pathname: string): 'en' | 'ja' {
-  return pathname === '/ja' || pathname.startsWith('/ja/') ? 'ja' : 'en';
-}
-
-// localePrefix is 'as-needed': the default locale (en) carries no prefix,
-// so switching just means stripping/adding the /ja segment.
-function localizedPath(pathname: string, target: 'en' | 'ja'): string {
-  const stripped = pathname.replace(/^\/ja(?=\/|$)/, '') || '/';
-  return target === 'ja' ? `/ja${stripped === '/' ? '' : stripped}` : stripped;
-}
-
-function setLocaleCookie(locale: 'en' | 'ja') {
-  document.cookie = `${LOCALE_COOKIE}=${locale};path=/;max-age=${60 * 60 * 24 * 365};samesite=lax`;
 }
 
 const MAIN_CATEGORIES = PRODUCT_CATEGORIES.filter(
@@ -118,10 +70,8 @@ const NAV_ITEMS: NavItem[] = [
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
-  const [gtLang, setGtLang] = useState<string | null>(null);
   const cartCount = useCartCount();
   const pathname = usePathname();
-  const currentLocale = currentLocaleOf(pathname);
 
   useEffect(() => {
     const check = () => setIsSignedIn(Boolean(getMemberToken()));
@@ -130,20 +80,10 @@ export default function Header() {
     return () => window.removeEventListener('storage', check);
   }, [pathname]);
 
-  useEffect(() => {
-    setGtLang(getActiveGoogleTranslateLang());
-  }, [pathname]);
-
   const handleSignOut = () => {
     localStorage.removeItem('xceed_member_token');
     window.location.href = '/member/login';
   };
-
-  // A Google-translated language (if active) takes visual priority over the
-  // routed en/ja locale, since it's layered on top of whichever page is
-  // actually showing.
-  const activeCode = gtLang ?? currentLocale;
-  const activeLang = LANGUAGES.find((l) => l.code === activeCode) ?? LANGUAGES[0];
 
   return (
     <header className="sticky top-0 z-50 shadow-sm">
@@ -216,69 +156,13 @@ export default function Header() {
           </ul>
 
           <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
-            {/* Language selector — translate="no" so Google doesn't re-translate
-                these language names/codes into whichever language is currently
-                active (e.g. showing "தமிழ் - TA" while browsing in Hindi). */}
-            <div className="group relative notranslate" translate="no">
-              <button
-                type="button"
-                aria-label="Select language"
-                className="flex items-center gap-1 rounded-xl px-2 py-2 text-xs font-bold uppercase tracking-wide text-brand-charcoal/70 transition hover:bg-brand-mist hover:text-brand-charcoal sm:gap-1.5 sm:px-2.5"
-              >
-                <FlagIcon country={activeLang.flag} className="h-3.5 w-5 shrink-0 rounded-[2px]" />
-                <span>{activeCode.toUpperCase()}</span>
-                <ChevronDown size={13} className="shrink-0 transition-transform duration-200 group-hover:rotate-180" />
-              </button>
-
-              <div className="invisible absolute right-0 top-full z-[60] max-h-[70vh] min-w-[200px] translate-y-1 overflow-y-auto rounded-xl border border-black/5 bg-white py-2 text-brand-charcoal opacity-0 shadow-lg transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
-                {LANGUAGES.map((lang) => {
-                  const isActive = activeCode === lang.code;
-                  const rowClass = `flex w-full items-center gap-2 px-4 py-2 text-left text-xs normal-case transition-colors ${
-                    isActive
-                      ? 'bg-brand-mist font-semibold text-brand-red'
-                      : 'text-brand-charcoal/80 hover:bg-brand-mist hover:text-brand-red'
-                  }`;
-
-                  if (lang.google) {
-                    // Machine-translated in place via the Google widget —
-                    // no navigation, so a <button> rather than an <a>.
-                    return (
-                      <button key={lang.code} type="button" onClick={() => { translateTo(lang.code); setGtLang(lang.code); }} className={rowClass}>
-                        <FlagIcon country={lang.flag} className="h-3.5 w-5 shrink-0 rounded-[2px]" />
-                        {lang.native} - {lang.code.toUpperCase()}
-                      </button>
-                    );
-                  }
-
-                  const target = localizedPath(pathname, lang.code);
-                  return (
-                    <a
-                      key={lang.code}
-                      href={target}
-                      onClick={(e) => {
-                        clearGoogleTranslateCookie();
-                        setLocaleCookie(lang.code);
-                        // Google Translate never changes the URL — it's a pure
-                        // in-place DOM rewrite — so switching from a
-                        // Google-translated language back to English usually
-                        // means `target` is byte-identical to the current URL.
-                        // Relying on the browser's own same-URL anchor-click
-                        // behavior there isn't fully dependable across
-                        // browsers, so force it explicitly instead of leaving
-                        // it to chance.
-                        if (target === window.location.pathname) {
-                          e.preventDefault();
-                          window.location.reload();
-                        }
-                      }}
-                      className={rowClass}
-                    >
-                      <FlagIcon country={lang.flag} className="h-3.5 w-5 shrink-0 rounded-[2px]" />
-                      {lang.native} - {lang.code.toUpperCase()}
-                    </a>
-                  );
-                })}
-              </div>
+            {/* Static English indicator — site is English-only for now, no
+                dropdown since there's nothing to switch to. Multi-language
+                (Google Translate widget + EN/JA routing) was built and then
+                fully removed per request; see git log if it comes back. */}
+            <div className="notranslate flex items-center gap-1 rounded-xl px-2 py-2 text-xs font-bold uppercase tracking-wide text-brand-charcoal/70 sm:gap-1.5 sm:px-2.5" translate="no">
+              <IndiaFlagIcon className="h-3.5 w-5 shrink-0 rounded-[2px]" />
+              <span>EN</span>
             </div>
 
             {/* Sign in / Account & Lists */}
