@@ -19,8 +19,8 @@ const SOCIALS = [
 ];
 
 const MEMBER_LINKS = [
-  { label: 'Directory', href: '/membership' },
-  { label: 'Member Directory', href: '/membership#directory' },
+  { label: 'Directory', href: '/directory' },
+  { label: 'Member Directory', href: '/directory#directory' },
   { label: 'Become a Member', href: '/membership/register' },
   { label: 'Sign In', href: '/login' },
 ];

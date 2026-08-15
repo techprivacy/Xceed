@@ -7,7 +7,7 @@ const STATIC_ROUTES = [
   '',
   '/products',
   '/industries',
-  '/membership',
+  '/directory',
   '/membership/register',
   '/contact-us',
   '/track-order',
