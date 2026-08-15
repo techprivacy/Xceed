@@ -50,11 +50,7 @@ export default function MemberLoginPage() {
 
           <div className="mb-1 flex items-center justify-between">
             <label className="block text-xs font-semibold text-brand-charcoal">Password</label>
-            {/* Credentials are staff-issued on approval, not member-chosen (see
-                membership registration flow) — there's no self-service reset
-                yet, so this routes to Contact Us to request reissued
-                credentials rather than a reset flow that doesn't exist. */}
-            <Link href="/contact-us" className="text-xs font-semibold text-brand-blue hover:underline">
+            <Link href="/member/forgot-password" className="text-xs font-semibold text-brand-blue hover:underline">
               Forgot password?
             </Link>
           </div>
@@ -76,7 +72,7 @@ export default function MemberLoginPage() {
           <div className="mt-5 space-y-2 border-t border-black/5 pt-5 text-center text-xs text-brand-slate">
             <p>
               New here?{' '}
-              <Link href="/membership/register" className="font-semibold text-brand-red hover:underline">
+              <Link href="/member/register" className="font-semibold text-brand-red hover:underline">
                 Create an Account
               </Link>
             </p>

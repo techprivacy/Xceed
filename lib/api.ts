@@ -272,6 +272,23 @@ export const memberLogin = async (email: string, password: string): Promise<Memb
   return json;
 };
 
+// Always resolves with the backend's generic message (never throws for
+// "email not found") — the endpoint itself is deliberately non-revealing
+// about whether an email is registered, see memberController.forgotPassword.
+export const forgotMemberPassword = async (email: string): Promise<{ success: boolean; message: string }> => {
+  const res = await fetch(`${API_URL}/members/forgot-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+    cache: 'no-store',
+  });
+  const json = await res.json();
+  if (!res.ok) {
+    throw new Error(json.message || 'Something went wrong. Please try again.');
+  }
+  return json;
+};
+
 export const getMyMemberProfile = (token: string) => memberRequest<Member>('/members/me', token);
 
 export const updateMyMemberProfile = (token: string, payload: MemberProfileInput) =>

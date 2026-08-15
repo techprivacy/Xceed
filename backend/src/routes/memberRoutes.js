@@ -3,6 +3,7 @@ const router = express.Router();
 const {
   registerMember,
   loginMember,
+  forgotPassword,
   getPublicDirectory,
   getMyProfile,
   updateMyProfile,
@@ -21,6 +22,7 @@ const { protectMember } = require('../middlewares/memberAuth');
 // Public
 router.post('/register', registerMember);
 router.post('/login', loginMember);
+router.post('/forgot-password', forgotPassword);
 router.get('/directory', getPublicDirectory);
 
 // Member-authenticated — must come before /:id so "me" isn't parsed as an id

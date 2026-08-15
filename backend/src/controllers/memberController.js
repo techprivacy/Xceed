@@ -112,6 +112,50 @@ exports.loginMember = async (req, res) => {
   }
 };
 
+// @route POST /api/members/forgot-password
+// Always returns the same generic message regardless of whether the email
+// matches a member, is still pending, or is approved — this endpoint must
+// not be usable to enumerate registered emails. The new password is only
+// actually saved once the email send has succeeded (same random-password
+// pattern as approveMember), so a misconfigured mailer or a transient send
+// failure can't silently lock someone out of an account they could still
+// reach with their existing password.
+exports.forgotPassword = async (req, res) => {
+  const GENERIC_MESSAGE = 'If that email belongs to an approved member, a new password has been sent to it.';
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'Email is required' });
+    }
+
+    const member = await Member.findOne({ email: email.trim().toLowerCase() });
+    if (!member || member.status !== 'approved' || !isConfigured()) {
+      return res.json({ success: true, message: GENERIC_MESSAGE });
+    }
+
+    const newPassword = crypto.randomBytes(9).toString('base64url');
+    try {
+      const transporter = getTransporter();
+      await transporter.sendMail({
+        from: process.env.SMTP_FROM || process.env.SMTP_USER,
+        to: member.email,
+        subject: 'Reset Your XCEED India Member Portal Password',
+        text: `Dear ${member.contactPerson},\n\nWe received a request to reset your XCEED India Member Portal password.\n\nYour new password is: ${newPassword}\n\nYou can now log in with this password. We recommend changing it after logging in.\n\nIf you did not request this, you can ignore this email — your password has not been changed.\n\nRegards,\nXCEED India Team`,
+      });
+      // Only persisted after the send succeeds — see comment above.
+      member.password = newPassword;
+      await member.save();
+    } catch (mailErr) {
+      // Swallowed on purpose: the response stays generic either way, and the
+      // member's existing password is left untouched.
+    }
+
+    res.json({ success: true, message: GENERIC_MESSAGE });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
 // @route GET /api/members/directory (public)
 // Approved members only, and only the fields the public directory card shows
 // — email is intentionally withheld here even though it's on the model.

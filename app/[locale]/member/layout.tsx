@@ -10,22 +10,26 @@ import { getMemberToken } from '@/lib/api';
 // xceed_member_token — a member session can't satisfy this check with an
 // admin token or vice versa (see backend/src/middlewares/memberAuth.js for
 // why that's true on the API side too, not just here).
+// Public entry points into the member area — none of these need (or should
+// wait on) a session check, unlike /member/dashboard, /member/profile, etc.
+const PUBLIC_MEMBER_PAGES = ['/member/login', '/member/forgot-password', '/member/register'];
+
 export default function MemberPortalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [checked, setChecked] = useState(false);
-  const isLoginPage = pathname === '/member/login';
+  const isPublicPage = PUBLIC_MEMBER_PAGES.includes(pathname);
 
   useEffect(() => {
-    if (isLoginPage) return;
+    if (isPublicPage) return;
     if (!getMemberToken()) {
       router.replace('/member/login');
       return;
     }
     setChecked(true);
-  }, [isLoginPage, router]);
+  }, [isPublicPage, router]);
 
-  if (isLoginPage)
+  if (isPublicPage)
     return (
       <>
         {children}
