@@ -41,7 +41,8 @@ export default function CartPage() {
     <main>
       <Header />
 
-      <section className="container-x py-14">
+      <section className="bg-white py-14">
+        <div className="container-x">
         <h1 className="mb-8 text-2xl font-bold tracking-tight text-brand-black sm:text-3xl">Your Cart</h1>
 
         {items.length === 0 ? (
@@ -169,6 +170,7 @@ export default function CartPage() {
             </Card>
           </div>
         )}
+        </div>
       </section>
 
       <Footer />

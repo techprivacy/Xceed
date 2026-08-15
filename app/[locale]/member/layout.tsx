@@ -12,6 +12,9 @@ import { getMemberToken } from '@/lib/api';
 // why that's true on the API side too, not just here).
 // Public entry points into the member area — none of these need (or should
 // wait on) a session check, unlike /member/dashboard, /member/profile, etc.
+// /member/login itself is just a redirect stub now (see its page.tsx) but
+// stays listed defensively in case it ever renders as a child of this
+// layout before that redirect fires.
 const PUBLIC_MEMBER_PAGES = ['/member/login', '/member/forgot-password', '/member/register'];
 
 export default function MemberPortalLayout({ children }: { children: React.ReactNode }) {
@@ -23,7 +26,9 @@ export default function MemberPortalLayout({ children }: { children: React.React
   useEffect(() => {
     if (isPublicPage) return;
     if (!getMemberToken()) {
-      router.replace('/member/login');
+      // Straight to the unified login, not /member/login (which would just
+      // redirect here again) — one hop instead of two.
+      router.replace('/login');
       return;
     }
     setChecked(true);

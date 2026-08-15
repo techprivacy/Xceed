@@ -22,7 +22,7 @@ const MEMBER_LINKS = [
   { label: 'Membership', href: '/membership' },
   { label: 'Member Directory', href: '/membership#directory' },
   { label: 'Become a Member', href: '/membership/register' },
-  { label: 'Member Login', href: '/member/login' },
+  { label: 'Sign In', href: '/login' },
 ];
 
 // Shared so the three link columns keep identical hierarchy and spacing.

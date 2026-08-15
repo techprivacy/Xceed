@@ -127,7 +127,7 @@ export default function Header() {
 
   const handleSignOut = () => {
     localStorage.removeItem('xceed_member_token');
-    window.location.href = '/member/login';
+    window.location.href = '/login';
   };
 
   return (
@@ -286,7 +286,7 @@ export default function Header() {
                 ) : (
                   <>
                     <a
-                      href="/member/login"
+                      href="/login"
                       className="block w-full rounded-lg bg-brand-blue px-4 py-2.5 text-center text-sm font-bold text-white transition hover:bg-brand-blueDark"
                     >
                       Sign in
@@ -338,16 +338,6 @@ export default function Header() {
                       <li>
                         <a href="#" className="hover:text-brand-red hover:underline">
                           Create a Wish List
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" className="hover:text-brand-red hover:underline">
-                          Wish from Any Website
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" className="hover:text-brand-red hover:underline">
-                          Discover Your Style
                         </a>
                       </li>
                       <li>
@@ -425,7 +415,7 @@ export default function Header() {
             })}
             <li className="mt-2 flex items-center gap-2 border-t border-white/10 pt-3">
               <a
-                href="/admin/login"
+                href="/login"
                 className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-white/5 px-3.5 py-3 normal-case tracking-normal text-white/80"
               >
                 <User size={16} /> Admin

@@ -12,6 +12,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const router = useRouter();
   const [checked, setChecked] = useState(false);
+  // /admin/login is just a redirect stub now (see its page.tsx, which
+  // forwards to the unified /login) but stays checked defensively in case
+  // it ever renders as a child of this layout before that redirect fires.
   const isLoginPage = pathname === '/admin/login';
   const { admin } = useCurrentAdmin();
   useAdminNotifications(admin?.role);
@@ -19,7 +22,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   useEffect(() => {
     if (isLoginPage) return;
     if (!getAdminToken()) {
-      router.replace('/admin/login');
+      // Straight to the unified login, not /admin/login (which would just
+      // redirect here again) — one hop instead of two.
+      router.replace('/login');
       return;
     }
     setChecked(true);

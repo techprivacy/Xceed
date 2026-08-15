@@ -30,7 +30,7 @@ export default function MemberSidebar() {
 
   const handleLogout = () => {
     localStorage.removeItem('xceed_member_token');
-    router.push('/member/login');
+    router.push('/login');
   };
 
   const NavList = (

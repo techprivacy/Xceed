@@ -44,7 +44,7 @@ export default function AdminSidebar() {
 
   const handleLogout = () => {
     localStorage.removeItem('xceed_admin_token');
-    router.push('/admin/login');
+    router.push('/login');
   };
 
   return (
