@@ -31,7 +31,7 @@ export default function AboutUsPage() {
 
             <div className="mt-5 space-y-5 text-base leading-relaxed text-brand-slate">
               <p>
-                For more than 25 years, my journey between Japan and India has been driven by one purpose —{' '}
+                For more than 25 years, our journey between Japan and India has been driven by one purpose —{' '}
                 <strong className="font-semibold text-brand-black">
                   connecting advanced Japanese technology with the growing needs of Indian industry.
                 </strong>
@@ -45,9 +45,17 @@ export default function AboutUsPage() {
                 Our experience spans{' '}
                 <strong className="font-semibold text-brand-black">
                   foundry engineering, robotics, automation, sand reclamation, environmental technologies, wastewater
-                  treatment, and industrial waste-gas purification
+                  treatment, industrial waste-gas purification, and industrial gasification machines for converting
+                  solid waste into energy.
                 </strong>
-                .
+              </p>
+              <p>
+                XCEED is honoured to stand as a{' '}
+                <strong className="font-semibold text-brand-black">
+                  pillar of the growing economic and business relationship between Japan and India
+                </strong>
+                , fostering stronger connections, technology exchange, and long-term collaboration between the two
+                nations.
               </p>
               <p>
                 Today, we continue to work closely with leading Indian industries while helping Japanese technology
@@ -56,8 +64,8 @@ export default function AboutUsPage() {
               <p>
                 Our vision is simple:{' '}
                 <strong className="font-semibold text-brand-black">
-                  to build a stronger bridge between Japan and India through technology, trust, and long-term
-                  industrial partnerships.
+                  to strengthen Japan–India collaboration through technology, trust, and long-term industrial
+                  partnerships.
                 </strong>
               </p>
             </div>

@@ -1,11 +1,92 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Menu, X, ShoppingCart, User, ChevronDown } from 'lucide-react';
 import { useCartCount } from '@/lib/useCartCount';
+import { getMemberToken } from '@/lib/api';
+import { getActiveGoogleTranslateLang, translateTo, clearGoogleTranslateCookie } from '@/lib/googleTranslate';
 import { PRODUCT_CATEGORIES, INDUSTRIES } from '@/lib/staticData';
+
+// EN is the real underlying content (see i18n/routing.ts + messages/en) —
+// clicking it navigates like any other link. Every other language is driven
+// live by the Google Website Translator widget instead (see
+// lib/googleTranslate.ts + components/GoogleTranslateLoader.tsx): `google:
+// true` marks that. JA has its own /ja route via next-intl too, but no page
+// actually calls useTranslations() — messages/ja/*.json covers two strings,
+// so that route silently rendered English. Google Translate is what
+// actually makes Japanese (and the rest) show translated content. `flag`
+// picks which drawn flag (not an emoji — Windows renders flag emoji as bare
+// "IN"/"JP" text) shows next to it; `native` is the name in that language's
+// own script.
+const LANGUAGES = [
+  { code: 'en' as const, native: 'English', flag: 'in' as const, google: false },
+  { code: 'ja' as const, native: '日本語', flag: 'jp' as const, google: true },
+  { code: 'hi' as const, native: 'हिन्दी', flag: 'in' as const, google: true },
+  { code: 'ta' as const, native: 'தமிழ்', flag: 'in' as const, google: true },
+  { code: 'te' as const, native: 'తెలుగు', flag: 'in' as const, google: true },
+  { code: 'kn' as const, native: 'ಕನ್ನಡ', flag: 'in' as const, google: true },
+  { code: 'ml' as const, native: 'മലയാളം', flag: 'in' as const, google: true },
+  { code: 'bn' as const, native: 'বাংলা', flag: 'in' as const, google: true },
+  { code: 'mr' as const, native: 'मराठी', flag: 'in' as const, google: true },
+] as const;
+
+// Small drawn flag chips — deliberately not emoji. Windows (this user's OS)
+// renders 🇮🇳/🇯🇵 as plain "IN"/"JP" text instead of a flag glyph, so an
+// actual India/Japan graphic needs to be real markup, not a codepoint.
+function FlagIcon({ country, className }: { country: 'in' | 'jp'; className?: string }) {
+  if (country === 'jp') {
+    return (
+      <svg viewBox="0 0 30 20" className={className} aria-hidden>
+        <rect width="30" height="20" rx="2" fill="#fff" />
+        <rect width="30" height="20" rx="2" fill="none" stroke="#00000014" strokeWidth="1" />
+        <circle cx="15" cy="10" r="6" fill="#BC002D" />
+      </svg>
+    );
+  }
+  return (
+    <svg viewBox="0 0 30 20" className={className} aria-hidden>
+      <rect width="30" height="20" rx="2" fill="#fff" />
+      <rect width="30" height="6.67" rx="2" fill="#FF9933" />
+      <rect y="13.33" width="30" height="6.67" rx="2" fill="#138808" />
+      <rect width="30" height="20" rx="2" fill="none" stroke="#00000014" strokeWidth="1" />
+      <circle cx="15" cy="10" r="2.6" fill="none" stroke="#000080" strokeWidth="0.35" />
+      <circle cx="15" cy="10" r="0.4" fill="#000080" />
+      {Array.from({ length: 24 }).map((_, i) => {
+        const a = (i * Math.PI) / 12;
+        return (
+          <line
+            key={i}
+            x1="15"
+            y1="10"
+            x2={15 + 2.6 * Math.cos(a)}
+            y2={10 + 2.6 * Math.sin(a)}
+            stroke="#000080"
+            strokeWidth="0.15"
+          />
+        );
+      })}
+    </svg>
+  );
+}
+
+const LOCALE_COOKIE = 'NEXT_LOCALE';
+
+function currentLocaleOf(pathname: string): 'en' | 'ja' {
+  return pathname === '/ja' || pathname.startsWith('/ja/') ? 'ja' : 'en';
+}
+
+// localePrefix is 'as-needed': the default locale (en) carries no prefix,
+// so switching just means stripping/adding the /ja segment.
+function localizedPath(pathname: string, target: 'en' | 'ja'): string {
+  const stripped = pathname.replace(/^\/ja(?=\/|$)/, '') || '/';
+  return target === 'ja' ? `/ja${stripped === '/' ? '' : stripped}` : stripped;
+}
+
+function setLocaleCookie(locale: 'en' | 'ja') {
+  document.cookie = `${LOCALE_COOKIE}=${locale};path=/;max-age=${60 * 60 * 24 * 365};samesite=lax`;
+}
 
 const MAIN_CATEGORIES = PRODUCT_CATEGORIES.filter(
   (c) => ['cast-letters', 'cast-numbers', 'holders', 'magnetic-tools'].includes(c.urlSlug)
@@ -31,12 +112,35 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Contact Us', href: '/contact-us' },
 ];
 
-const TOUR_ITEM: NavItem = { label: 'Tokyo Tour 2026', href: '/tokyo-tour-2026' };
-
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [gtLang, setGtLang] = useState<string | null>(null);
   const cartCount = useCartCount();
   const pathname = usePathname();
+  const currentLocale = currentLocaleOf(pathname);
+
+  useEffect(() => {
+    const check = () => setIsSignedIn(Boolean(getMemberToken()));
+    check();
+    window.addEventListener('storage', check);
+    return () => window.removeEventListener('storage', check);
+  }, [pathname]);
+
+  useEffect(() => {
+    setGtLang(getActiveGoogleTranslateLang());
+  }, [pathname]);
+
+  const handleSignOut = () => {
+    localStorage.removeItem('xceed_member_token');
+    window.location.href = '/member/login';
+  };
+
+  // A Google-translated language (if active) takes visual priority over the
+  // routed en/ja locale, since it's layered on top of whichever page is
+  // actually showing.
+  const activeCode = gtLang ?? currentLocale;
+  const activeLang = LANGUAGES.find((l) => l.code === activeCode) ?? LANGUAGES[0];
 
   return (
     <header className="sticky top-0 z-50 shadow-sm">
@@ -56,7 +160,7 @@ export default function Header() {
             <Image src="/logo.png" alt="XCEED India" fill sizes="220px" className="object-contain" priority />
           </a>
 
-          <ul className="hidden min-w-0 flex-1 items-center justify-center gap-2 text-sm font-bold uppercase tracking-[0.03em] text-brand-charcoal/70 xl:flex 2xl:gap-4 2xl:text-[15px]">
+          <ul className="no-scrollbar hidden min-w-0 flex-1 items-center justify-center gap-2 overflow-x-auto text-sm font-bold uppercase tracking-[0.03em] leading-normal text-brand-charcoal/70 xl:flex 2xl:gap-4 2xl:text-[15px]">
             {NAV_ITEMS.map((item) => {
               const isActive = item.children
                 ? pathname === item.href || item.children.some((c) => c.href === pathname)
@@ -98,21 +202,171 @@ export default function Header() {
                 </li>
               );
             })}
-            <li className="shrink-0">
-              <a
-                href={TOUR_ITEM.href}
-                className="relative flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-brand-red px-3 py-1.5 text-white shadow-sm shadow-brand-red/30 transition-all hover:-translate-y-0.5 hover:bg-brand-redDark xl:px-4 xl:py-2"
-              >
-                <span className="absolute -right-1.5 -top-1.5 flex h-3.5 w-3.5" aria-hidden>
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
-                  <span className="relative inline-flex h-3.5 w-3.5 rounded-full bg-white" />
-                </span>
-                {TOUR_ITEM.label}
-              </a>
-            </li>
           </ul>
 
-          <div className="ml-auto flex shrink-0 items-center gap-1">
+          <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
+            {/* Language selector — translate="no" so Google doesn't re-translate
+                these language names/codes into whichever language is currently
+                active (e.g. showing "தமிழ் - TA" while browsing in Hindi). */}
+            <div className="group relative notranslate" translate="no">
+              <button
+                type="button"
+                aria-label="Select language"
+                className="flex items-center gap-1 rounded-xl px-2 py-2 text-xs font-bold uppercase tracking-wide text-brand-charcoal/70 transition hover:bg-brand-mist hover:text-brand-charcoal sm:gap-1.5 sm:px-2.5"
+              >
+                <FlagIcon country={activeLang.flag} className="h-3.5 w-5 shrink-0 rounded-[2px]" />
+                <span>{activeCode.toUpperCase()}</span>
+                <ChevronDown size={13} className="shrink-0 transition-transform duration-200 group-hover:rotate-180" />
+              </button>
+
+              <div className="invisible absolute right-0 top-full z-[60] max-h-[70vh] min-w-[200px] translate-y-1 overflow-y-auto rounded-xl border border-black/5 bg-white py-2 text-brand-charcoal opacity-0 shadow-lg transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                {LANGUAGES.map((lang) => {
+                  const isActive = activeCode === lang.code;
+                  const rowClass = `flex w-full items-center gap-2 px-4 py-2 text-left text-xs normal-case transition-colors ${
+                    isActive
+                      ? 'bg-brand-mist font-semibold text-brand-red'
+                      : 'text-brand-charcoal/80 hover:bg-brand-mist hover:text-brand-red'
+                  }`;
+
+                  if (lang.google) {
+                    // Machine-translated in place via the Google widget —
+                    // no navigation, so a <button> rather than an <a>.
+                    return (
+                      <button key={lang.code} type="button" onClick={() => { translateTo(lang.code); setGtLang(lang.code); }} className={rowClass}>
+                        <FlagIcon country={lang.flag} className="h-3.5 w-5 shrink-0 rounded-[2px]" />
+                        {lang.native} - {lang.code.toUpperCase()}
+                      </button>
+                    );
+                  }
+
+                  return (
+                    <a
+                      key={lang.code}
+                      href={localizedPath(pathname, lang.code)}
+                      onClick={() => {
+                        clearGoogleTranslateCookie();
+                        setLocaleCookie(lang.code);
+                      }}
+                      className={rowClass}
+                    >
+                      <FlagIcon country={lang.flag} className="h-3.5 w-5 shrink-0 rounded-[2px]" />
+                      {lang.native} - {lang.code.toUpperCase()}
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Sign in / Account & Lists */}
+            <div className="group relative">
+              <button
+                type="button"
+                className="flex items-center gap-1.5 rounded-xl px-2 py-2 transition hover:bg-brand-mist sm:px-2.5"
+              >
+                <User size={20} className="hidden shrink-0 text-brand-charcoal/70 sm:block" />
+                <span className="flex min-w-0 flex-col items-start leading-snug">
+                  {/* max-w + truncate: translated labels run longer than English
+                      in several of these languages — ellipsis keeps the button a
+                      single predictable line instead of growing header height
+                      per-language. */}
+                  <span className="block max-w-[100px] truncate text-[10px] font-medium normal-case text-brand-slate sm:max-w-[140px] sm:text-[11px]">
+                    {isSignedIn ? 'Hello, Member' : 'Hello, sign in'}
+                  </span>
+                  <span className="flex w-full min-w-0 items-center gap-1 text-[11px] font-bold uppercase tracking-wide text-brand-charcoal sm:text-xs">
+                    <span className="block max-w-[85px] truncate sm:max-w-[120px]">Account &amp; Lists</span>
+                    <ChevronDown size={12} className="shrink-0 transition-transform duration-200 group-hover:rotate-180" />
+                  </span>
+                </span>
+              </button>
+
+              <div className="invisible absolute right-0 top-full z-[60] w-[320px] max-w-[90vw] translate-y-1 rounded-xl border border-black/5 bg-white p-5 text-brand-charcoal opacity-0 shadow-xl transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                {isSignedIn ? (
+                  <button
+                    type="button"
+                    onClick={handleSignOut}
+                    className="w-full rounded-lg border border-brand-border px-4 py-2.5 text-center text-sm font-bold text-brand-charcoal transition hover:bg-brand-mist"
+                  >
+                    Sign out
+                  </button>
+                ) : (
+                  <>
+                    <a
+                      href="/member/login"
+                      className="block w-full rounded-lg bg-brand-blue px-4 py-2.5 text-center text-sm font-bold text-white transition hover:bg-brand-blueDark"
+                    >
+                      Sign in
+                    </a>
+                    <p className="mt-2 text-center text-xs text-brand-slate">
+                      New customer?{' '}
+                      <a href="/membership/register" className="font-semibold text-brand-red hover:underline">
+                        Start here.
+                      </a>
+                    </p>
+                  </>
+                )}
+
+                <div className="my-4 border-t border-black/5" />
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <h3 className="mb-2 text-[11px] font-bold uppercase tracking-wide text-brand-charcoal">
+                      Your Account
+                    </h3>
+                    <ul className="space-y-1.5 text-xs text-brand-slate">
+                      <li>
+                        <a href="/member/profile" className="hover:text-brand-red hover:underline">
+                          Your Account
+                        </a>
+                      </li>
+                      <li>
+                        <a href="/track-order" className="hover:text-brand-red hover:underline">
+                          Your Orders
+                        </a>
+                      </li>
+                      <li>
+                        <a href="/member/subscription" className="hover:text-brand-red hover:underline">
+                          Your Membership
+                        </a>
+                      </li>
+                      <li>
+                        <a href="/membership/register" className="hover:text-brand-red hover:underline">
+                          Register your Business with us
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className="mb-2 text-[11px] font-bold uppercase tracking-wide text-brand-charcoal">
+                      Your Lists
+                    </h3>
+                    <ul className="space-y-1.5 text-xs text-brand-slate">
+                      <li>
+                        <a href="#" className="hover:text-brand-red hover:underline">
+                          Create a Wish List
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#" className="hover:text-brand-red hover:underline">
+                          Wish from Any Website
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#" className="hover:text-brand-red hover:underline">
+                          Discover Your Style
+                        </a>
+                      </li>
+                      <li>
+                        <a href="/products" className="hover:text-brand-red hover:underline">
+                          Explore Showroom
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Cart */}
             <a
               href="/cart"
               aria-label="Cart"
@@ -123,14 +377,6 @@ export default function Header() {
               </span>
               <ShoppingCart size={28} className="sm:order-1" />
             </a>
-
-            <a
-              href="/admin/login"
-              aria-label="Admin login"
-              className="hidden h-11 w-11 items-center justify-center rounded-xl text-brand-charcoal transition hover:bg-brand-mist hover:text-brand-red sm:flex"
-            >
-              <User size={26} />
-            </a>
           </div>
         </div>
       </div>
@@ -138,26 +384,18 @@ export default function Header() {
       {open && (
         <div className="animate-fadeIn border-t border-white/10 bg-brand-black xl:hidden">
           <ul className="container-x flex flex-col gap-1 py-3 text-sm font-semibold uppercase tracking-wide text-white/80">
-            {[...NAV_ITEMS, TOUR_ITEM].map((item) => (
+            {NAV_ITEMS.map((item) => (
               <li key={item.label}>
                 <a
                   href={item.href}
                   onClick={() => setOpen(false)}
                   className={`relative flex items-center justify-between gap-1 rounded-xl px-3.5 py-3 transition-colors ${
-                    item === TOUR_ITEM
-                      ? 'bg-brand-red text-white'
-                      : pathname === item.href
-                        ? 'bg-white/10 text-white'
-                        : 'text-white/70 hover:bg-white/5 hover:text-white'
+                    pathname === item.href
+                      ? 'bg-white/10 text-white'
+                      : 'text-white/70 hover:bg-white/5 hover:text-white'
                   }`}
                 >
-                  {item.label}
-                  {item === TOUR_ITEM && (
-                    <span className="relative flex h-3.5 w-3.5 shrink-0" aria-hidden>
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
-                      <span className="relative inline-flex h-3.5 w-3.5 rounded-full bg-white" />
-                    </span>
-                  )}
+                  <span className="break-words">{item.label}</span>
                 </a>
 
                 {item.children && (

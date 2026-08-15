@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Package, Building2, UserCheck, Users, Plane, ShoppingBag, Bookmark } from 'lucide-react';
+import { Package, Building2, UserCheck, Users, ShoppingBag, Bookmark } from 'lucide-react';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import StatCard from '@/components/admin/StatCard';
-import { getAdminToken, getProducts, getMemberStats, getQuoteRequests, getOrders, getSavedCarts } from '@/lib/api';
+import { getAdminToken, getProducts, getMemberStats, getOrders, getSavedCarts } from '@/lib/api';
 import { useCurrentAdmin } from '@/lib/useCurrentAdmin';
 import { can } from '@/lib/permissions';
 
@@ -18,7 +18,6 @@ export default function AdminDashboardPage() {
     approvedMembers: number;
     pendingApprovals: number;
   } | null>(null);
-  const [tokyoTourCount, setTokyoTourCount] = useState<number | null>(null);
   const [orderCount, setOrderCount] = useState<number | null>(null);
   const [savedCartCount, setSavedCartCount] = useState<number | null>(null);
 
@@ -36,14 +35,10 @@ export default function AdminDashboardPage() {
         .then((res) => setMemberStats(res.data))
         .catch(() => setMemberStats({ totalMembers: 0, approvedMembers: 0, pendingApprovals: 0 }));
     }
-    // /api/quotes, /api/orders and /api/saved-carts are gated by adminOnly on
-    // the backend (not the permission system), same as the "Tokyo Tour"
-    // sidebar link — so only fetch for the admin role, matching
-    // AdminSidebar's `admin.role === 'admin'` fallback.
+    // /api/orders and /api/saved-carts are gated by adminOnly on the backend
+    // (not the permission system) — so only fetch for the admin role,
+    // matching AdminSidebar's `admin.role === 'admin'` fallback.
     if (admin.role === 'admin') {
-      getQuoteRequests(token, { source: 'Tokyo Tour', limit: 1 })
-        .then((res) => setTokyoTourCount(res.total ?? 0))
-        .catch(() => setTokyoTourCount(0));
       getOrders(token, { limit: 1 })
         .then((res) => setOrderCount(res.total ?? 0))
         .catch(() => setOrderCount(0));
@@ -70,15 +65,6 @@ export default function AdminDashboardPage() {
       { label: 'Total Registered Members', value: memberStats?.totalMembers ?? '—', icon: Users }
     );
   }
-  if (!admin || admin.role === 'admin') {
-    tiles.push({
-      label: 'Tokyo Tour Interested',
-      value: tokyoTourCount ?? '—',
-      icon: Plane,
-      href: '/admin/tokyo-tour',
-    });
-  }
-
   return (
     <main className="p-6">
       <AdminPageHeader title="Dashboard" subtitle="Welcome back to the XCEED India admin panel." />
