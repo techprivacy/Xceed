@@ -5,7 +5,7 @@ const PDFDocument = require('pdfkit');
 function createQuotePdfDoc(quote) {
   const doc = new PDFDocument({ margin: 50 });
 
-  doc.fontSize(20).fillColor('#0F4AA6').font('Helvetica-Bold').text('XCEED India');
+  doc.fontSize(20).fillColor('#0F4AA6').font('Helvetica-Bold').text('XCEED');
   doc.fontSize(10).fillColor('#666666').font('Helvetica').text('Precision Marking Solutions');
   doc.moveDown(1.5);
 
@@ -48,7 +48,7 @@ function createQuotePdfDoc(quote) {
     .fontSize(9)
     .fillColor('#999999')
     .font('Helvetica')
-    .text('This is a system-generated quotation summary from XCEED India.');
+    .text('This is a system-generated quotation summary from XCEED.');
   doc.text('Contact: +91 95375 11777 | info@xceedindia.com');
 
   return doc;

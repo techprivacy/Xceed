@@ -1,11 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Handshake,
   User,
   Building2,
-  Mail,
   Phone,
   Globe2,
   Briefcase,
@@ -15,16 +14,15 @@ import {
   Settings,
   ArrowRight,
 } from 'lucide-react';
-import { registerMember } from '@/lib/api';
+import { getAccountToken, getMyAccountProfile, submitMembershipApplication } from '@/lib/api';
 import { MembershipType } from '@/types';
 
 const INPUT_CLASSES =
   'w-full rounded-xl border border-brand-border bg-white py-3.5 pl-11 pr-4 text-base text-brand-charcoal focus:outline-none focus:ring-2 focus:ring-brand-red/20';
 
 const EMPTY_FORM = {
-  fullName: '',
   companyName: '',
-  email: '',
+  contactPerson: '',
   mobileNumber: '',
   country: '',
   industry: '',
@@ -52,11 +50,35 @@ function IconField({ icon: Icon, children }: { icon: typeof User; children: Reac
   );
 }
 
+// Step 2 of "User Account -> Apply for Membership -> ... -> Admin Review":
+// this now requires an already-signed-in Account (see MembershipApplication
+// on the backend) — no more email field here at all, identity comes from
+// the logged-in account, and submission is authenticated rather than the
+// old public registerMember. contactPerson still defaults to the account's
+// own name but stays editable, since the on-the-ground contact for a
+// company application isn't always the account holder.
 export default function MembershipForm() {
+  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [accountEmail, setAccountEmail] = useState('');
   const [form, setForm] = useState(EMPTY_FORM);
   const [membershipType, setMembershipType] = useState<MembershipType | ''>('');
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
+
+  useEffect(() => {
+    const token = getAccountToken();
+    if (!token) {
+      setCheckingAuth(false);
+      return;
+    }
+    getMyAccountProfile(token)
+      .then((res) => {
+        setAccountEmail(res.data.email);
+        setForm((prev) => ({ ...prev, contactPerson: prev.contactPerson || res.data.fullName }));
+      })
+      .catch(() => {})
+      .finally(() => setCheckingAuth(false));
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -69,22 +91,17 @@ export default function MembershipForm() {
       setErrorMsg('Please select which category you are joining as.');
       return;
     }
+    const token = getAccountToken();
+    if (!token) {
+      setStatus('error');
+      setErrorMsg('Please sign in first.');
+      return;
+    }
 
     setStatus('submitting');
     setErrorMsg('');
     try {
-      await registerMember({
-        companyName: form.companyName,
-        contactPerson: form.fullName,
-        email: form.email,
-        mobileNumber: form.mobileNumber,
-        country: form.country,
-        location: form.country,
-        industry: form.industry,
-        products: form.products,
-        website: form.website,
-        membershipType,
-      });
+      await submitMembershipApplication(token, { ...form, membershipType });
       setStatus('success');
       setForm(EMPTY_FORM);
       setMembershipType('');
@@ -93,6 +110,37 @@ export default function MembershipForm() {
       setErrorMsg(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
     }
   };
+
+  if (checkingAuth) return null;
+
+  if (!accountEmail) {
+    return (
+      <div className="overflow-hidden rounded-3xl border border-black/5 bg-white p-10 text-center shadow-xl">
+        <span className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-red/10 text-brand-red">
+          <Handshake size={28} />
+        </span>
+        <h3 className="text-xl font-bold text-brand-black">Sign in to apply</h3>
+        <p className="mt-2 text-sm leading-relaxed text-brand-slate">
+          Membership applications are tied to an account. Create a free account first (instant, no approval
+          wait), then come back here to apply.
+        </p>
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
+          <a
+            href="/login"
+            className="rounded-xl border border-brand-border px-6 py-3 text-sm font-bold text-brand-charcoal transition hover:bg-brand-mist"
+          >
+            Sign In
+          </a>
+          <a
+            href="/member/register"
+            className="rounded-xl bg-brand-red px-6 py-3 text-sm font-bold text-white transition hover:bg-brand-redDark"
+          >
+            Create an Account
+          </a>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="overflow-hidden rounded-3xl border border-black/5 bg-white shadow-xl">
@@ -103,7 +151,7 @@ export default function MembershipForm() {
         <div>
           <h3 className="text-2xl font-bold text-white">Membership Application</h3>
           <p className="mt-1 text-sm text-white/80">
-            Tell us about your business — our team will review your application.
+            Applying as {accountEmail} — our team will review your application.
           </p>
         </div>
       </div>
@@ -111,11 +159,11 @@ export default function MembershipForm() {
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6 p-8 sm:grid-cols-2 sm:p-10">
         <IconField icon={User}>
           <input
-            name="fullName"
-            value={form.fullName}
+            name="contactPerson"
+            value={form.contactPerson}
             onChange={handleChange}
             required
-            placeholder="Full Name*"
+            placeholder="Contact Person*"
             className={INPUT_CLASSES}
           />
         </IconField>
@@ -126,17 +174,6 @@ export default function MembershipForm() {
             onChange={handleChange}
             required
             placeholder="Company Name*"
-            className={INPUT_CLASSES}
-          />
-        </IconField>
-        <IconField icon={Mail}>
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            required
-            placeholder="Business Email*"
             className={INPUT_CLASSES}
           />
         </IconField>
@@ -237,8 +274,8 @@ export default function MembershipForm() {
 
         {status === 'success' && (
           <p className="text-sm font-medium text-green-600 sm:col-span-2">
-            Thanks! Your application has been received. Once approved, we&apos;ll email your Member Portal login
-            details to the address above.
+            Thanks! Your application has been received. Our team will review it and update your membership status
+            shortly — check My Membership in your account for updates.
           </p>
         )}
         {status === 'error' && <p className="text-sm font-medium text-red-600 sm:col-span-2">{errorMsg}</p>}

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Package, Building2, UserCheck, Users, ShoppingBag, Bookmark } from 'lucide-react';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import StatCard from '@/components/admin/StatCard';
-import { getAdminToken, getProducts, getMemberStats, getOrders, getSavedCarts } from '@/lib/api';
+import { getAdminToken, getProducts, getMembershipApplicationStats, getAccounts, getOrders, getSavedCarts } from '@/lib/api';
 import { useCurrentAdmin } from '@/lib/useCurrentAdmin';
 import { can } from '@/lib/permissions';
 
@@ -13,11 +13,12 @@ import { can } from '@/lib/permissions';
 export default function AdminDashboardPage() {
   const { admin } = useCurrentAdmin();
   const [products, setProducts] = useState<number | null>(null);
-  const [memberStats, setMemberStats] = useState<{
-    totalMembers: number;
-    approvedMembers: number;
-    pendingApprovals: number;
+  const [applicationStats, setApplicationStats] = useState<{
+    approvedCompanies: number;
+    pendingApplications: number;
+    totalApplications: number;
   } | null>(null);
+  const [accountCount, setAccountCount] = useState<number | null>(null);
   const [orderCount, setOrderCount] = useState<number | null>(null);
   const [savedCartCount, setSavedCartCount] = useState<number | null>(null);
 
@@ -31,9 +32,12 @@ export default function AdminDashboardPage() {
         .catch(() => setProducts(0));
     }
     if (can(admin.role, 'directory')) {
-      getMemberStats(token)
-        .then((res) => setMemberStats(res.data))
-        .catch(() => setMemberStats({ totalMembers: 0, approvedMembers: 0, pendingApprovals: 0 }));
+      getMembershipApplicationStats(token)
+        .then((res) => setApplicationStats(res.data))
+        .catch(() => setApplicationStats({ approvedCompanies: 0, pendingApplications: 0, totalApplications: 0 }));
+      getAccounts(token, { limit: 1 })
+        .then((res) => setAccountCount(res.total ?? 0))
+        .catch(() => setAccountCount(0));
     }
     // /api/orders and /api/saved-carts are gated by adminOnly on the backend
     // (not the permission system) — so only fetch for the admin role,
@@ -60,14 +64,19 @@ export default function AdminDashboardPage() {
   }
   if (!admin || can(admin.role, 'directory')) {
     tiles.push(
-      { label: 'Total Companies in Directory', value: memberStats?.approvedMembers ?? '—', icon: Building2 },
-      { label: 'Pending Member Approvals', value: memberStats?.pendingApprovals ?? '—', icon: UserCheck },
-      { label: 'Total Registered Members', value: memberStats?.totalMembers ?? '—', icon: Users }
+      { label: 'Total Companies in Directory', value: applicationStats?.approvedCompanies ?? '—', icon: Building2 },
+      {
+        label: 'Pending Membership Applications',
+        value: applicationStats?.pendingApplications ?? '—',
+        icon: UserCheck,
+        href: '/admin/membership',
+      },
+      { label: 'Total Registered Users', value: accountCount ?? '—', icon: Users, href: '/admin/accounts' }
     );
   }
   return (
     <main className="p-6">
-      <AdminPageHeader title="Dashboard" subtitle="Welcome back to the XCEED India admin panel." />
+      <AdminPageHeader title="Dashboard" subtitle="Welcome back to the XCEED admin panel." />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {tiles.map((tile) => (
           <StatCard key={tile.label} {...tile} />

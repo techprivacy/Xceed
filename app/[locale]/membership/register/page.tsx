@@ -14,7 +14,7 @@ export default function MembershipRegisterPage() {
             <span className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-blue/10 text-brand-blue">
               <Handshake size={32} />
             </span>
-            <h1 className="text-4xl font-bold tracking-tight text-brand-black sm:text-5xl">Join XCEED India</h1>
+            <h1 className="text-4xl font-bold tracking-tight text-brand-black sm:text-5xl">Join XCEED</h1>
             <p className="max-w-xl text-base leading-relaxed text-brand-slate sm:text-lg">
               Connect with Japan&ndash;India industrial businesses, technology providers, manufacturers and
               foundry professionals.

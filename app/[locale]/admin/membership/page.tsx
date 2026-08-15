@@ -6,62 +6,51 @@ import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import DataTable from '@/components/admin/DataTable';
 import ListPagination from '@/components/admin/ListPagination';
 import Badge from '@/components/ui/Badge';
-import { useMemberList } from '@/lib/useMemberList';
-import { getAdminToken, approveMember, rejectMember } from '@/lib/api';
+import { useMembershipApplicationList } from '@/lib/useMembershipApplicationList';
+import { getAdminToken, approveMembershipApplication, rejectMembershipApplication } from '@/lib/api';
 import { toast } from '@/lib/toast';
-import { Member, MemberStatus } from '@/types';
+import { MembershipApplication, ApplicationStatus } from '@/types';
 
-const STATUS_TONE: Record<MemberStatus, 'amber' | 'green' | 'red'> = {
+const STATUS_TONE: Record<ApplicationStatus, 'amber' | 'green' | 'red'> = {
   pending: 'amber',
   approved: 'green',
   rejected: 'red',
 };
 
-const STATUS_FILTERS: { value: MemberStatus | ''; label: string }[] = [
+const STATUS_FILTERS: { value: ApplicationStatus | ''; label: string }[] = [
   { value: '', label: 'All Statuses' },
   { value: 'pending', label: 'Pending' },
   { value: 'approved', label: 'Approved' },
   { value: 'rejected', label: 'Rejected' },
 ];
 
-// Replaces the old QuoteRequest-filtered "Membership Applications" view.
-// Members are now a real collection (backend/src/models/Member.js) with a
-// register -> pending -> admin approve/reject flow, so this manages that
-// directly instead of reading quote-request rows tagged by product name.
-export default function DirectoryPage() {
+// Step 3 of "User Account -> Apply for Membership -> Membership Details ->
+// Submit -> Admin Review -> Approved / Rejected". Separate from the "Users"
+// page (app/admin/accounts) on purpose — see MembershipApplication.js and
+// Account.js for why the two are split.
+export default function MembershipApplicationsPage() {
   const { rows, loading, search, setSearch, status, setStatus, page, setPage, pages, total, remove, reload } =
-    useMemberList();
+    useMembershipApplicationList();
 
-  const handleApprove = async (member: Member) => {
+  const handleApprove = async (application: MembershipApplication) => {
     const token = getAdminToken();
     if (!token) return;
     try {
-      const res = await approveMember(token, member._id);
-      if (res.temporaryPassword) {
-        // Email wasn't delivered (SMTP not configured, or the send failed) —
-        // this is the only place the generated password is ever surfaced, so
-        // hand it to the admin via a copyable prompt rather than a toast
-        // that auto-dismisses in 3.5s.
-        toast.success(`${member.companyName} approved. Email delivery unavailable — share this password manually.`);
-        window.prompt(`Temporary password for ${member.email}:`, res.temporaryPassword);
-      } else if (res.emailStatus === 'sent') {
-        toast.success(`${member.companyName} approved — login details emailed to them.`);
-      } else {
-        toast.success(`${member.companyName} approved — they can now log in.`);
-      }
+      await approveMembershipApplication(token, application._id);
+      toast.success(`${application.companyName} approved`);
       reload();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Failed to approve');
     }
   };
 
-  const handleReject = async (member: Member) => {
+  const handleReject = async (application: MembershipApplication) => {
     const token = getAdminToken();
     if (!token) return;
-    if (!confirm(`Reject ${member.companyName}'s application?`)) return;
+    if (!confirm(`Reject ${application.companyName}'s application?`)) return;
     try {
-      await rejectMember(token, member._id);
-      toast.success(`${member.companyName} rejected`);
+      await rejectMembershipApplication(token, application._id);
+      toast.success(`${application.companyName} rejected`);
       reload();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Failed to reject');
@@ -70,7 +59,10 @@ export default function DirectoryPage() {
 
   return (
     <main className="p-6">
-      <AdminPageHeader title="Directory" subtitle={`${total} member${total === 1 ? '' : 's'} registered`} />
+      <AdminPageHeader
+        title="Membership Applications"
+        subtitle={`${total} application${total === 1 ? '' : 's'} submitted`}
+      />
 
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <div className="flex min-w-[240px] flex-1 items-center rounded-full border border-brand-border bg-white px-4">
@@ -78,13 +70,13 @@ export default function DirectoryPage() {
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search company, contact, email..."
+            placeholder="Search company, contact..."
             className="w-full bg-transparent px-3 py-2.5 text-sm outline-none"
           />
         </div>
         <select
           value={status}
-          onChange={(e) => setStatus(e.target.value as MemberStatus | '')}
+          onChange={(e) => setStatus(e.target.value as ApplicationStatus | '')}
           className="rounded-full border border-brand-border bg-white px-4 py-2.5 text-sm"
         >
           {STATUS_FILTERS.map((f) => (
@@ -96,38 +88,41 @@ export default function DirectoryPage() {
       </div>
 
       <DataTable
-        keyField={(m) => m._id}
+        keyField={(a) => a._id}
         rows={rows}
-        emptyMessage={loading ? 'Loading...' : 'No members found.'}
+        emptyMessage={loading ? 'Loading...' : 'No applications found.'}
         columns={[
           {
             header: 'Company',
-            accessor: (m) => (
+            accessor: (a) => (
               <div>
-                <p className="font-semibold text-brand-black">{m.companyName}</p>
-                <p className="text-xs text-brand-slate">{m.contactPerson}</p>
+                <p className="font-semibold text-brand-black">{a.companyName}</p>
+                <p className="text-xs text-brand-slate">{a.contactPerson}</p>
               </div>
             ),
           },
-          { header: 'Email', accessor: (m) => m.email },
-          { header: 'Industry', accessor: (m) => m.industry || '—' },
-          { header: 'Status', accessor: (m) => <Badge tone={STATUS_TONE[m.status]}>{m.status}</Badge> },
+          {
+            header: 'Account Email',
+            accessor: (a) => (typeof a.account === 'string' ? '—' : a.account.email),
+          },
+          { header: 'Industry', accessor: (a) => a.industry || '—' },
+          { header: 'Status', accessor: (a) => <Badge tone={STATUS_TONE[a.status]}>{a.status}</Badge> },
           {
             header: 'Subscription',
-            accessor: (m) => (
-              <Badge tone={m.subscriptionStatus === 'active' ? 'green' : 'gray'}>{m.subscriptionStatus}</Badge>
+            accessor: (a) => (
+              <Badge tone={a.subscriptionStatus === 'active' ? 'green' : 'gray'}>{a.subscriptionStatus}</Badge>
             ),
           },
           {
             header: 'Actions',
-            accessor: (m) => (
+            accessor: (a) => (
               <div className="flex items-center gap-1.5">
-                {m.status === 'pending' && (
+                {a.status === 'pending' && (
                   <>
                     <button
                       type="button"
-                      onClick={() => handleApprove(m)}
-                      aria-label={`Approve ${m.companyName}`}
+                      onClick={() => handleApprove(a)}
+                      aria-label={`Approve ${a.companyName}`}
                       title="Approve"
                       className="flex h-8 w-8 items-center justify-center rounded-lg text-green-600 transition-colors hover:bg-green-50"
                     >
@@ -135,8 +130,8 @@ export default function DirectoryPage() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => handleReject(m)}
-                      aria-label={`Reject ${m.companyName}`}
+                      onClick={() => handleReject(a)}
+                      aria-label={`Reject ${a.companyName}`}
                       title="Reject"
                       className="flex h-8 w-8 items-center justify-center rounded-lg text-brand-red transition-colors hover:bg-red-50"
                     >
@@ -145,8 +140,8 @@ export default function DirectoryPage() {
                   </>
                 )}
                 <Link
-                  href={`/admin/membership/${m._id}/edit`}
-                  aria-label={`Edit ${m.companyName}`}
+                  href={`/admin/membership/${a._id}/edit`}
+                  aria-label={`Edit ${a.companyName}`}
                   title="Edit"
                   className="flex h-8 w-8 items-center justify-center rounded-lg text-brand-slate transition-colors hover:bg-brand-mist hover:text-brand-charcoal"
                 >
@@ -154,8 +149,8 @@ export default function DirectoryPage() {
                 </Link>
                 <button
                   type="button"
-                  onClick={() => remove(m._id)}
-                  aria-label={`Delete ${m.companyName}`}
+                  onClick={() => remove(a._id)}
+                  aria-label={`Delete ${a.companyName}`}
                   title="Delete"
                   className="flex h-8 w-8 items-center justify-center rounded-lg text-brand-slate transition-colors hover:bg-red-50 hover:text-brand-red"
                 >

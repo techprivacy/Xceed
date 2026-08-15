@@ -1,13 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { UserPlus, User, Mail, Phone, Globe2, ArrowRight } from 'lucide-react';
-import { registerMember } from '@/lib/api';
+import { UserPlus, User, Mail, Lock, ArrowRight, MailCheck } from 'lucide-react';
+import { registerAccount } from '@/lib/api';
+import PasswordInput from '@/components/ui/PasswordInput';
 
 const INPUT_CLASSES =
-  'w-full rounded-xl border border-brand-border bg-white py-3.5 pl-11 pr-4 text-base text-brand-charcoal focus:outline-none focus:ring-2 focus:ring-brand-red/20';
+  'w-full rounded-xl border border-brand-border bg-white py-3.5 pl-11 text-base text-brand-charcoal focus:outline-none focus:ring-2 focus:ring-brand-blue/20';
 
-const EMPTY_FORM = { fullName: '', email: '', mobileNumber: '', country: '' };
+const EMPTY_FORM = { fullName: '', email: '', password: '', confirmPassword: '' };
 
 function IconField({ icon: Icon, children }: { icon: typeof User; children: React.ReactNode }) {
   return (
@@ -18,14 +19,12 @@ function IconField({ icon: Icon, children }: { icon: typeof User; children: Reac
   );
 }
 
-// Deliberately a short, personal form — four fields, no company/industry/
-// products/website/membership-type questions — distinct from
-// MembershipForm's full business application. Both submit to the same
-// registerMember endpoint underneath (there's no separate "individual
-// account" schema on the backend — see Member.js), but companyName is a
-// required field there, so it's backfilled with the person's own name and
-// membershipType defaults to 'Industry Professional', the one category in
-// the existing enum that already means "not a company."
+// True self-service signup: Full Name, Email, Password, Confirm Password ->
+// Create Account -> email verification -> account activated -> login. No
+// admin approval anywhere in this flow — that's the whole point of Account
+// vs. the separate, still-approval-gated MembershipApplication (see
+// MembershipForm.tsx), which an already-signed-in Account holder can apply
+// for afterwards as its own distinct step.
 export default function CreateAccountForm() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
@@ -37,18 +36,21 @@ export default function CreateAccountForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (form.password !== form.confirmPassword) {
+      setStatus('error');
+      setErrorMsg('Passwords do not match.');
+      return;
+    }
+    if (form.password.length < 6) {
+      setStatus('error');
+      setErrorMsg('Password must be at least 6 characters.');
+      return;
+    }
+
     setStatus('submitting');
     setErrorMsg('');
     try {
-      await registerMember({
-        companyName: form.fullName,
-        contactPerson: form.fullName,
-        email: form.email,
-        mobileNumber: form.mobileNumber,
-        country: form.country,
-        location: form.country,
-        membershipType: 'Industry Professional',
-      });
+      await registerAccount({ fullName: form.fullName, email: form.email, password: form.password });
       setStatus('success');
       setForm(EMPTY_FORM);
     } catch (err) {
@@ -56,6 +58,21 @@ export default function CreateAccountForm() {
       setErrorMsg(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
     }
   };
+
+  if (status === 'success') {
+    return (
+      <div className="overflow-hidden rounded-3xl border border-black/5 bg-white p-10 text-center shadow-xl">
+        <span className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-blue/10 text-brand-blue">
+          <MailCheck size={28} />
+        </span>
+        <h3 className="text-xl font-bold text-brand-black">Check your email</h3>
+        <p className="mt-2 text-sm leading-relaxed text-brand-slate">
+          We&apos;ve sent a verification link to your email address. Click it to activate your account, then sign
+          in — no approval wait, you&apos;re ready as soon as it&apos;s verified.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="overflow-hidden rounded-3xl border border-black/5 bg-white shadow-xl">
@@ -65,11 +82,11 @@ export default function CreateAccountForm() {
         </span>
         <div>
           <h3 className="text-2xl font-bold text-white">Create Your Account</h3>
-          <p className="mt-1 text-sm text-white/80">Just a few details — our team will confirm your access.</p>
+          <p className="mt-1 text-sm text-white/80">Instant — no approval wait. Just verify your email.</p>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6 p-8 sm:p-10">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-5 p-8 sm:p-10">
         <IconField icon={User}>
           <input
             name="fullName"
@@ -87,27 +104,31 @@ export default function CreateAccountForm() {
             value={form.email}
             onChange={handleChange}
             required
-            placeholder="Email*"
+            placeholder="Email Address*"
             className={INPUT_CLASSES}
           />
         </IconField>
-        <IconField icon={Phone}>
-          <input
-            name="mobileNumber"
-            value={form.mobileNumber}
+        <IconField icon={Lock}>
+          <PasswordInput
+            name="password"
+            value={form.password}
             onChange={handleChange}
             required
-            placeholder="Mobile / WhatsApp*"
+            minLength={6}
+            autoComplete="new-password"
+            placeholder="Password*"
             className={INPUT_CLASSES}
           />
         </IconField>
-        <IconField icon={Globe2}>
-          <input
-            name="country"
-            value={form.country}
+        <IconField icon={Lock}>
+          <PasswordInput
+            name="confirmPassword"
+            value={form.confirmPassword}
             onChange={handleChange}
             required
-            placeholder="Country*"
+            minLength={6}
+            autoComplete="new-password"
+            placeholder="Confirm Password*"
             className={INPUT_CLASSES}
           />
         </IconField>
@@ -121,19 +142,14 @@ export default function CreateAccountForm() {
           <ArrowRight size={18} />
         </button>
 
-        {status === 'success' && (
-          <p className="text-sm font-medium text-green-600">
-            Thanks! We&apos;ve received your details. Once confirmed, we&apos;ll email your Member Portal login to
-            the address above.
-          </p>
-        )}
         {status === 'error' && <p className="text-sm font-medium text-red-600">{errorMsg}</p>}
 
         <p className="text-center text-xs text-brand-slate">
-          Signing up on behalf of a company instead?{' '}
+          Signing up on behalf of a company?{' '}
           <a href="/membership/register" className="font-semibold text-brand-red hover:underline">
-            Register your Business
+            Create an account first, then apply for Membership
           </a>
+          .
         </p>
       </form>
     </div>

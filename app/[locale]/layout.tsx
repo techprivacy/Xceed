@@ -7,15 +7,15 @@ import { getLiveTheme, themeToCssVars, DEFAULT_THEME } from '@/lib/theme';
 import { routing } from '@/i18n/routing';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-const SITE_TITLE = 'Japan–India Casting & Foundry Business Platform | XCEED India';
+const SITE_TITLE = 'Japan–India Casting & Foundry Business Platform | XCEED';
 const SITE_DESCRIPTION =
-  'XCEED India connects Japanese casting technology, foundry equipment, manufacturers and expertise with Indian foundries and industrial companies for sourcing, business development and partnerships.';
+  'XCEED connects Japanese casting technology, foundry equipment, manufacturers and expertise with Indian foundries and industrial companies for sourcing, business development and partnerships.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     default: SITE_TITLE,
-    template: '%s | XCEED India',
+    template: '%s | XCEED',
   },
   description: SITE_DESCRIPTION,
   icons: {
@@ -59,10 +59,10 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_IN',
     url: SITE_URL,
-    siteName: 'XCEED India',
+    siteName: 'XCEED',
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    images: [{ url: '/logo.png', width: 280, height: 126, alt: 'XCEED India' }],
+    images: [{ url: '/logo.png', width: 280, height: 126, alt: 'XCEED' }],
   },
   twitter: {
     card: 'summary_large_image',

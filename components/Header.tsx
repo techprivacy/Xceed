@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Menu, X, ShoppingCart, User, ChevronDown } from 'lucide-react';
 import { useCartCount } from '@/lib/useCartCount';
-import { getMemberToken } from '@/lib/api';
+import { getAccountToken } from '@/lib/api';
 import { PRODUCT_CATEGORIES, INDUSTRIES } from '@/lib/staticData';
 
 // Precomputed once at module load, not inline per render: Math.cos/sin can
@@ -119,14 +119,14 @@ export default function Header() {
   }, [pathname]);
 
   useEffect(() => {
-    const check = () => setIsSignedIn(Boolean(getMemberToken()));
+    const check = () => setIsSignedIn(Boolean(getAccountToken()));
     check();
     window.addEventListener('storage', check);
     return () => window.removeEventListener('storage', check);
   }, [pathname]);
 
   const handleSignOut = () => {
-    localStorage.removeItem('xceed_member_token');
+    localStorage.removeItem('xceed_account_token');
     window.location.href = '/login';
   };
 
@@ -145,7 +145,7 @@ export default function Header() {
           </button>
 
           <a href="/" className="relative h-9 w-24 shrink-0 sm:h-12 sm:w-40 lg:h-14 lg:w-52 xl:w-56">
-            <Image src="/logo.png" alt="XCEED India" fill sizes="220px" className="object-contain" priority />
+            <Image src="/logo.png" alt="XCEED" fill sizes="220px" className="object-contain" priority />
           </a>
 
           {/* Centered between logo and the EN/Account/Cart cluster. Verified

@@ -33,7 +33,7 @@ app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ success: true, message: 'Xceed India API is running' });
+  res.json({ success: true, message: 'XCEED API is running' });
 });
 
 // Routes

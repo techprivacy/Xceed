@@ -5,7 +5,7 @@ export default function RefundPolicyPage() {
     <LegalPageLayout
       title="Refund Policy"
       lastUpdated="27 July 2026"
-      intro="At XCEED India, we strive to ensure our customers are satisfied with every purchase. This Refund Policy outlines the terms under which refunds, replacements, or cancellations may be considered."
+      intro="At XCEED, we strive to ensure our customers are satisfied with every purchase. This Refund Policy outlines the terms under which refunds, replacements, or cancellations may be considered."
       sections={[
         {
           heading: '1. Eligibility for Refunds',

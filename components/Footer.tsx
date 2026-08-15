@@ -82,9 +82,9 @@ export default function Footer() {
             </p>
             <div className="mt-4 h-0.5 w-10 rounded-full bg-brand-blue" />
             <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-brand-slate">
-              XCEED India delivers Japanese-quality industrial marking solutions backed by 20+ years of
-              expertise, a trusted network of 2,000+ manufacturers &amp; foundries, and 100+ precision tools
-              across India and Japan.
+              XCEED connects businesses with Japanese engineering excellence, backed by 20+ years of
+              industry experience, a global network of trusted manufacturers and foundries, and 100+
+              industrial solutions across India and Japan.
             </p>
             <div className="mt-6 flex gap-3">
               {SOCIALS.map(({ icon: Icon, label, bg, href }) => (
@@ -194,7 +194,7 @@ export default function Footer() {
         {/* Extra bottom padding on small screens keeps the copyright clear of
             the fixed floating button, which sits above this bar. */}
         <div className="container-x flex flex-col items-center gap-3 pb-24 pt-4 text-center text-sm text-white/80 sm:flex-row sm:justify-between sm:pb-4">
-          <p>© 2026 XCEED India. All Rights Reserved.</p>
+          <p>© 2026 XCEED. All Rights Reserved.</p>
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
             {LEGAL_LINKS.map(({ label, icon: Icon, href }, i) => (
               <div key={label} className="flex items-center gap-4">

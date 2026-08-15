@@ -113,7 +113,7 @@ export default function ContactForm() {
             required
             className="mt-0.5 h-4 w-4 shrink-0 rounded border-brand-border text-brand-red focus:ring-brand-red/20"
           />
-          I agree to be contacted by XCEED India regarding my enquiry.
+          I agree to be contacted by XCEED regarding my enquiry.
         </label>
 
         <div className="sm:col-span-2">

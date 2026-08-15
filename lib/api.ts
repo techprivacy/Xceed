@@ -11,6 +11,11 @@ import {
   PublicMember,
   MemberRegisterInput,
   MemberProfileInput,
+  Account,
+  AccountRegisterInput,
+  MembershipApplication,
+  MembershipApplicationInput,
+  PublicMembershipApplication,
   Order,
   OrderInput,
   SavedCart,
@@ -338,6 +343,214 @@ export const rejectMember = (token: string, id: string) =>
 
 export const deleteMember = (token: string, id: string) =>
   adminRequest<null>(`/members/${id}`, token, { method: 'DELETE' });
+
+// --- Accounts (self-service signup/login) + Membership Applications (the
+// separate, admin-approved business flow) — the new system replacing
+// Members above for anything going forward. See backend/src/models/
+// Account.js + MembershipApplication.js for why they're split. ---
+
+// Separate localStorage key from both getAdminToken() and getMemberToken()
+// so all three kinds of session can coexist in the same browser.
+export const getAccountToken = () =>
+  typeof window === 'undefined' ? null : localStorage.getItem('xceed_account_token');
+
+async function accountRequest<T>(path: string, token: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
+  const res = await fetch(`${API_URL}${path}`, {
+    cache: 'no-store',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+      ...options.headers,
+    },
+  });
+  const json = await res.json();
+  if (!res.ok) {
+    throw new Error(json.message || 'Request failed');
+  }
+  return json;
+}
+
+export const registerAccount = async (
+  payload: AccountRegisterInput
+): Promise<{ success: boolean; message: string; emailStatus: string }> => {
+  const res = await fetch(`${API_URL}/accounts/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+    cache: 'no-store',
+  });
+  const json = await res.json();
+  if (!res.ok) {
+    throw new Error(json.message || 'Something went wrong. Please try again.');
+  }
+  return json;
+};
+
+export const verifyAccountEmail = async (token: string): Promise<{ success: boolean; message: string }> => {
+  const res = await fetch(`${API_URL}/accounts/verify-email`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token }),
+    cache: 'no-store',
+  });
+  const json = await res.json();
+  if (!res.ok) {
+    throw new Error(json.message || 'This verification link is invalid or has expired.');
+  }
+  return json;
+};
+
+export const resendAccountVerification = async (email: string): Promise<{ success: boolean; message: string }> => {
+  const res = await fetch(`${API_URL}/accounts/resend-verification`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+    cache: 'no-store',
+  });
+  const json = await res.json();
+  if (!res.ok) {
+    throw new Error(json.message || 'Something went wrong. Please try again.');
+  }
+  return json;
+};
+
+export interface AccountLoginResponse {
+  success: boolean;
+  message?: string;
+  token: string;
+  account: { id: string; fullName: string; email: string };
+}
+
+export const accountLogin = async (email: string, password: string): Promise<AccountLoginResponse> => {
+  const res = await fetch(`${API_URL}/accounts/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+    cache: 'no-store',
+  });
+  const json = await res.json();
+  if (!res.ok) {
+    throw new Error(json.message || 'Login failed');
+  }
+  return json;
+};
+
+// Always resolves with the backend's generic message — deliberately
+// non-revealing about whether an email is registered, see
+// accountController.forgotPassword.
+export const forgotAccountPassword = async (email: string): Promise<{ success: boolean; message: string }> => {
+  const res = await fetch(`${API_URL}/accounts/forgot-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+    cache: 'no-store',
+  });
+  const json = await res.json();
+  if (!res.ok) {
+    throw new Error(json.message || 'Something went wrong. Please try again.');
+  }
+  return json;
+};
+
+export const resetAccountPassword = async (
+  token: string,
+  password: string
+): Promise<{ success: boolean; message: string }> => {
+  const res = await fetch(`${API_URL}/accounts/reset-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token, password }),
+    cache: 'no-store',
+  });
+  const json = await res.json();
+  if (!res.ok) {
+    throw new Error(json.message || 'This reset link is invalid or has expired.');
+  }
+  return json;
+};
+
+export const getMyAccountProfile = (token: string) => accountRequest<Account>('/accounts/me', token);
+
+export const updateMyAccountProfile = (token: string, payload: { fullName?: string }) =>
+  accountRequest<Account>('/accounts/me', token, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  });
+
+// Admin — the "Users" list: every directly-registered account, no approval
+// concept at all (contrast with getMembershipApplications below).
+export const getAccounts = (token: string, params: { page?: number; limit?: number } = {}) => {
+  const query = new URLSearchParams(
+    Object.entries(params).reduce<Record<string, string>>((acc, [k, v]) => {
+      if (v !== undefined) acc[k] = String(v);
+      return acc;
+    }, {})
+  ).toString();
+  return adminRequest<Account[]>(`/accounts${query ? `?${query}` : ''}`, token);
+};
+
+// --- Membership Applications ---
+
+export const getPublicMembershipDirectory = () =>
+  request<PublicMembershipApplication[]>('/membership-applications/directory', { cache: 'no-store', next: undefined });
+
+// Requires an already-signed-in, already-verified Account — this step no
+// longer creates any login credentials of its own, unlike the old
+// registerMember it replaces.
+export const submitMembershipApplication = (accountToken: string, payload: MembershipApplicationInput) =>
+  accountRequest<{ id: string; status: string }>('/membership-applications', accountToken, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+
+export const getMyMembershipApplication = (accountToken: string) =>
+  accountRequest<MembershipApplication | null>('/membership-applications/mine', accountToken);
+
+export interface MembershipApplicationListParams {
+  status?: string;
+  search?: string;
+  page?: number;
+  limit?: number;
+}
+
+export const getMembershipApplications = (token: string, params: MembershipApplicationListParams = {}) => {
+  const query = new URLSearchParams(
+    Object.entries(params).reduce<Record<string, string>>((acc, [k, v]) => {
+      if (v !== undefined && v !== '') acc[k] = String(v);
+      return acc;
+    }, {})
+  ).toString();
+  return adminRequest<MembershipApplication[]>(`/membership-applications${query ? `?${query}` : ''}`, token);
+};
+
+export const getMembershipApplicationStats = (token: string) =>
+  adminRequest<{ approvedCompanies: number; pendingApplications: number; totalApplications: number }>(
+    '/membership-applications/stats',
+    token
+  );
+
+export const getMembershipApplication = (token: string, id: string) =>
+  adminRequest<MembershipApplication>(`/membership-applications/${id}`, token);
+
+export const updateMembershipApplication = (
+  token: string,
+  id: string,
+  payload: Partial<MembershipApplicationInput> & { status?: string; subscriptionStatus?: string }
+) =>
+  adminRequest<MembershipApplication>(`/membership-applications/${id}`, token, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  });
+
+export const approveMembershipApplication = (token: string, id: string) =>
+  adminRequest<MembershipApplication>(`/membership-applications/${id}/approve`, token, { method: 'PUT' });
+
+export const rejectMembershipApplication = (token: string, id: string) =>
+  adminRequest<MembershipApplication>(`/membership-applications/${id}/reject`, token, { method: 'PUT' });
+
+export const deleteMembershipApplication = (token: string, id: string) =>
+  adminRequest<null>(`/membership-applications/${id}`, token, { method: 'DELETE' });
 
 export interface QuoteListParams {
   status?: string;

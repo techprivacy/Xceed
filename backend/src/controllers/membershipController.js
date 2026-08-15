@@ -108,7 +108,14 @@ exports.getApplications = async (req, res) => {
         .limit(Math.max(1, parseInt(limit, 10))),
       MembershipApplication.countDocuments(query),
     ]);
-    res.json({ success: true, data: applications, total, page: Number(page), limit: Number(limit) });
+    res.json({
+      success: true,
+      data: applications,
+      total,
+      page: Number(page),
+      limit: Number(limit),
+      pages: Math.ceil(total / Number(limit)),
+    });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

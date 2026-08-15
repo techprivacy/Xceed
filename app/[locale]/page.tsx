@@ -11,7 +11,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 const ORGANIZATION_JSON_LD = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'XCEED India',
+  name: 'XCEED',
   url: SITE_URL,
   logo: `${SITE_URL}/logo.png`,
   description:

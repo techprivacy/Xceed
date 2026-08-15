@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Mail, Lock, AlertCircle } from 'lucide-react';
-import { login, memberLogin } from '@/lib/api';
+import { login, accountLogin } from '@/lib/api';
 import Button from '@/components/ui/Button';
 import PasswordInput from '@/components/ui/PasswordInput';
 import Header from '@/components/Header';
@@ -26,13 +26,16 @@ function IconField({ icon: Icon, children }: { icon: typeof Mail; children: Reac
   );
 }
 
-// The one login for the whole site — members and staff/admins both sign in
-// here rather than at separate /member/login and /admin/login pages (both
-// now just redirect here). The two account systems underneath stay exactly
-// as separate as they were — different database models, different token
-// types, different middleware (see backend/src/middlewares/memberAuth.js vs
-// auth.js) — this page just tries both APIs against the one form and routes
-// by whichever one recognizes the credentials.
+// The one login for the whole site — regular users and staff/admins both
+// sign in here rather than at separate pages (/member/login and
+// /admin/login both now just redirect here). The account systems
+// underneath stay separate — different database models, different token
+// types, different middleware (see backend/src/middlewares/accountAuth.js
+// vs auth.js) — this page just tries both APIs against the one form and
+// routes by whichever one recognizes the credentials. Membership
+// (MembershipApplication) has no login of its own — it's a status attached
+// to an Account, applied for after signing in here, not a separate
+// credential system.
 export default function LoginPage() {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
@@ -44,18 +47,18 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
 
-    // Member accounts are the common case (public-facing), so try that
-    // first. A pending/rejected member returns a specific, non-generic
-    // message — that's a conclusive match on a real member account, so it's
+    // Regular accounts are the common case (public-facing), so try that
+    // first. An unverified-email account returns a specific, non-generic
+    // message — that's a conclusive match on a real account, so it's
     // surfaced directly instead of silently falling through to the admin
     // attempt below and showing a misleading "invalid credentials" instead.
     try {
-      const memberRes = await memberLogin(identifier, password);
-      localStorage.setItem('xceed_member_token', memberRes.token);
+      const accountRes = await accountLogin(identifier, password);
+      localStorage.setItem('xceed_account_token', accountRes.token);
       window.location.href = '/member/dashboard';
       return;
-    } catch (memberErr) {
-      const message = memberErr instanceof Error ? memberErr.message : '';
+    } catch (accountErr) {
+      const message = accountErr instanceof Error ? accountErr.message : '';
       if (message && message !== 'Invalid credentials') {
         setError(message);
         setLoading(false);
@@ -83,9 +86,9 @@ export default function LoginPage() {
 
       <div className="flex items-center justify-center bg-brand-navy px-4 py-16">
         <form onSubmit={handleSubmit} className="w-full max-w-sm rounded-3xl bg-white p-8 shadow-2xl sm:p-9">
-          <Image src="/logo.png" alt="XCEED India" width={280} height={126} priority className="mb-3 h-10 w-auto object-contain" />
+          <Image src="/logo.png" alt="XCEED" width={280} height={126} priority className="mb-3 h-10 w-auto object-contain" />
           <h1 className="text-xl font-bold text-brand-black">Welcome back</h1>
-          <p className="mb-6 mt-1 text-sm text-brand-slate">Sign in to your XCEED India account.</p>
+          <p className="mb-6 mt-1 text-sm text-brand-slate">Sign in to your XCEED account.</p>
 
           <label htmlFor="login-identifier" className="mb-1.5 block text-xs font-semibold text-brand-charcoal">
             Email or Username

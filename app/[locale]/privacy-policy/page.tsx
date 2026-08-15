@@ -5,7 +5,7 @@ export default function PrivacyPolicyPage() {
     <LegalPageLayout
       title="Privacy Policy"
       lastUpdated="27 July 2026"
-      intro="XCEED India ('we', 'us', 'our') respects your privacy and is committed to protecting the personal information you share with us. This Privacy Policy explains what information we collect, how we use it, and the choices you have regarding your data."
+      intro="XCEED ('we', 'us', 'our') respects your privacy and is committed to protecting the personal information you share with us. This Privacy Policy explains what information we collect, how we use it, and the choices you have regarding your data."
       sections={[
         {
           heading: '1. Information We Collect',

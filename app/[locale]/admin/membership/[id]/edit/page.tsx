@@ -3,13 +3,13 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
-import MemberForm from '@/components/admin/MemberForm';
-import { getAdminToken, getMember } from '@/lib/api';
-import { Member } from '@/types';
+import MembershipApplicationForm from '@/components/admin/MembershipApplicationForm';
+import { getAdminToken, getMembershipApplication } from '@/lib/api';
+import { MembershipApplication } from '@/types';
 
-export default function EditMemberPage() {
+export default function EditMembershipApplicationPage() {
   const { id } = useParams<{ id: string }>();
-  const [member, setMember] = useState<Member | null>(null);
+  const [application, setApplication] = useState<MembershipApplication | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -19,10 +19,10 @@ export default function EditMemberPage() {
     setLoading(true);
     setError('');
     try {
-      const res = await getMember(token, id);
-      setMember(res.data);
+      const res = await getMembershipApplication(token, id);
+      setApplication(res.data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load member');
+      setError(err instanceof Error ? err.message : 'Failed to load application');
     } finally {
       setLoading(false);
     }
@@ -34,10 +34,10 @@ export default function EditMemberPage() {
 
   return (
     <main className="p-6">
-      <AdminPageHeader title="Edit Member" subtitle={member?.companyName} />
+      <AdminPageHeader title="Edit Application" subtitle={application?.companyName} />
       {loading && <p className="text-sm text-brand-slate/70">Loading...</p>}
       {!loading && error && <p className="text-sm text-red-600">{error}</p>}
-      {!loading && member && <MemberForm member={member} />}
+      {!loading && application && <MembershipApplicationForm application={application} />}
     </main>
   );
 }

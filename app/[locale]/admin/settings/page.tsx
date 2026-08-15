@@ -5,7 +5,7 @@ const SECTIONS = [
   {
     title: 'Company Details',
     fields: [
-      { label: 'Company Name', value: 'XCEED India' },
+      { label: 'Company Name', value: 'XCEED' },
       { label: 'Support Email', value: 'info@xceedindia.com' },
       { label: 'Support Phone', value: '+91 95375 11777' },
     ],

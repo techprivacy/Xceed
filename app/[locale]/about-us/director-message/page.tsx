@@ -19,7 +19,7 @@ export default function DirectorMessagePage() {
           <SectionHeading
             eyebrow="Director Message"
             title="Bridging Japan and India Through Technology"
-            subtitle="XCEED India connects advanced Japanese industrial technology and expertise with the growing needs of Indian manufacturing, foundry, and engineering industries."
+            subtitle="XCEED connects advanced Japanese industrial technology and expertise with the growing needs of Indian manufacturing, foundry, and engineering industries."
             align="center"
             size="h1"
             className="mx-auto max-w-3xl"

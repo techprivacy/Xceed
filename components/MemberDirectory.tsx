@@ -4,8 +4,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { Search, Building2, User, Package, MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
-import { getPublicMemberDirectory } from '@/lib/api';
-import { PublicMember } from '@/types';
+import { getPublicMembershipDirectory } from '@/lib/api';
+import { PublicMembershipApplication } from '@/types';
 
 const PAGE_SIZE = 10;
 
@@ -31,7 +31,7 @@ function DetailRow({ icon: Icon, label, value }: { icon: typeof User; label: str
   );
 }
 
-function CompanyCard({ company }: { company: PublicMember }) {
+function CompanyCard({ company }: { company: PublicMembershipApplication }) {
   return (
     <Card
       accent
@@ -61,14 +61,14 @@ function CompanyCard({ company }: { company: PublicMember }) {
 }
 
 export default function MemberDirectory() {
-  const [companies, setCompanies] = useState<PublicMember[]>([]);
+  const [companies, setCompanies] = useState<PublicMembershipApplication[]>([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
   const [filterField, setFilterField] = useState<FilterField>('all');
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    getPublicMemberDirectory()
+    getPublicMembershipDirectory()
       .then((res) => setCompanies(res.data))
       .catch(() => setCompanies([]))
       .finally(() => setLoading(false));

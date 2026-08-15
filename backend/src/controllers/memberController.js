@@ -139,8 +139,8 @@ exports.forgotPassword = async (req, res) => {
       await transporter.sendMail({
         from: process.env.SMTP_FROM || process.env.SMTP_USER,
         to: member.email,
-        subject: 'Reset Your XCEED India Member Portal Password',
-        text: `Dear ${member.contactPerson},\n\nWe received a request to reset your XCEED India Member Portal password.\n\nYour new password is: ${newPassword}\n\nYou can now log in with this password. We recommend changing it after logging in.\n\nIf you did not request this, you can ignore this email — your password has not been changed.\n\nRegards,\nXCEED India Team`,
+        subject: 'Reset Your XCEED Member Portal Password',
+        text: `Dear ${member.contactPerson},\n\nWe received a request to reset your XCEED Member Portal password.\n\nYour new password is: ${newPassword}\n\nYou can now log in with this password. We recommend changing it after logging in.\n\nIf you did not request this, you can ignore this email — your password has not been changed.\n\nRegards,\nXCEED Team`,
       });
       // Only persisted after the send succeeds — see comment above.
       member.password = newPassword;
@@ -301,8 +301,8 @@ exports.approveMember = async (req, res) => {
           await transporter.sendMail({
             from: process.env.SMTP_FROM || process.env.SMTP_USER,
             to: member.email,
-            subject: 'Your XCEED India Membership Has Been Approved',
-            text: `Dear ${member.contactPerson},\n\nYour XCEED India membership application has been approved.\n\nYou can now log in to the Member Portal at the XCEED India website with:\n\nEmail: ${member.email}\nPassword: ${temporaryPassword}\n\nWe recommend changing your password after logging in.\n\nRegards,\nXCEED India Team`,
+            subject: 'Your XCEED Membership Has Been Approved',
+            text: `Dear ${member.contactPerson},\n\nYour XCEED membership application has been approved.\n\nYou can now log in to the Member Portal at the XCEED website with:\n\nEmail: ${member.email}\nPassword: ${temporaryPassword}\n\nWe recommend changing your password after logging in.\n\nRegards,\nXCEED Team`,
           });
           emailStatus = 'sent';
         } catch (mailErr) {

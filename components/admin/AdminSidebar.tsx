@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Package, ShieldCheck, LogOut, Award, MessageSquare, ShoppingBag, Bookmark } from 'lucide-react';
+import { LayoutDashboard, Package, ShieldCheck, LogOut, Award, MessageSquare, ShoppingBag, Bookmark, Users } from 'lucide-react';
 import { useCurrentAdmin } from '@/lib/useCurrentAdmin';
 import { can, Permission } from '@/lib/permissions';
 
@@ -26,8 +26,9 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Orders', href: '/admin/orders', icon: ShoppingBag },
   { label: 'Saved Carts', href: '/admin/saved-carts', icon: Bookmark },
   { label: 'Contact Enquiries', href: '/admin/contact', icon: MessageSquare },
-  { label: 'Directory', href: '/admin/membership', icon: Award, permission: 'directory' },
-  { label: 'Users & Roles', href: '/admin/users', icon: ShieldCheck },
+  { label: 'Users', href: '/admin/accounts', icon: Users, permission: 'directory' },
+  { label: 'Membership Applications', href: '/admin/membership', icon: Award, permission: 'directory' },
+  { label: 'Admin Users & Roles', href: '/admin/users', icon: ShieldCheck },
 ];
 
 export default function AdminSidebar() {
@@ -51,7 +52,7 @@ export default function AdminSidebar() {
     <aside className="flex h-screen w-64 shrink-0 flex-col bg-brand-navy text-white">
       <div className="border-b border-white/10 px-5 py-5">
         <div className="inline-block rounded-lg bg-white p-1.5">
-          <Image src="/logo.png" alt="XCEED India" width={280} height={126} priority className="h-9 w-auto object-contain" />
+          <Image src="/logo.png" alt="XCEED" width={280} height={126} priority className="h-9 w-auto object-contain" />
         </div>
         <p className="mt-2 text-[11px] text-white/50">Precision Marking Solutions</p>
         {admin && (

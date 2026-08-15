@@ -53,7 +53,7 @@ export default function ContactUsPage() {
             Connect with Our Experts
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-brand-slate">
-            From product selection to bulk supply and dealership partnerships, XCEED India
+            From product selection to bulk supply and dealership partnerships, XCEED
             provides reliable industrial solutions backed by expert support. Reach out via phone,
             email, or the enquiry form below, and our team will respond at the earliest.
           </p>
@@ -104,7 +104,7 @@ export default function ContactUsPage() {
       <section className="bg-brand-mist py-14">
         <div className="container-x">
           <h2 className="text-center text-3xl font-bold leading-[1.2] tracking-tight text-brand-black sm:text-4xl">
-            Why Choose XCEED India?
+            Why Choose XCEED?
           </h2>
           <div className="mx-auto mt-8 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2">
             {WHY_CHOOSE.map((point) => (

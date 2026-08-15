@@ -5,7 +5,7 @@ export default function TermsAndConditionsPage() {
     <LegalPageLayout
       title="Terms & Conditions"
       lastUpdated="27 July 2026"
-      intro="These Terms & Conditions govern your use of the XCEED India website and any products or services purchased through it. By accessing this website or placing an order with us, you agree to be bound by these terms."
+      intro="These Terms & Conditions govern your use of the XCEED website and any products or services purchased through it. By accessing this website or placing an order with us, you agree to be bound by these terms."
       sections={[
         {
           heading: '1. Use of Website',
@@ -32,7 +32,7 @@ export default function TermsAndConditionsPage() {
           body: (
             <p>
               All content on this website, including text, graphics, logos, and images, is the property of
-              XCEED India and is protected by applicable intellectual property laws. It may not be
+              XCEED and is protected by applicable intellectual property laws. It may not be
               reproduced without our prior written consent.
             </p>
           ),
@@ -41,7 +41,7 @@ export default function TermsAndConditionsPage() {
           heading: '4. Limitation of Liability',
           body: (
             <p>
-              XCEED India shall not be liable for any indirect, incidental, or consequential damages arising
+              XCEED shall not be liable for any indirect, incidental, or consequential damages arising
               from the use of this website or the products purchased through it, to the fullest extent
               permitted by law.
             </p>

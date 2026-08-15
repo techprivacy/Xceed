@@ -45,8 +45,8 @@ exports.registerAccount = async (req, res) => {
         await transporter.sendMail({
           from: process.env.SMTP_FROM || process.env.SMTP_USER,
           to: account.email,
-          subject: 'Verify your XCEED India account',
-          text: `Hi ${fullName},\n\nWelcome to XCEED India. Verify your email to activate your account:\n\n${verifyUrl}\n\nThis link expires in 24 hours.\n\nIf you didn't create this account, you can ignore this email.\n\nRegards,\nXCEED India Team`,
+          subject: 'Verify your XCEED account',
+          text: `Hi ${fullName},\n\nWelcome to XCEED. Verify your email to activate your account:\n\n${verifyUrl}\n\nThis link expires in 24 hours.\n\nIf you didn't create this account, you can ignore this email.\n\nRegards,\nXCEED Team`,
         });
         emailStatus = 'sent';
       } catch (err) {
@@ -118,8 +118,8 @@ exports.resendVerification = async (req, res) => {
       await transporter.sendMail({
         from: process.env.SMTP_FROM || process.env.SMTP_USER,
         to: account.email,
-        subject: 'Verify your XCEED India account',
-        text: `Hi ${account.fullName},\n\nHere's your new verification link:\n\n${verifyUrl}\n\nThis link expires in 24 hours.\n\nRegards,\nXCEED India Team`,
+        subject: 'Verify your XCEED account',
+        text: `Hi ${account.fullName},\n\nHere's your new verification link:\n\n${verifyUrl}\n\nThis link expires in 24 hours.\n\nRegards,\nXCEED Team`,
       });
     } catch (err) {
       // Response stays generic regardless.
@@ -188,8 +188,8 @@ exports.forgotPassword = async (req, res) => {
       await transporter.sendMail({
         from: process.env.SMTP_FROM || process.env.SMTP_USER,
         to: account.email,
-        subject: 'Reset your XCEED India password',
-        text: `Hi ${account.fullName},\n\nReset your password here (expires in 1 hour):\n\n${resetUrl}\n\nIf you didn't request this, you can ignore this email — your password hasn't changed.\n\nRegards,\nXCEED India Team`,
+        subject: 'Reset your XCEED password',
+        text: `Hi ${account.fullName},\n\nReset your password here (expires in 1 hour):\n\n${resetUrl}\n\nIf you didn't request this, you can ignore this email — your password hasn't changed.\n\nRegards,\nXCEED Team`,
       });
     } catch (err) {
       // Response stays generic regardless.
@@ -267,7 +267,7 @@ exports.getAccounts = async (req, res) => {
         .limit(limit),
       Account.countDocuments(),
     ]);
-    res.json({ success: true, data: accounts, total, page, limit });
+    res.json({ success: true, data: accounts, total, page, limit, pages: Math.ceil(total / limit) });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

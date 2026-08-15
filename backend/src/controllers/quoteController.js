@@ -221,8 +221,8 @@ exports.emailQuotePdf = async (req, res) => {
         await transporter.sendMail({
           from: process.env.SMTP_FROM || process.env.SMTP_USER,
           to: quote.email,
-          subject: `XCEED India — Your Bulk Quote (Ref: ${quote._id})`,
-          text: `Dear ${quote.contactPerson || quote.companyName},\n\nPlease find attached your quotation from XCEED India.\n\nRegards,\nXCEED India Sales Team`,
+          subject: `XCEED — Your Bulk Quote (Ref: ${quote._id})`,
+          text: `Dear ${quote.contactPerson || quote.companyName},\n\nPlease find attached your quotation from XCEED.\n\nRegards,\nXCEED Sales Team`,
           attachments: [
             { filename: `XCEED-Quote-${quote._id}.pdf`, content: Buffer.concat(chunks) },
           ],

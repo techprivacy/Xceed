@@ -159,6 +159,70 @@ export interface MemberProfileInput {
   officeAddress?: string;
 }
 
+// --- Account (self-service login) + MembershipApplication (the separate,
+// admin-approved business flow) — replaces Member above for new signups;
+// see backend/src/models/Account.js and MembershipApplication.js. Member
+// itself is left in place for whatever data hasn't been migrated yet.
+
+export interface Account {
+  _id: string;
+  fullName: string;
+  email: string;
+  emailVerified: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AccountRegisterInput {
+  fullName: string;
+  email: string;
+  password: string;
+}
+
+export type ApplicationStatus = 'pending' | 'approved' | 'rejected';
+
+export interface MembershipApplication {
+  _id: string;
+  account: Account | string;
+  companyName: string;
+  contactPerson: string;
+  industry?: string;
+  products?: string;
+  location?: string;
+  country?: string;
+  website?: string;
+  membershipType?: MembershipType | '';
+  companyLogo?: string;
+  mobileNumber?: string;
+  whatsappNumber?: string;
+  officeAddress?: string;
+  status: ApplicationStatus;
+  subscriptionStatus: SubscriptionStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Fields shown on the public directory only, same shape as PublicMember.
+export type PublicMembershipApplication = Pick<
+  MembershipApplication,
+  'companyName' | 'contactPerson' | 'industry' | 'products' | 'location' | 'companyLogo'
+> & { _id: string };
+
+export interface MembershipApplicationInput {
+  companyName: string;
+  contactPerson: string;
+  industry?: string;
+  products?: string;
+  location?: string;
+  country?: string;
+  website?: string;
+  membershipType?: MembershipType | '';
+  companyLogo?: string;
+  mobileNumber?: string;
+  whatsappNumber?: string;
+  officeAddress?: string;
+}
+
 export interface QuoteNote {
   _id: string;
   text: string;

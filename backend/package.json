@@ -1,7 +1,7 @@
 {
   "name": "xceed-india-backend",
   "version": "1.0.0",
-  "description": "Backend API for Xceed India - Precision Marking Solutions",
+  "description": "Backend API for XCEED - Precision Marking Solutions",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

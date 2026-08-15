@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { CreditCard, Info } from 'lucide-react';
-import { getMemberToken, getMyMemberProfile } from '@/lib/api';
-import { Member, SubscriptionStatus } from '@/types';
+import { getAccountToken, getMyMembershipApplication } from '@/lib/api';
+import { MembershipApplication, SubscriptionStatus } from '@/types';
 
 const STATUS_COPY: Record<SubscriptionStatus, { label: string; tone: string; text: string }> = {
   active: {
@@ -24,18 +24,18 @@ const STATUS_COPY: Record<SubscriptionStatus, { label: string; tone: string; tex
 };
 
 export default function MemberSubscriptionPage() {
-  const [member, setMember] = useState<Member | null>(null);
+  const [application, setApplication] = useState<MembershipApplication | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = getMemberToken();
+    const token = getAccountToken();
     if (!token) return;
-    getMyMemberProfile(token)
-      .then((res) => setMember(res.data))
+    getMyMembershipApplication(token)
+      .then((res) => setApplication(res.data))
       .finally(() => setLoading(false));
   }, []);
 
-  const status = member?.subscriptionStatus ?? 'none';
+  const status = application?.subscriptionStatus ?? 'none';
   const copy = STATUS_COPY[status];
 
   return (
@@ -64,7 +64,7 @@ export default function MemberSubscriptionPage() {
           <div className="mt-6 flex items-start gap-2.5 rounded-xl bg-brand-mist p-4 text-xs text-brand-slate">
             <Info size={14} className="mt-0.5 shrink-0" />
             Subscription status is set manually by the XCEED team — there is no online payment on this
-            portal yet. To activate or renew, contact XCEED India directly.
+            portal yet. To activate or renew, contact XCEED directly.
           </div>
         </div>
       )}

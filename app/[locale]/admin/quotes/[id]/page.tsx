@@ -210,7 +210,7 @@ export default function QuoteDetailPage() {
 
   const whatsappHref = quote
     ? `https://wa.me/${quote.mobileNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
-        `Hi ${quote.contactPerson || quote.companyName}, thank you for your bulk quote request for ${quote.productRequirement}. Our team at XCEED India will get back to you shortly with pricing.`
+        `Hi ${quote.contactPerson || quote.companyName}, thank you for your bulk quote request for ${quote.productRequirement}. Our team at XCEED will get back to you shortly with pricing.`
       )}`
     : '#';
 

@@ -4,32 +4,36 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, User, Users, CreditCard, LogOut, Menu, X } from 'lucide-react';
+import { LayoutDashboard, User, Users, Handshake, CreditCard, LogOut, Menu, X } from 'lucide-react';
 
 const NAV_ITEMS = [
   { label: 'Dashboard', href: '/member/dashboard', icon: LayoutDashboard },
   { label: 'Your Profile', href: '/member/profile', icon: User },
+  // Apply for Membership is its own step now (see MembershipApplication) —
+  // an Account holder isn't a "member" just by having an account, unlike
+  // the old Member model where signup and membership were the same thing.
+  { label: 'Apply for Membership', href: '/membership/register', icon: Handshake },
   { label: 'Member Directory', href: '/member/directory', icon: Users },
   { label: 'Subscription', href: '/member/subscription', icon: CreditCard },
 ];
 
 // Deliberately its own shell (not the public Header/Footer, not AdminSidebar)
-// — this is a logged-in member's own application area, using a separate
-// localStorage token (xceed_member_token) from both the public site and the
-// admin panel.
+// — this is a logged-in account holder's own application area, using a
+// separate localStorage token (xceed_account_token) from both the public
+// site and the admin panel.
 //
-// Unlike the admin panel (internal staff, overwhelmingly desktop), members
-// are the public — real people who will open this from a phone. A fixed
-// 256px column with no mobile treatment left ~134px for content on a 390px
-// screen. Below lg, the sidebar becomes a slide-in drawer behind a top bar,
-// same idiom as components/Header.tsx's mobile menu.
+// Unlike the admin panel (internal staff, overwhelmingly desktop), account
+// holders are the public — real people who will open this from a phone. A
+// fixed 256px column with no mobile treatment left ~134px for content on a
+// 390px screen. Below lg, the sidebar becomes a slide-in drawer behind a
+// top bar, same idiom as components/Header.tsx's mobile menu.
 export default function MemberSidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
   const handleLogout = () => {
-    localStorage.removeItem('xceed_member_token');
+    localStorage.removeItem('xceed_account_token');
     router.push('/login');
   };
 
@@ -63,7 +67,7 @@ export default function MemberSidebar() {
           normal flow, so this bar is what actually reserves layout space. */}
       <div className="flex items-center justify-between border-b border-black/5 bg-brand-navy px-4 py-3 lg:hidden">
         <div className="inline-block rounded-lg bg-white p-1">
-          <Image src="/logo.png" alt="XCEED India" width={280} height={126} className="h-7 w-auto object-contain" />
+          <Image src="/logo.png" alt="XCEED" width={280} height={126} className="h-7 w-auto object-contain" />
         </div>
         <button
           type="button"
@@ -91,7 +95,7 @@ export default function MemberSidebar() {
       >
         <div className="hidden border-b border-white/10 px-5 py-5 lg:block">
           <div className="inline-block rounded-lg bg-white p-1.5">
-            <Image src="/logo.png" alt="XCEED India" width={280} height={126} priority className="h-9 w-auto object-contain" />
+            <Image src="/logo.png" alt="XCEED" width={280} height={126} priority className="h-9 w-auto object-contain" />
           </div>
           <p className="mt-2 text-[11px] text-white/50">Member Portal</p>
         </div>

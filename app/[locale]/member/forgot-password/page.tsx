@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { forgotMemberPassword } from '@/lib/api';
+import { forgotAccountPassword } from '@/lib/api';
 import Button from '@/components/ui/Button';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -21,10 +21,10 @@ export default function ForgotPasswordPage() {
     setMessage('');
     try {
       // Backend always returns the same generic message regardless of
-      // whether the email matches a member — see memberController.
+      // whether the email matches an account — see accountController.
       // forgotPassword. That's deliberate (no email enumeration), so this
       // form never shows a "no account found" error.
-      const res = await forgotMemberPassword(email);
+      const res = await forgotAccountPassword(email);
       setMessage(res.message);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
@@ -39,11 +39,10 @@ export default function ForgotPasswordPage() {
 
       <div className="flex items-center justify-center bg-brand-navy px-4 py-16">
         <form onSubmit={handleSubmit} className="w-full max-w-sm rounded-3xl bg-white p-8 shadow-2xl">
-          <Image src="/logo.png" alt="XCEED India" width={280} height={126} priority className="mb-3 h-10 w-auto object-contain" />
+          <Image src="/logo.png" alt="XCEED" width={280} height={126} priority className="mb-3 h-10 w-auto object-contain" />
           <h1 className="mb-1 text-lg font-bold text-brand-black">Forgot your password?</h1>
           <p className="mb-6 text-sm text-brand-slate">
-            Enter the email on your Member Portal account and, if it&apos;s approved, we&apos;ll send you a new
-            password.
+            Enter your account email and we&apos;ll send you a link to set a new password.
           </p>
 
           {message ? (
@@ -63,7 +62,7 @@ export default function ForgotPasswordPage() {
               {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
 
               <Button type="submit" disabled={loading} variant="primary" className="w-full">
-                {loading ? 'Sending...' : 'Send New Password'}
+                {loading ? 'Sending...' : 'Send Reset Link'}
               </Button>
             </>
           )}

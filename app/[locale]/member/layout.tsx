@@ -4,12 +4,15 @@ import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import MemberSidebar from '@/components/member/MemberSidebar';
 import ToastHost from '@/components/admin/ToastHost';
-import { getMemberToken } from '@/lib/api';
+import { getAccountToken } from '@/lib/api';
 
 // Mirrors app/admin/layout.tsx's guard exactly, but against the separate
-// xceed_member_token — a member session can't satisfy this check with an
-// admin token or vice versa (see backend/src/middlewares/memberAuth.js for
-// why that's true on the API side too, not just here).
+// xceed_account_token — an account session can't satisfy this check with an
+// admin token or vice versa (see backend/src/middlewares/accountAuth.js for
+// why that's true on the API side too, not just here). This portal is now
+// gated by Account (self-service signup), not the old Member login —
+// "membership" is a status the dashboard/profile pages fetch separately
+// (see MembershipApplication), not what grants access to this area at all.
 // Public entry points into the member area — none of these need (or should
 // wait on) a session check, unlike /member/dashboard, /member/profile, etc.
 // /member/login itself is just a redirect stub now (see its page.tsx) but
@@ -25,7 +28,7 @@ export default function MemberPortalLayout({ children }: { children: React.React
 
   useEffect(() => {
     if (isPublicPage) return;
-    if (!getMemberToken()) {
+    if (!getAccountToken()) {
       // Straight to the unified login, not /member/login (which would just
       // redirect here again) — one hop instead of two.
       router.replace('/login');
