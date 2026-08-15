@@ -103,11 +103,12 @@ export default function Header() {
             <Image src="/logo.png" alt="XCEED India" fill sizes="220px" className="object-contain" priority />
           </a>
 
-          {/* justify-start (not center): container-x caps at max-w-[1360px], so
-              past that this budget never grows — if it's ever tight, overflow
-              should trim the *last* item via scroll, not clip "Home" off the
-              front the way a centered overflow silently did before. */}
-          <ul className="no-scrollbar hidden min-w-0 flex-1 items-center justify-start gap-1 overflow-x-auto text-sm font-bold uppercase tracking-[0.03em] leading-normal text-brand-charcoal/70 xl:flex">
+          {/* Centered between logo and the EN/Account/Cart cluster. Verified
+              (screenshot sweep, 1280-1920px) this now has real margin to
+              spare at every width, so a centered overflow clipping both ends
+              silently — the bug that forced justify-start earlier — isn't a
+              live risk; overflow-x-auto stays on as a fallback regardless. */}
+          <ul className="no-scrollbar hidden min-w-0 flex-1 items-center justify-center gap-1 overflow-x-auto text-sm font-bold uppercase tracking-[0.03em] leading-normal text-brand-charcoal/70 xl:flex">
             {NAV_ITEMS.map((item) => {
               const isActive = item.children
                 ? pathname === item.href || item.children.some((c) => c.href === pathname)
