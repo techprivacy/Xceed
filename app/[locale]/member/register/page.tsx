@@ -1,7 +1,7 @@
 import { UserPlus } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import MembershipForm from '@/components/MembershipForm';
+import CreateAccountForm from '@/components/CreateAccountForm';
 
 export default function CreateAccountPage() {
   return (
@@ -20,8 +20,8 @@ export default function CreateAccountPage() {
                   instant self-service signup — see backend/src/controllers/
                   memberController.js. An admin reviews and approves every
                   application, then emails your Member Portal login. */}
-              Tell us a bit about yourself and your business. Our team will review your application and email your
-              Member Portal login once approved.
+              Just your own details — our team will confirm your access and email your Member Portal login once
+              approved.
             </p>
           </div>
         </div>
@@ -30,7 +30,7 @@ export default function CreateAccountPage() {
       <section className="bg-brand-mist py-14">
         <div className="container-x">
           <div className="mx-auto max-w-2xl">
-            <MembershipForm />
+            <CreateAccountForm />
           </div>
         </div>
       </section>
