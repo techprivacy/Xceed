@@ -58,7 +58,7 @@ const NAV_ITEMS: NavItem[] = [
   {
     label: 'About Us',
     children: [
-      { label: 'Director Message', href: '/about-us/director-message' },
+      { label: 'President Message', href: '/about-us/president-message' },
       { label: 'Our Global Team', href: '/about-us/our-global-team' },
       { label: 'News & Awards', href: '/about-us/news-awards' },
     ],
@@ -226,7 +226,7 @@ export default function Header() {
                         <a
                           key={child.href}
                           href={child.href}
-                          className={`block px-4 py-2 text-xs normal-case tracking-normal transition-colors xl:text-sm ${
+                          className={`block px-4 py-2 text-xs uppercase tracking-wide transition-colors xl:text-sm ${
                             pathname === child.href
                               ? 'bg-brand-mist text-brand-red'
                               : 'text-brand-charcoal/80 hover:bg-brand-mist hover:text-brand-red'
@@ -406,7 +406,7 @@ export default function Header() {
                         <a
                           href={child.href}
                           onClick={() => setOpen(false)}
-                          className={`block rounded-lg px-3 py-2 text-xs normal-case tracking-normal transition-colors ${
+                          className={`block rounded-lg px-3 py-2 text-xs uppercase tracking-wide transition-colors ${
                             pathname === child.href
                               ? 'bg-white/10 text-white'
                               : 'text-white/60 hover:bg-white/5 hover:text-white'
