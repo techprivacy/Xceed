@@ -1,40 +1,21 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import { ArrowRight, Award, Trophy, Landmark, Users2, TrendingUp, Rocket, Newspaper, Handshake, Factory } from 'lucide-react';
+import Link from 'next/link';
+import { ArrowRight, Award, Trophy, Landmark, Users2, TrendingUp, Rocket } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Card from '@/components/ui/Card';
 import SectionHeading from '@/components/ui/SectionHeading';
+import { getFeaturedArticle, getLatestArticles } from '@/lib/newsData';
 
 export const metadata: Metadata = {
   title: 'News & Awards',
 };
 
-// Placeholder copy throughout — real articles/awards/dates get swapped in
-// once supplied. Image slots use an icon-on-gradient placeholder rather
-// than stock photography standing in for real news coverage (same
-// reasoning as the initials avatars on the Our Global Team page).
-const LATEST_NEWS = [
-  {
-    category: 'Technology',
-    title: 'Next-Gen Marking Technology Launched for Heavy Industries',
-    date: '10 August 2026',
-    icon: Factory,
-  },
-  {
-    category: 'Partnership',
-    title: 'Strengthening Japan–India Industrial Partnerships',
-    date: '02 August 2026',
-    icon: Handshake,
-  },
-  {
-    category: 'Industry',
-    title: 'Supporting the Future of Smart Manufacturing',
-    date: '26 July 2026',
-    icon: Newspaper,
-  },
-];
-
+// Awards/milestones stay placeholder copy — real ones get swapped in once
+// supplied. Article content (featured + latest) now lives in
+// lib/newsData.ts, shared with the /all listing and individual article
+// pages so all three can never drift out of sync.
 const AWARDS = [
   {
     year: '2026',
@@ -90,6 +71,10 @@ const MILESTONES = [
 ];
 
 export default function NewsAwardsPage() {
+  const featured = getFeaturedArticle();
+  const latest = getLatestArticles(featured.slug, 3);
+  const FeaturedIcon = featured.icon;
+
   return (
     <main>
       <Header />
@@ -132,24 +117,21 @@ export default function NewsAwardsPage() {
 
           <Card className="grid grid-cols-1 items-center gap-8 overflow-hidden lg:grid-cols-2" style={{ padding: 0 }}>
             <div className="p-8 sm:p-10">
-              <h2 className="text-2xl font-bold leading-tight tracking-tight text-brand-black sm:text-3xl">
-                XCEED Expands Advanced Marking Solutions Across India
+              <p className="text-[11px] font-bold uppercase tracking-wide text-brand-red">{featured.category}</p>
+              <h2 className="mt-2 text-2xl font-bold leading-tight tracking-tight text-brand-black sm:text-3xl">
+                {featured.title}
               </h2>
-              <p className="mt-4 text-sm leading-relaxed text-brand-slate">
-                XCEED continues to strengthen its presence across India with enhanced industrial marking and
-                identification solutions — helping foundries and manufacturers achieve greater precision,
-                durability, and consistency backed by Japanese engineering standards.
-              </p>
-              <a
-                href="/contact-us"
+              <p className="mt-4 text-sm leading-relaxed text-brand-slate">{featured.excerpt}</p>
+              <Link
+                href={`/about-us/news-awards/${featured.slug}`}
                 className="mt-6 inline-flex items-center gap-2 rounded-full bg-brand-red px-5 py-2.5 text-xs font-bold uppercase tracking-wide text-white transition hover:bg-brand-redDark"
               >
                 Read More
                 <ArrowRight size={14} />
-              </a>
+              </Link>
             </div>
             <div className="flex h-56 items-center justify-center bg-gradient-to-br from-brand-navy to-brand-blueDarker lg:h-full lg:min-h-[280px]">
-              <Newspaper size={64} className="text-white/25" />
+              <FeaturedIcon size={64} className="text-white/25" />
             </div>
           </Card>
         </div>
@@ -163,27 +145,29 @@ export default function NewsAwardsPage() {
               Latest News
               <span className="h-px w-10 bg-brand-red/30" />
             </p>
-            <a
-              href="#"
+            <Link
+              href="/about-us/news-awards/all"
               className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-brand-red hover:underline"
             >
               View All News
               <ArrowRight size={13} />
-            </a>
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {LATEST_NEWS.map(({ category, title, date, icon: Icon }) => (
-              <Card key={title} accent className="overflow-hidden" style={{ padding: 0 }}>
-                <div className="flex h-40 items-center justify-center bg-gradient-to-br from-brand-navy to-brand-blueDarker">
-                  <Icon size={40} className="text-white/25" />
-                </div>
-                <div className="p-5">
-                  <p className="text-[11px] font-bold uppercase tracking-wide text-brand-red">{category}</p>
-                  <h3 className="mt-2 text-base font-bold leading-snug text-brand-black">{title}</h3>
-                  <p className="mt-3 text-xs text-brand-slate">{date}</p>
-                </div>
-              </Card>
+            {latest.map(({ slug, category, title, date, icon: Icon }) => (
+              <Link key={slug} href={`/about-us/news-awards/${slug}`}>
+                <Card accent className="h-full overflow-hidden" style={{ padding: 0 }}>
+                  <div className="flex h-40 items-center justify-center bg-gradient-to-br from-brand-navy to-brand-blueDarker">
+                    <Icon size={40} className="text-white/25" />
+                  </div>
+                  <div className="p-5">
+                    <p className="text-[11px] font-bold uppercase tracking-wide text-brand-red">{category}</p>
+                    <h3 className="mt-2 text-base font-bold leading-snug text-brand-black">{title}</h3>
+                    <p className="mt-3 text-xs text-brand-slate">{date}</p>
+                  </div>
+                </Card>
+              </Link>
             ))}
           </div>
         </div>
