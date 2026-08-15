@@ -88,30 +88,26 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 shadow-sm">
       <div className="bg-white">
-        <div className="container-x flex items-center gap-4 py-3 lg:gap-6 lg:py-4 xl:gap-8 2xl:gap-8">
+        <div className="container-x flex items-center gap-2 py-3 sm:gap-4 lg:gap-6 lg:py-4 xl:gap-5 2xl:gap-8">
           <button
             type="button"
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-brand-charcoal transition hover:bg-brand-mist 2xl:hidden"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-brand-charcoal transition hover:bg-brand-mist xl:hidden"
           >
             {open ? <X size={24} /> : <Menu size={24} />}
           </button>
 
-          <a href="/" className="relative h-11 w-36 shrink-0 sm:h-12 sm:w-40 lg:h-14 lg:w-52 xl:w-56">
+          <a href="/" className="relative h-9 w-24 shrink-0 sm:h-12 sm:w-40 lg:h-14 lg:w-52 xl:w-56">
             <Image src="/logo.png" alt="XCEED India" fill sizes="220px" className="object-contain" priority />
           </a>
 
-          {/* Desktop nav only appears at 2xl+ (not xl) — the language/account/cart
-              cluster added this session made xl (1280px, a very common laptop
-              width) too tight to fit six labels plus that cluster without
-              clipping; 2xl+ is the first width that's actually spacious enough.
-              justify-start (not center): container-x caps at max-w-[1360px], so
-              past that this budget never grows — if it's ever still tight,
-              overflow should trim the *last* item via scroll, not clip "Home"
-              off the front the way a centered overflow silently does. */}
-          <ul className="no-scrollbar hidden min-w-0 flex-1 items-center justify-start gap-3 overflow-x-auto text-sm font-bold uppercase tracking-[0.03em] leading-normal text-brand-charcoal/70 2xl:flex">
+          {/* justify-start (not center): container-x caps at max-w-[1360px], so
+              past that this budget never grows — if it's ever tight, overflow
+              should trim the *last* item via scroll, not clip "Home" off the
+              front the way a centered overflow silently did before. */}
+          <ul className="no-scrollbar hidden min-w-0 flex-1 items-center justify-start gap-1 overflow-x-auto text-sm font-bold uppercase tracking-[0.03em] leading-normal text-brand-charcoal/70 xl:flex">
             {NAV_ITEMS.map((item) => {
               const isActive = item.children
                 ? pathname === item.href || item.children.some((c) => c.href === pathname)
@@ -160,7 +156,7 @@ export default function Header() {
                 dropdown since there's nothing to switch to. Multi-language
                 (Google Translate widget + EN/JA routing) was built and then
                 fully removed per request; see git log if it comes back. */}
-            <div className="notranslate flex items-center gap-1 rounded-xl px-2 py-2 text-xs font-bold uppercase tracking-wide text-brand-charcoal/70 sm:gap-1.5 sm:px-2.5" translate="no">
+            <div className="notranslate flex items-center gap-1 rounded-xl px-1.5 py-2 text-xs font-bold uppercase tracking-wide text-brand-charcoal/70 sm:gap-1.5 sm:px-2.5" translate="no">
               <IndiaFlagIcon className="h-3.5 w-5 shrink-0 rounded-[2px]" />
               <span>EN</span>
             </div>
@@ -171,20 +167,20 @@ export default function Header() {
                 type="button"
                 className="flex items-center gap-1.5 rounded-xl px-2 py-2 transition hover:bg-brand-mist sm:px-2.5"
               >
-                <User size={20} className="hidden shrink-0 text-brand-charcoal/70 sm:block" />
-                <span className="flex min-w-0 flex-col items-start leading-snug">
-                  {/* max-w + truncate: translated labels run longer than English
-                      in several of these languages — ellipsis keeps the button a
-                      single predictable line instead of growing header height
-                      per-language. */}
-                  <span className="block max-w-[100px] truncate text-[10px] font-medium normal-case text-brand-slate sm:max-w-[140px] sm:text-[11px]">
+                {/* Below sm: icon + chevron only. The full two-line label
+                    (~130px) plus everything else in this row was overflowing
+                    the viewport at 375px — a real ~100px horizontal
+                    scroll/clip on mobile, not just tight. */}
+                <User size={20} className="shrink-0 text-brand-charcoal/70" />
+                <span className="hidden min-w-0 flex-col items-start whitespace-nowrap leading-snug sm:flex">
+                  <span className="text-[11px] font-medium normal-case text-brand-slate">
                     {isSignedIn ? 'Hello, Member' : 'Hello, sign in'}
                   </span>
-                  <span className="flex w-full min-w-0 items-center gap-1 text-[11px] font-bold uppercase tracking-wide text-brand-charcoal sm:text-xs">
-                    <span className="block max-w-[85px] truncate sm:max-w-[120px]">Account &amp; Lists</span>
-                    <ChevronDown size={12} className="shrink-0 transition-transform duration-200 group-hover:rotate-180" />
+                  <span className="flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-brand-charcoal">
+                    Account &amp; Lists
                   </span>
                 </span>
+                <ChevronDown size={12} className="shrink-0 transition-transform duration-200 group-hover:rotate-180" />
               </button>
 
               <div className="invisible absolute right-0 top-full z-[60] w-[320px] max-w-[90vw] translate-y-1 rounded-xl border border-black/5 bg-white p-5 text-brand-charcoal opacity-0 shadow-xl transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
@@ -278,7 +274,7 @@ export default function Header() {
             <a
               href="/cart"
               aria-label="Cart"
-              className="relative flex h-11 w-11 items-center justify-center rounded-xl text-brand-charcoal transition hover:bg-brand-mist hover:text-brand-red sm:h-auto sm:w-auto sm:gap-2 sm:px-3 sm:py-2"
+              className="relative flex h-10 w-10 items-center justify-center rounded-xl text-brand-charcoal transition hover:bg-brand-mist hover:text-brand-red sm:h-auto sm:w-auto sm:gap-2 sm:px-3 sm:py-2"
             >
               <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-red px-1 text-[10px] font-bold text-white sm:static sm:order-2">
                 {cartCount}
@@ -290,7 +286,7 @@ export default function Header() {
       </div>
 
       {open && (
-        <div className="animate-fadeIn border-t border-white/10 bg-brand-black 2xl:hidden">
+        <div className="animate-fadeIn border-t border-white/10 bg-brand-black xl:hidden">
           <ul className="container-x flex flex-col gap-1 py-3 text-sm font-semibold uppercase tracking-wide text-white/80">
             {NAV_ITEMS.map((item) => (
               <li key={item.label}>
