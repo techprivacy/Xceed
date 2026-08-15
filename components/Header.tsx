@@ -149,13 +149,19 @@ export default function Header() {
           </a>
 
           {/* Centered between logo and the EN/Account/Cart cluster. Verified
-              (screenshot sweep, 1280-1920px) this now has real margin to
-              spare at every width, so a centered overflow clipping both ends
-              silently — the bug that forced justify-start earlier — isn't a
-              live risk; overflow-x-auto stays on as a fallback regardless. */}
+              (screenshot sweep, 1280-1920px) this has real margin to spare at
+              every width, so no horizontal-overflow fallback is needed here.
+              That's deliberate, not an oversight: overflow-x-auto (removed)
+              was silently clipping every dropdown panel below it — per the
+              CSS spec, setting only overflow-x to non-visible forces
+              overflow-y to compute as auto too, which clipped the
+              absolutely-positioned dropdowns hanging below this <ul>'s own
+              one-line height. Confirmed via elementFromPoint(): clicks at the
+              dropdown's own coordinates were landing on the header's
+              container div instead, for every item with children. */}
           <ul
             ref={navRef}
-            className="no-scrollbar hidden min-w-0 flex-1 items-center justify-center gap-1 overflow-x-auto text-sm font-bold uppercase tracking-[0.03em] leading-normal text-brand-charcoal/70 xl:flex"
+            className="hidden min-w-0 flex-1 items-center justify-center gap-1 text-sm font-bold uppercase tracking-[0.03em] leading-normal text-brand-charcoal/70 xl:flex"
           >
             {NAV_ITEMS.map((item) => {
               const isActive = item.children
@@ -179,25 +185,31 @@ export default function Header() {
                   {item.children && (
                     <ChevronDown
                       size={14}
-                      className={`shrink-0 transition-transform duration-200 group-hover:rotate-180 ${isOpen ? 'rotate-180' : ''}`}
+                      className={`shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
                     />
                   )}
                 </>
               );
 
               return (
-                <li key={item.label} className="group relative shrink-0">
-                  {/* No href (e.g. "About Us"): dropdown-only trigger that
-                      opens nothing itself — a <button>, not a link. Click
-                      explicitly toggles the dropdown (via openDropdown
-                      state) as a deterministic supplement to the CSS
-                      group-hover every item still gets — a <button> visually
-                      invites clicking, not just hovering. */}
+                <li
+                  key={item.label}
+                  className="relative shrink-0"
+                  // Driven entirely by React state now, not CSS
+                  // :hover/:focus-within — those depend on paint/transition
+                  // timing that turned out unreliable for this menu in
+                  // practice, so open/closed is now a plain boolean with no
+                  // ambiguity about what's actually showing.
+                  onMouseEnter={() => item.children && setOpenDropdown(item.label)}
+                  onMouseLeave={() => setOpenDropdown((current) => (current === item.label ? null : current))}
+                >
                   {item.href ? (
                     <a href={item.href} className={triggerClassName}>
                       {triggerContent}
                     </a>
                   ) : (
+                    // No href (e.g. "About Us"): dropdown-only trigger that
+                    // opens nothing itself — a <button>, not a link.
                     <button
                       type="button"
                       aria-expanded={isOpen}
@@ -208,12 +220,8 @@ export default function Header() {
                     </button>
                   )}
 
-                  {item.children && (
-                    <div
-                      className={`absolute left-0 top-full z-[60] min-w-[190px] translate-y-1 rounded-xl border border-black/5 bg-white py-2 opacity-0 shadow-lg transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 ${
-                        isOpen ? 'visible translate-y-0 opacity-100' : 'invisible'
-                      }`}
-                    >
+                  {item.children && isOpen && (
+                    <div className="animate-fadeIn absolute left-0 top-full z-[60] min-w-[190px] rounded-xl border border-black/5 bg-white py-2 shadow-lg">
                       {item.children.map((child) => (
                         <a
                           key={child.href}
