@@ -148,13 +148,13 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 shadow-sm">
       <div className="bg-white">
-        <div className="container-x flex items-center gap-4 py-3 lg:gap-6 lg:py-4 xl:gap-10 2xl:gap-14">
+        <div className="container-x flex items-center gap-4 py-3 lg:gap-6 lg:py-4 xl:gap-8 2xl:gap-8">
           <button
             type="button"
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-brand-charcoal transition hover:bg-brand-mist xl:hidden"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-brand-charcoal transition hover:bg-brand-mist 2xl:hidden"
           >
             {open ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -163,7 +163,15 @@ export default function Header() {
             <Image src="/logo.png" alt="XCEED India" fill sizes="220px" className="object-contain" priority />
           </a>
 
-          <ul className="no-scrollbar hidden min-w-0 flex-1 items-center justify-center gap-2 overflow-x-auto text-sm font-bold uppercase tracking-[0.03em] leading-normal text-brand-charcoal/70 xl:flex 2xl:gap-4 2xl:text-[15px]">
+          {/* Desktop nav only appears at 2xl+ (not xl) — the language/account/cart
+              cluster added this session made xl (1280px, a very common laptop
+              width) too tight to fit six labels plus that cluster without
+              clipping; 2xl+ is the first width that's actually spacious enough.
+              justify-start (not center): container-x caps at max-w-[1360px], so
+              past that this budget never grows — if it's ever still tight,
+              overflow should trim the *last* item via scroll, not clip "Home"
+              off the front the way a centered overflow silently does. */}
+          <ul className="no-scrollbar hidden min-w-0 flex-1 items-center justify-start gap-3 overflow-x-auto text-sm font-bold uppercase tracking-[0.03em] leading-normal text-brand-charcoal/70 2xl:flex">
             {NAV_ITEMS.map((item) => {
               const isActive = item.children
                 ? pathname === item.href || item.children.some((c) => c.href === pathname)
@@ -173,7 +181,7 @@ export default function Header() {
                 <li key={item.label} className="group relative shrink-0">
                   <a
                     href={item.href}
-                    className={`relative flex items-center gap-1 whitespace-nowrap rounded-md px-2 py-2 transition-colors after:absolute after:bottom-0 after:left-2 after:h-0.5 after:rounded-full after:bg-brand-red after:transition-all after:duration-300 xl:px-2.5 2xl:px-3 ${
+                    className={`relative flex items-center gap-1 whitespace-nowrap rounded-md px-2 py-2 transition-colors after:absolute after:bottom-0 after:left-2 after:h-0.5 after:rounded-full after:bg-brand-red after:transition-all after:duration-300 ${
                       isActive
                         ? 'text-brand-charcoal after:w-[calc(100%-1rem)]'
                         : 'hover:text-brand-charcoal after:w-0 hover:after:w-[calc(100%-1rem)]'
@@ -242,13 +250,26 @@ export default function Header() {
                     );
                   }
 
+                  const target = localizedPath(pathname, lang.code);
                   return (
                     <a
                       key={lang.code}
-                      href={localizedPath(pathname, lang.code)}
-                      onClick={() => {
+                      href={target}
+                      onClick={(e) => {
                         clearGoogleTranslateCookie();
                         setLocaleCookie(lang.code);
+                        // Google Translate never changes the URL — it's a pure
+                        // in-place DOM rewrite — so switching from a
+                        // Google-translated language back to English usually
+                        // means `target` is byte-identical to the current URL.
+                        // Relying on the browser's own same-URL anchor-click
+                        // behavior there isn't fully dependable across
+                        // browsers, so force it explicitly instead of leaving
+                        // it to chance.
+                        if (target === window.location.pathname) {
+                          e.preventDefault();
+                          window.location.reload();
+                        }
                       }}
                       className={rowClass}
                     >
@@ -385,7 +406,7 @@ export default function Header() {
       </div>
 
       {open && (
-        <div className="animate-fadeIn border-t border-white/10 bg-brand-black xl:hidden">
+        <div className="animate-fadeIn border-t border-white/10 bg-brand-black 2xl:hidden">
           <ul className="container-x flex flex-col gap-1 py-3 text-sm font-semibold uppercase tracking-wide text-white/80">
             {NAV_ITEMS.map((item) => (
               <li key={item.label}>
