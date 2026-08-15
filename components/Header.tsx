@@ -242,21 +242,29 @@ export default function Header() {
             })}
           </ul>
 
-          <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
+          <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
             {/* Static English indicator — site is English-only for now, no
                 dropdown since there's nothing to switch to. Multi-language
                 (Google Translate widget + EN/JA routing) was built and then
-                fully removed per request; see git log if it comes back. */}
-            <div className="notranslate flex items-center gap-1 rounded-xl px-1.5 py-2 text-xs font-bold uppercase tracking-wide text-brand-charcoal/70 sm:gap-1.5 sm:px-2.5" translate="no">
+                fully removed per request; see git log if it comes back. The
+                chevron stays purely decorative (matches the reference pill
+                design) rather than implying a working switcher. */}
+            <div
+              className="notranslate flex items-center gap-1.5 rounded-xl border border-brand-border/60 px-2.5 py-2 text-xs font-bold uppercase tracking-wide text-brand-charcoal/80 sm:px-3"
+              translate="no"
+            >
               <IndiaFlagIcon className="h-3.5 w-5 shrink-0 rounded-[2px]" />
               <span>EN</span>
+              <ChevronDown size={12} className="hidden shrink-0 text-brand-charcoal/40 sm:block" />
             </div>
 
-            {/* Sign in / Account & Lists */}
+            <span className="hidden h-8 w-px bg-brand-border/60 sm:block" aria-hidden />
+
+            {/* Sign in / My Account */}
             <div className="group relative">
               <button
                 type="button"
-                className="flex items-center gap-1.5 rounded-xl px-2 py-2 transition hover:bg-brand-mist sm:px-2.5"
+                className="flex items-center gap-2 rounded-xl border border-brand-border/60 px-2.5 py-2 transition hover:bg-brand-mist sm:px-3"
               >
                 {/* Below sm: icon + chevron only. The full two-line label
                     (~130px) plus everything else in this row was overflowing
@@ -265,11 +273,9 @@ export default function Header() {
                 <User size={20} className="shrink-0 text-brand-charcoal/70" />
                 <span className="hidden min-w-0 flex-col items-start whitespace-nowrap leading-snug sm:flex">
                   <span className="text-[11px] font-medium normal-case text-brand-slate">
-                    {isSignedIn ? 'Hello, Member' : 'Hello, sign in'}
+                    {isSignedIn ? 'Hello, Member' : 'Hello, Sign in'}
                   </span>
-                  <span className="flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-brand-charcoal">
-                    Account &amp; Lists
-                  </span>
+                  <span className="text-xs font-bold normal-case text-brand-charcoal">My Account</span>
                 </span>
                 <ChevronDown size={12} className="shrink-0 transition-transform duration-200 group-hover:rotate-180" />
               </button>
@@ -351,16 +357,18 @@ export default function Header() {
               </div>
             </div>
 
-            {/* Cart */}
+            {/* Cart — solid navy square, matching the reference design's
+                fixed icon button rather than the old label-that-expands
+                treatment at sm+. */}
             <a
               href="/cart"
               aria-label="Cart"
-              className="relative flex h-10 w-10 items-center justify-center rounded-xl text-brand-charcoal transition hover:bg-brand-mist hover:text-brand-red sm:h-auto sm:w-auto sm:gap-2 sm:px-3 sm:py-2"
+              className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-navy text-white transition hover:bg-brand-navy/90 sm:h-11 sm:w-11"
             >
-              <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-red px-1 text-[10px] font-bold text-white sm:static sm:order-2">
+              <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-red px-1 text-[10px] font-bold text-white ring-2 ring-white">
                 {cartCount}
               </span>
-              <ShoppingCart size={28} className="sm:order-1" />
+              <ShoppingCart size={22} />
             </a>
           </div>
         </div>
