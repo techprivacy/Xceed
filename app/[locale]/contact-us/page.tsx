@@ -127,7 +127,7 @@ export default function ContactUsPage() {
             ))}
           </div>
           <p className="text-sm font-semibold text-brand-charcoal">
-            Trusted Network of 2,000+ Manufacturers &amp; Suppliers
+            Trusted Network of Manufacturers &amp; Suppliers
           </p>
         </div>
       </section>
