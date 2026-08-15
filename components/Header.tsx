@@ -73,7 +73,7 @@ const NAV_ITEMS: NavItem[] = [
     href: '/products',
     children: MAIN_CATEGORIES.map((c) => ({ label: c.title, href: `/${c.urlSlug}` })),
   },
-  { label: 'Membership', href: '/membership' },
+  { label: 'Directory', href: '/membership' },
   { label: 'Contact Us', href: '/contact-us' },
 ];
 
