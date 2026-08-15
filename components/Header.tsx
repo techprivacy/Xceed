@@ -32,6 +32,20 @@ const LANGUAGES = [
   { code: 'mr' as const, native: 'मराठी', flag: 'in' as const, google: true },
 ] as const;
 
+// Precomputed once at module load, not inline per render: Math.cos/sin can
+// return a value that differs from the browser's in the last couple of
+// binary digits versus Node's SSR pass (trig functions aren't required to
+// be bit-identical across engines/platforms per IEEE 754, only +-*/ are).
+// That was showing up as a real React hydration-mismatch warning on every
+// page load — "Server: 7.748333950160459 Client: 7.74833395016046" — right
+// in the language switcher's own flag icon. .toFixed(3) rounds both
+// platforms' results to the same string well before that divergence, which
+// sits ~12 decimal places deeper than this icon could ever render visibly.
+const CHAKRA_SPOKES = Array.from({ length: 24 }, (_, i) => {
+  const a = (i * Math.PI) / 12;
+  return { x2: (15 + 2.6 * Math.cos(a)).toFixed(3), y2: (10 + 2.6 * Math.sin(a)).toFixed(3) };
+});
+
 // Small drawn flag chips — deliberately not emoji. Windows (this user's OS)
 // renders 🇮🇳/🇯🇵 as plain "IN"/"JP" text instead of a flag glyph, so an
 // actual India/Japan graphic needs to be real markup, not a codepoint.
@@ -53,20 +67,9 @@ function FlagIcon({ country, className }: { country: 'in' | 'jp'; className?: st
       <rect width="30" height="20" rx="2" fill="none" stroke="#00000014" strokeWidth="1" />
       <circle cx="15" cy="10" r="2.6" fill="none" stroke="#000080" strokeWidth="0.35" />
       <circle cx="15" cy="10" r="0.4" fill="#000080" />
-      {Array.from({ length: 24 }).map((_, i) => {
-        const a = (i * Math.PI) / 12;
-        return (
-          <line
-            key={i}
-            x1="15"
-            y1="10"
-            x2={15 + 2.6 * Math.cos(a)}
-            y2={10 + 2.6 * Math.sin(a)}
-            stroke="#000080"
-            strokeWidth="0.15"
-          />
-        );
-      })}
+      {CHAKRA_SPOKES.map((spoke, i) => (
+        <line key={i} x1="15" y1="10" x2={spoke.x2} y2={spoke.y2} stroke="#000080" strokeWidth="0.15" />
+      ))}
     </svg>
   );
 }

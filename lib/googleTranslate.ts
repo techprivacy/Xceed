@@ -26,12 +26,21 @@ export function getActiveGoogleTranslateLang(): string | null {
 }
 
 function fireChange(el: HTMLSelectElement) {
+  // Fired twice deliberately: this is the long-standing, widely-tested
+  // "doGTranslate" trick — a single dispatch sometimes only arms Google's
+  // internal listener without triggering the translation on the first
+  // language switch after page load. The second dispatch is what actually
+  // reaches it reliably.
+  el.dispatchEvent(new Event('change', { bubbles: true }));
   el.dispatchEvent(new Event('change', { bubbles: true }));
 }
 
-// Retries because the widget injects its <select> asynchronously after its
-// script loads — the first call after a fresh page load usually finds
-// nothing yet.
+// Retries because the widget injects its <select> — and populates its
+// <option> list — asynchronously after its script loads. Two distinct
+// "not ready yet" states need the same retry: the combo box not existing at
+// all yet, and it existing but not yet having an <option value="lang">
+// (setting .value to a not-yet-present option silently no-ops rather than
+// throwing, so checking afterwards is the only way to detect it).
 function applyToWidget(lang: string, attemptsLeft = 20) {
   const combo = document.querySelector<HTMLSelectElement>('select.goog-te-combo');
   if (!combo) {
@@ -40,6 +49,11 @@ function applyToWidget(lang: string, attemptsLeft = 20) {
     return;
   }
   combo.value = lang;
+  if (combo.value !== lang) {
+    if (attemptsLeft <= 0) return;
+    window.setTimeout(() => applyToWidget(lang, attemptsLeft - 1), 250);
+    return;
+  }
   fireChange(combo);
 }
 
