@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { login, memberLogin } from '@/lib/api';
 import Button from '@/components/ui/Button';
+import PasswordInput from '@/components/ui/PasswordInput';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -83,8 +84,7 @@ export default function LoginPage() {
               Forgot password?
             </Link>
           </div>
-          <input
-            type="password"
+          <PasswordInput
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required

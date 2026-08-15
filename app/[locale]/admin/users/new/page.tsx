@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import Button from '@/components/ui/Button';
+import PasswordInput from '@/components/ui/PasswordInput';
 import { getAdminToken, createUser } from '@/lib/api';
 import { toast } from '@/lib/toast';
 import { ASSIGNABLE_ROLES, ROLE_LABELS } from '@/lib/permissions';
@@ -63,8 +64,7 @@ export default function NewUserPage() {
 
         <div>
           <label className={LABEL_CLASSES}>Password</label>
-          <input
-            type="password"
+          <PasswordInput
             required
             minLength={6}
             value={password}
