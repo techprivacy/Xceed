@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Menu, X, ShoppingCart, User, ChevronDown } from 'lucide-react';
@@ -83,6 +83,41 @@ export default function Header() {
   const cartCount = useCartCount();
   const pathname = usePathname();
 
+  // Explicit click-to-toggle for href-less nav triggers ("About Us"), as a
+  // reliable supplement to the CSS group-hover the other nav items rely on
+  // — a <button> visually invites clicking, not just hovering, so this
+  // covers that path deterministically rather than leaning on hover timing.
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const navRef = useRef<HTMLUListElement>(null);
+
+  useEffect(() => {
+    if (!openDropdown) return;
+    const closeOnOutside = (e: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) setOpenDropdown(null);
+    };
+    const closeOnEscape = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      setOpenDropdown(null);
+      // Escape doesn't blur by default, unlike an outside click — without
+      // this the trigger button keeps keyboard focus, and the dropdown's
+      // own group-focus-within:visible rule keeps it visually open even
+      // though openDropdown state is now correctly null.
+      if (document.activeElement instanceof HTMLElement && navRef.current?.contains(document.activeElement)) {
+        document.activeElement.blur();
+      }
+    };
+    document.addEventListener('mousedown', closeOnOutside);
+    document.addEventListener('keydown', closeOnEscape);
+    return () => {
+      document.removeEventListener('mousedown', closeOnOutside);
+      document.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [openDropdown]);
+
+  useEffect(() => {
+    setOpenDropdown(null);
+  }, [pathname]);
+
   useEffect(() => {
     const check = () => setIsSignedIn(Boolean(getMemberToken()));
     check();
@@ -118,13 +153,22 @@ export default function Header() {
               spare at every width, so a centered overflow clipping both ends
               silently — the bug that forced justify-start earlier — isn't a
               live risk; overflow-x-auto stays on as a fallback regardless. */}
-          <ul className="no-scrollbar hidden min-w-0 flex-1 items-center justify-center gap-1 overflow-x-auto text-sm font-bold uppercase tracking-[0.03em] leading-normal text-brand-charcoal/70 xl:flex">
+          <ul
+            ref={navRef}
+            className="no-scrollbar hidden min-w-0 flex-1 items-center justify-center gap-1 overflow-x-auto text-sm font-bold uppercase tracking-[0.03em] leading-normal text-brand-charcoal/70 xl:flex"
+          >
             {NAV_ITEMS.map((item) => {
               const isActive = item.children
                 ? pathname === item.href || item.children.some((c) => c.href === pathname)
                 : pathname === item.href;
+              const isOpen = openDropdown === item.label;
 
-              const triggerClassName = `relative flex items-center gap-1 whitespace-nowrap rounded-md px-2 py-2 transition-colors after:absolute after:bottom-0 after:left-2 after:h-0.5 after:rounded-full after:bg-brand-red after:transition-all after:duration-300 ${
+              // uppercase is explicit here, not just inherited from the <ul>
+              // — browsers reset text-transform to none on <button> in their
+              // default stylesheet, which silently broke it for href-less
+              // triggers like "About Us" even though the parent <ul> already
+              // says uppercase.
+              const triggerClassName = `relative flex items-center gap-1 whitespace-nowrap rounded-md px-2 py-2 uppercase transition-colors after:absolute after:bottom-0 after:left-2 after:h-0.5 after:rounded-full after:bg-brand-red after:transition-all after:duration-300 ${
                 isActive
                   ? 'text-brand-charcoal after:w-[calc(100%-1rem)]'
                   : 'hover:text-brand-charcoal after:w-0 hover:after:w-[calc(100%-1rem)]'
@@ -133,7 +177,10 @@ export default function Header() {
                 <>
                   {item.label}
                   {item.children && (
-                    <ChevronDown size={14} className="shrink-0 transition-transform duration-200 group-hover:rotate-180" />
+                    <ChevronDown
+                      size={14}
+                      className={`shrink-0 transition-transform duration-200 group-hover:rotate-180 ${isOpen ? 'rotate-180' : ''}`}
+                    />
                   )}
                 </>
               );
@@ -141,19 +188,32 @@ export default function Header() {
               return (
                 <li key={item.label} className="group relative shrink-0">
                   {/* No href (e.g. "About Us"): dropdown-only trigger that
-                      opens nothing itself — a <button>, not a link. */}
+                      opens nothing itself — a <button>, not a link. Click
+                      explicitly toggles the dropdown (via openDropdown
+                      state) as a deterministic supplement to the CSS
+                      group-hover every item still gets — a <button> visually
+                      invites clicking, not just hovering. */}
                   {item.href ? (
                     <a href={item.href} className={triggerClassName}>
                       {triggerContent}
                     </a>
                   ) : (
-                    <button type="button" className={triggerClassName}>
+                    <button
+                      type="button"
+                      aria-expanded={isOpen}
+                      onClick={() => setOpenDropdown(isOpen ? null : item.label)}
+                      className={triggerClassName}
+                    >
                       {triggerContent}
                     </button>
                   )}
 
                   {item.children && (
-                    <div className="invisible absolute left-0 top-full z-[60] min-w-[190px] translate-y-1 rounded-xl border border-black/5 bg-white py-2 opacity-0 shadow-lg transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                    <div
+                      className={`absolute left-0 top-full z-[60] min-w-[190px] translate-y-1 rounded-xl border border-black/5 bg-white py-2 opacity-0 shadow-lg transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 ${
+                        isOpen ? 'visible translate-y-0 opacity-100' : 'invisible'
+                      }`}
+                    >
                       {item.children.map((child) => (
                         <a
                           key={child.href}
