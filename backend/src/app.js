@@ -14,6 +14,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const savedCartRoutes = require('./routes/savedCartRoutes');
 const accountRoutes = require('./routes/accountRoutes');
 const membershipApplicationRoutes = require('./routes/membershipApplicationRoutes');
+const newsRoutes = require('./routes/newsRoutes');
 
 const app = express();
 
@@ -52,6 +53,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/saved-carts', savedCartRoutes);
 app.use('/api/accounts', accountRoutes);
 app.use('/api/membership-applications', membershipApplicationRoutes);
+app.use('/api/news', newsRoutes);
 
 // 404 handler
 app.use((req, res) => {

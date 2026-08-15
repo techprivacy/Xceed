@@ -4,7 +4,7 @@ import { AdminRole } from '@/types';
 // nav items the user can't use, not for enforcement. The API re-checks every
 // request with its own copy of this map, so a UI bypass here can't grant
 // real access.
-export type Permission = 'dashboard' | 'products' | 'directory';
+export type Permission = 'dashboard' | 'products' | 'directory' | 'news';
 
 const ROLE_PERMISSIONS: Record<Exclude<AdminRole, 'admin'>, Permission[]> = {
   staff: ['dashboard'],

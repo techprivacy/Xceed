@@ -9,7 +9,7 @@
 // here grants 'users', and routes/authRoutes.js still gates on the original
 // adminOnly middleware rather than requirePermission. Otherwise a custom role
 // could edit its own permissions into a superuser.
-const PERMISSIONS = ['dashboard', 'products', 'directory'];
+const PERMISSIONS = ['dashboard', 'products', 'directory', 'news'];
 
 const ROLE_PERMISSIONS = {
   // Legacy default from before this RBAC pass existed. Kept minimal on

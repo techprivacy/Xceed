@@ -230,6 +230,46 @@ export interface QuoteNote {
   createdAt: string;
 }
 
+export type NewsIcon =
+  | 'Newspaper'
+  | 'Factory'
+  | 'Handshake'
+  | 'Building2'
+  | 'Package'
+  | 'Trophy'
+  | 'Award'
+  | 'Rocket'
+  | 'TrendingUp';
+
+export type NewsStatus = 'draft' | 'published';
+
+export interface NewsArticle {
+  _id: string;
+  title: string;
+  slug: string;
+  category: string;
+  excerpt: string;
+  body: string;
+  date: string;
+  icon: NewsIcon;
+  featured: boolean;
+  status: NewsStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface NewsArticleInput {
+  title: string;
+  slug?: string;
+  category: string;
+  excerpt: string;
+  body: string;
+  date?: string;
+  icon: NewsIcon;
+  featured?: boolean;
+  status?: NewsStatus;
+}
+
 export interface QuoteRequest {
   _id: string;
   companyName: string;

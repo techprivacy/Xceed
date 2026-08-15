@@ -6,16 +6,18 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Card from '@/components/ui/Card';
 import SectionHeading from '@/components/ui/SectionHeading';
-import { getFeaturedArticle, getLatestArticles } from '@/lib/newsData';
+import { getNewsArticles } from '@/lib/api';
+import { NEWS_ICON_MAP, formatNewsDate } from '@/lib/newsIcons';
 
 export const metadata: Metadata = {
   title: 'News & Awards',
 };
 
 // Awards/milestones stay placeholder copy — real ones get swapped in once
-// supplied. Article content (featured + latest) now lives in
-// lib/newsData.ts, shared with the /all listing and individual article
-// pages so all three can never drift out of sync.
+// supplied. Article content (featured + latest) is now backend-managed
+// (see backend/src/models/NewsArticle.js and the admin "News" section),
+// shared with the /all listing and individual article pages via the same
+// API so all three can never drift out of sync.
 const AWARDS = [
   {
     year: '2026',
@@ -70,10 +72,12 @@ const MILESTONES = [
   },
 ];
 
-export default function NewsAwardsPage() {
-  const featured = getFeaturedArticle();
-  const latest = getLatestArticles(featured.slug, 3);
-  const FeaturedIcon = featured.icon;
+export default async function NewsAwardsPage() {
+  const res = await getNewsArticles({ limit: 20 }).catch(() => ({ data: [] }));
+  const articles = res.data ?? [];
+  const featured = articles.find((a) => a.featured) ?? articles[0];
+  const latest = featured ? articles.filter((a) => a._id !== featured._id).slice(0, 3) : [];
+  const FeaturedIcon = featured ? NEWS_ICON_MAP[featured.icon] : null;
 
   return (
     <main>
@@ -108,34 +112,36 @@ export default function NewsAwardsPage() {
       </section>
 
       {/* Featured news */}
-      <section className="bg-white py-16">
-        <div className="container-x">
-          <p className="mb-6 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.14em] text-brand-red">
-            Featured News
-            <span className="h-px w-10 bg-brand-red/30" />
-          </p>
+      {featured && FeaturedIcon && (
+        <section className="bg-white py-16">
+          <div className="container-x">
+            <p className="mb-6 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.14em] text-brand-red">
+              Featured News
+              <span className="h-px w-10 bg-brand-red/30" />
+            </p>
 
-          <Card className="grid grid-cols-1 items-center gap-8 overflow-hidden lg:grid-cols-2" style={{ padding: 0 }}>
-            <div className="p-8 sm:p-10">
-              <p className="text-[11px] font-bold uppercase tracking-wide text-brand-red">{featured.category}</p>
-              <h2 className="mt-2 text-2xl font-bold leading-tight tracking-tight text-brand-black sm:text-3xl">
-                {featured.title}
-              </h2>
-              <p className="mt-4 text-sm leading-relaxed text-brand-slate">{featured.excerpt}</p>
-              <Link
-                href={`/about-us/news-awards/${featured.slug}`}
-                className="mt-6 inline-flex items-center gap-2 rounded-full bg-brand-red px-5 py-2.5 text-xs font-bold uppercase tracking-wide text-white transition hover:bg-brand-redDark"
-              >
-                Read More
-                <ArrowRight size={14} />
-              </Link>
-            </div>
-            <div className="flex h-56 items-center justify-center bg-gradient-to-br from-brand-navy to-brand-blueDarker lg:h-full lg:min-h-[280px]">
-              <FeaturedIcon size={64} className="text-white/25" />
-            </div>
-          </Card>
-        </div>
-      </section>
+            <Card className="grid grid-cols-1 items-center gap-8 overflow-hidden lg:grid-cols-2" style={{ padding: 0 }}>
+              <div className="p-8 sm:p-10">
+                <p className="text-[11px] font-bold uppercase tracking-wide text-brand-red">{featured.category}</p>
+                <h2 className="mt-2 text-2xl font-bold leading-tight tracking-tight text-brand-black sm:text-3xl">
+                  {featured.title}
+                </h2>
+                <p className="mt-4 text-sm leading-relaxed text-brand-slate">{featured.excerpt}</p>
+                <Link
+                  href={`/about-us/news-awards/${featured.slug}`}
+                  className="mt-6 inline-flex items-center gap-2 rounded-full bg-brand-red px-5 py-2.5 text-xs font-bold uppercase tracking-wide text-white transition hover:bg-brand-redDark"
+                >
+                  Read More
+                  <ArrowRight size={14} />
+                </Link>
+              </div>
+              <div className="flex h-56 items-center justify-center bg-gradient-to-br from-brand-navy to-brand-blueDarker lg:h-full lg:min-h-[280px]">
+                <FeaturedIcon size={64} className="text-white/25" />
+              </div>
+            </Card>
+          </div>
+        </section>
+      )}
 
       {/* Latest news grid */}
       <section className="bg-brand-mist py-16">
@@ -154,22 +160,31 @@ export default function NewsAwardsPage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {latest.map(({ slug, category, title, date, icon: Icon }) => (
-              <Link key={slug} href={`/about-us/news-awards/${slug}`}>
-                <Card accent className="h-full overflow-hidden" style={{ padding: 0 }}>
-                  <div className="flex h-40 items-center justify-center bg-gradient-to-br from-brand-navy to-brand-blueDarker">
-                    <Icon size={40} className="text-white/25" />
-                  </div>
-                  <div className="p-5">
-                    <p className="text-[11px] font-bold uppercase tracking-wide text-brand-red">{category}</p>
-                    <h3 className="mt-2 text-base font-bold leading-snug text-brand-black">{title}</h3>
-                    <p className="mt-3 text-xs text-brand-slate">{date}</p>
-                  </div>
-                </Card>
-              </Link>
-            ))}
-          </div>
+          {latest.length === 0 ? (
+            <p className="rounded-2xl border border-black/5 bg-white p-6 text-center text-sm text-brand-slate">
+              No other articles yet — check back soon.
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {latest.map(({ _id, slug, category, title, date, icon }) => {
+                const Icon = NEWS_ICON_MAP[icon];
+                return (
+                  <Link key={_id} href={`/about-us/news-awards/${slug}`}>
+                    <Card accent className="h-full overflow-hidden" style={{ padding: 0 }}>
+                      <div className="flex h-40 items-center justify-center bg-gradient-to-br from-brand-navy to-brand-blueDarker">
+                        <Icon size={40} className="text-white/25" />
+                      </div>
+                      <div className="p-5">
+                        <p className="text-[11px] font-bold uppercase tracking-wide text-brand-red">{category}</p>
+                        <h3 className="mt-2 text-base font-bold leading-snug text-brand-black">{title}</h3>
+                        <p className="mt-3 text-xs text-brand-slate">{formatNewsDate(date)}</p>
+                      </div>
+                    </Card>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
 

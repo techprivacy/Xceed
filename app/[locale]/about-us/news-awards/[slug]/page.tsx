@@ -5,26 +5,30 @@ import { ArrowLeft } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Card from '@/components/ui/Card';
-import { getArticleBySlug, NEWS_ARTICLES } from '@/lib/newsData';
+import { getNewsArticleBySlug } from '@/lib/api';
+import { NEWS_ICON_MAP, formatNewsDate } from '@/lib/newsIcons';
 
 interface PageProps {
   params: { slug: string };
 }
 
-export function generateStaticParams() {
-  return NEWS_ARTICLES.map((article) => ({ slug: article.slug }));
+// No generateStaticParams here on purpose — articles are now backend-
+// managed (admin can add one at any time), so this renders dynamically
+// per request rather than only knowing about slugs that existed at build
+// time. getNewsArticleBySlug still benefits from lib/api.ts's normal
+// 60s revalidate window.
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const res = await getNewsArticleBySlug(params.slug).catch(() => null);
+  return { title: res?.data ? res.data.title : 'Article Not Found' };
 }
 
-export function generateMetadata({ params }: PageProps): Metadata {
-  const article = getArticleBySlug(params.slug);
-  return { title: article ? article.title : 'Article Not Found' };
-}
-
-export default function NewsArticlePage({ params }: PageProps) {
-  const article = getArticleBySlug(params.slug);
+export default async function NewsArticlePage({ params }: PageProps) {
+  const res = await getNewsArticleBySlug(params.slug).catch(() => null);
+  const article = res?.data;
   if (!article) notFound();
 
-  const Icon = article.icon;
+  const Icon = NEWS_ICON_MAP[article.icon];
+  const paragraphs = article.body.split(/\n\s*\n/).filter(Boolean);
 
   return (
     <main>
@@ -54,7 +58,7 @@ export default function NewsArticlePage({ params }: PageProps) {
           <h1 className="mt-4 max-w-3xl text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl">
             {article.title}
           </h1>
-          <p className="mt-3 text-sm text-white/60">{article.date}</p>
+          <p className="mt-3 text-sm text-white/60">{formatNewsDate(article.date)}</p>
         </div>
       </section>
 
@@ -62,7 +66,7 @@ export default function NewsArticlePage({ params }: PageProps) {
         <div className="container-x">
           <Card className="mx-auto max-w-3xl" style={{ padding: 'clamp(1.75rem, 1.2rem + 2vw, 3rem)' }}>
             <div className="space-y-5 text-base leading-relaxed text-brand-slate">
-              {article.body.map((paragraph, i) => (
+              {paragraphs.map((paragraph, i) => (
                 <p key={i}>{paragraph}</p>
               ))}
             </div>

@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Package, ShieldCheck, LogOut, Award, MessageSquare, ShoppingBag, Bookmark, Users } from 'lucide-react';
+import { LayoutDashboard, Package, ShieldCheck, LogOut, Award, MessageSquare, ShoppingBag, Bookmark, Users, Newspaper } from 'lucide-react';
 import { useCurrentAdmin } from '@/lib/useCurrentAdmin';
 import { can, Permission } from '@/lib/permissions';
 
@@ -28,6 +28,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Contact Enquiries', href: '/admin/contact', icon: MessageSquare },
   { label: 'Users', href: '/admin/accounts', icon: Users, permission: 'directory' },
   { label: 'Membership Applications', href: '/admin/membership', icon: Award, permission: 'directory' },
+  { label: 'News', href: '/admin/news', icon: Newspaper, permission: 'news' },
   { label: 'Admin Users & Roles', href: '/admin/users', icon: ShieldCheck },
 ];
 

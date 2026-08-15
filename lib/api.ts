@@ -20,6 +20,8 @@ import {
   OrderInput,
   SavedCart,
   SavedCartInput,
+  NewsArticle,
+  NewsArticleInput,
 } from '@/types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
@@ -704,3 +706,42 @@ export const downloadQuotePdf = async (token: string, id: string) => {
   a.click();
   URL.revokeObjectURL(url);
 };
+
+// --- News & Awards articles ---
+
+export interface NewsListParams {
+  category?: string;
+  search?: string;
+  page?: number;
+  limit?: number;
+  includeDrafts?: boolean;
+}
+
+export const getNewsArticles = (params: NewsListParams = {}) => {
+  const query = new URLSearchParams(
+    Object.entries(params).reduce<Record<string, string>>((acc, [k, v]) => {
+      if (v !== undefined && v !== '') acc[k] = String(v);
+      return acc;
+    }, {})
+  ).toString();
+  return request<NewsArticle[]>(`/news${query ? `?${query}` : ''}`, { cache: 'no-store', next: undefined });
+};
+
+export const getNewsArticleBySlug = (slug: string) => request<NewsArticle>(`/news/${slug}`);
+
+export const getNewsArticleById = (token: string, id: string) => adminRequest<NewsArticle>(`/news/id/${id}`, token);
+
+export const createNewsArticle = (token: string, payload: NewsArticleInput) =>
+  adminRequest<NewsArticle>('/news', token, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+
+export const updateNewsArticle = (token: string, id: string, payload: Partial<NewsArticleInput>) =>
+  adminRequest<NewsArticle>(`/news/${id}`, token, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  });
+
+export const deleteNewsArticle = (token: string, id: string) =>
+  adminRequest<null>(`/news/${id}`, token, { method: 'DELETE' });
