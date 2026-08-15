@@ -11,7 +11,7 @@ export default function FeaturedProductsSection() {
           <SectionHeading title="Our Products" />
           <Link
             href="/products"
-            className="flex shrink-0 items-center gap-1 text-sm font-semibold text-brand-red hover:text-brand-redDark"
+            className="flex shrink-0 items-center gap-1.5 rounded-full bg-brand-blue px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-blueDark"
           >
             View All Products <ArrowRight size={14} />
           </Link>
