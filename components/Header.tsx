@@ -293,7 +293,7 @@ export default function Header() {
                     </a>
                     <p className="mt-2 text-center text-xs text-brand-slate">
                       New customer?{' '}
-                      <a href="/membership/register" className="font-semibold text-brand-red hover:underline">
+                      <a href="/member/register" className="font-semibold text-brand-red hover:underline">
                         Start here.
                       </a>
                     </p>
@@ -320,7 +320,7 @@ export default function Header() {
                       </li>
                       <li>
                         <a href="/member/subscription" className="hover:text-brand-red hover:underline">
-                          Your Membership
+                          Members Login
                         </a>
                       </li>
                       <li>

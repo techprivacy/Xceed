@@ -1,8 +1,10 @@
+// "Japanese / Precision Technology" (the old first tile) moved up into the
+// Hero headline itself ("Japanese Engineering") rather than being repeated
+// here too — these five are what's left of the brief.
 const STATS = [
-  { title: 'Japanese', subtitle: 'Precision Technology' },
-  { title: '2,000+', subtitle: 'Trusted Manufacturers & Foundries' },
-  { title: '20+', subtitle: 'Years of Industry Experience' },
-  { title: '100+', subtitle: 'Precision Industrial Products' },
+  { title: 'Global Network', subtitle: 'Trusted Manufacturers & Foundries' },
+  { title: '20+ Years', subtitle: 'Industry Experience' },
+  { title: '100+', subtitle: 'Industrial Solutions' },
   { title: 'India & Japan', subtitle: 'Fast & Reliable Delivery' },
   { title: 'Bulk Orders', subtitle: 'Dedicated Business Support' },
 ];
@@ -11,7 +13,7 @@ export default function TrustBar() {
   return (
     <section className="relative z-10 bg-white">
       <div className="container-x" style={{ paddingTop: 0, paddingBottom: 'clamp(2rem, 2rem + 2vw, 4rem)' }}>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 lg:grid-cols-6 lg:gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 lg:grid-cols-5 lg:gap-4">
           {STATS.map(({ title, subtitle }) => (
             <div
               key={subtitle}
