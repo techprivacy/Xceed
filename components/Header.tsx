@@ -48,11 +48,21 @@ const MAIN_CATEGORIES = PRODUCT_CATEGORIES.filter(
 );
 
 type NavChild = { label: string; href: string };
-type NavItem = { label: string; href: string; children?: NavChild[] };
+// href is optional: "About Us" is a dropdown-only trigger with no page of
+// its own (see app/[locale]/about-us/page.tsx — it just redirects) so
+// clicking the label itself should do nothing but reveal the dropdown.
+type NavItem = { label: string; href?: string; children?: NavChild[] };
 
 const NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: '/' },
-  { label: 'About Us', href: '/about-us' },
+  {
+    label: 'About Us',
+    children: [
+      { label: 'Director Message', href: '/about-us/director-message' },
+      { label: 'Our Global Team', href: '/about-us/our-global-team' },
+      { label: 'News & Awards', href: '/about-us/news-awards' },
+    ],
+  },
   {
     label: 'Industries',
     href: '/industries',
@@ -114,21 +124,33 @@ export default function Header() {
                 ? pathname === item.href || item.children.some((c) => c.href === pathname)
                 : pathname === item.href;
 
+              const triggerClassName = `relative flex items-center gap-1 whitespace-nowrap rounded-md px-2 py-2 transition-colors after:absolute after:bottom-0 after:left-2 after:h-0.5 after:rounded-full after:bg-brand-red after:transition-all after:duration-300 ${
+                isActive
+                  ? 'text-brand-charcoal after:w-[calc(100%-1rem)]'
+                  : 'hover:text-brand-charcoal after:w-0 hover:after:w-[calc(100%-1rem)]'
+              }`;
+              const triggerContent = (
+                <>
+                  {item.label}
+                  {item.children && (
+                    <ChevronDown size={14} className="shrink-0 transition-transform duration-200 group-hover:rotate-180" />
+                  )}
+                </>
+              );
+
               return (
                 <li key={item.label} className="group relative shrink-0">
-                  <a
-                    href={item.href}
-                    className={`relative flex items-center gap-1 whitespace-nowrap rounded-md px-2 py-2 transition-colors after:absolute after:bottom-0 after:left-2 after:h-0.5 after:rounded-full after:bg-brand-red after:transition-all after:duration-300 ${
-                      isActive
-                        ? 'text-brand-charcoal after:w-[calc(100%-1rem)]'
-                        : 'hover:text-brand-charcoal after:w-0 hover:after:w-[calc(100%-1rem)]'
-                    }`}
-                  >
-                    {item.label}
-                    {item.children && (
-                      <ChevronDown size={14} className="shrink-0 transition-transform duration-200 group-hover:rotate-180" />
-                    )}
-                  </a>
+                  {/* No href (e.g. "About Us"): dropdown-only trigger that
+                      opens nothing itself — a <button>, not a link. */}
+                  {item.href ? (
+                    <a href={item.href} className={triggerClassName}>
+                      {triggerContent}
+                    </a>
+                  ) : (
+                    <button type="button" className={triggerClassName}>
+                      {triggerContent}
+                    </button>
+                  )}
 
                   {item.children && (
                     <div className="invisible absolute left-0 top-full z-[60] min-w-[190px] translate-y-1 rounded-xl border border-black/5 bg-white py-2 opacity-0 shadow-lg transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
@@ -289,19 +311,27 @@ export default function Header() {
       {open && (
         <div className="animate-fadeIn border-t border-white/10 bg-brand-black xl:hidden">
           <ul className="container-x flex flex-col gap-1 py-3 text-sm font-semibold uppercase tracking-wide text-white/80">
-            {NAV_ITEMS.map((item) => (
+            {NAV_ITEMS.map((item) => {
+              const mobileTriggerClassName = `relative flex items-center justify-between gap-1 rounded-xl px-3.5 py-3 transition-colors ${
+                pathname === item.href
+                  ? 'bg-white/10 text-white'
+                  : 'text-white/70 hover:bg-white/5 hover:text-white'
+              }`;
+
+              return (
               <li key={item.label}>
-                <a
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className={`relative flex items-center justify-between gap-1 rounded-xl px-3.5 py-3 transition-colors ${
-                    pathname === item.href
-                      ? 'bg-white/10 text-white'
-                      : 'text-white/70 hover:bg-white/5 hover:text-white'
-                  }`}
-                >
-                  <span className="break-words">{item.label}</span>
-                </a>
+                {/* No href (e.g. "About Us"): tapping the label opens
+                    nothing — its Director Message / etc. children below are
+                    the only tappable destinations. */}
+                {item.href ? (
+                  <a href={item.href} onClick={() => setOpen(false)} className={mobileTriggerClassName}>
+                    <span className="break-words">{item.label}</span>
+                  </a>
+                ) : (
+                  <span className={mobileTriggerClassName}>
+                    <span className="break-words">{item.label}</span>
+                  </span>
+                )}
 
                 {item.children && (
                   <ul className="ml-3 mt-1 flex flex-col gap-1 border-l border-white/10 pl-3">
@@ -323,7 +353,8 @@ export default function Header() {
                   </ul>
                 )}
               </li>
-            ))}
+              );
+            })}
             <li className="mt-2 flex items-center gap-2 border-t border-white/10 pt-3">
               <a
                 href="/admin/login"
