@@ -12,7 +12,7 @@ const INPUT_CLASSES =
   'w-full rounded-xl border border-brand-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue/20';
 const LABEL_CLASSES = 'mb-1 block text-xs font-semibold text-brand-charcoal';
 
-// Admin-side edit for a MembershipApplication — mirrors MemberForm.tsx.
+// Admin-side edit for a MembershipApplication.
 // No password/email field here: identity lives on the linked Account, not
 // on the application itself.
 export default function MembershipApplicationForm({ application }: { application: MembershipApplication }) {

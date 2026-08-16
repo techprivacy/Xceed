@@ -9,7 +9,6 @@ const productRoutes = require('./routes/productRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const quoteRoutes = require('./routes/quoteRoutes');
 const themeRoutes = require('./routes/themeRoutes');
-const memberRoutes = require('./routes/memberRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const savedCartRoutes = require('./routes/savedCartRoutes');
 const accountRoutes = require('./routes/accountRoutes');
@@ -43,12 +42,6 @@ app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/quotes', quoteRoutes);
 app.use('/api/theme', themeRoutes);
-// /api/members: the old approval-gated Member login+directory system.
-// Superseded by /api/accounts (self-service login) + /api/membership-
-// applications (the separate, still-approval-gated business flow) — left
-// mounted rather than removed in case anything else still depends on it,
-// but the frontend no longer calls it as of this change.
-app.use('/api/members', memberRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/saved-carts', savedCartRoutes);
 app.use('/api/accounts', accountRoutes);

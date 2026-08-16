@@ -5,7 +5,6 @@ const User = require('../src/models/User');
 const Category = require('../src/models/Category');
 const Product = require('../src/models/Product');
 const QuoteRequest = require('../src/models/QuoteRequest');
-const Member = require('../src/models/Member');
 
 const run = async () => {
   await connectDB();
@@ -173,52 +172,9 @@ const run = async () => {
   }
   console.log(`Sample quote requests ready: ${quoteDefs.length}`);
 
-  // ---- Sample members (directory + member-portal demo data) ----
-  const memberDemoPassword = 'member@123';
-  const memberDefs = [
-    {
-      companyName: 'Anand Auto Components',
-      contactPerson: 'Suresh Joshi',
-      email: 'suresh@anandauto.example.com',
-      industry: 'Automotive',
-      products: 'Magnetic Tools',
-      location: 'Chennai, India',
-      status: 'approved',
-      subscriptionStatus: 'active',
-    },
-    {
-      companyName: 'Shakti Engineering Works',
-      contactPerson: 'Anita Kulkarni',
-      email: 'anita@shaktiengineering.example.com',
-      industry: 'Machine Tools',
-      products: 'Detachable Jigs',
-      location: 'Coimbatore, India',
-      status: 'approved',
-      subscriptionStatus: 'active',
-    },
-    {
-      companyName: 'Vishwakarma Castings',
-      contactPerson: 'Vikram Rao',
-      email: 'vikram@vishwakarmacastings.example.com',
-      industry: 'Sheet Metal',
-      products: 'Custom Marking Solutions',
-      location: 'Rajkot, India',
-      status: 'pending',
-      subscriptionStatus: 'none',
-    },
-  ];
-
-  for (const def of memberDefs) {
-    const exists = await Member.findOne({ email: def.email });
-    if (!exists) await Member.create({ ...def, password: memberDemoPassword });
-  }
-  console.log(`Sample members ready: ${memberDefs.length}`);
-
   console.log('Seeding complete.');
   console.log(`Login with -> username: ${adminUsername} / password: ${adminPassword}`);
-  console.log(
-    `Approved demo member login -> email: ${memberDefs[0].email} / password: ${memberDemoPassword}`
-  );
+  console.log('For directory/member-portal demo data, run seed/seedDummyDirectory.js separately.');
   await mongoose.connection.close();
   process.exit(0);
 };

@@ -89,7 +89,6 @@ export interface AdminUser {
   role: AdminRole;
 }
 
-export type MemberStatus = 'pending' | 'approved' | 'rejected';
 export type SubscriptionStatus = 'none' | 'active' | 'expired';
 
 // Mirrors backend/src/models/Member.js MEMBERSHIP_TYPES.
@@ -100,69 +99,11 @@ export type MembershipType =
   | 'Technology / Machinery Supplier'
   | 'Industry Professional';
 
-export interface Member {
-  _id: string;
-  companyName: string;
-  contactPerson: string;
-  email: string;
-  industry?: string;
-  products?: string;
-  location?: string;
-  country?: string;
-  website?: string;
-  membershipType?: MembershipType | '';
-  companyLogo?: string;
-  mobileNumber?: string;
-  whatsappNumber?: string;
-  officeAddress?: string;
-  status: MemberStatus;
-  subscriptionStatus: SubscriptionStatus;
-  createdAt: string;
-  updatedAt: string;
-}
-
-// Fields shown on the public directory only — no email, matching what
-// GET /api/members/directory actually returns.
-export type PublicMember = Pick<
-  Member,
-  'companyName' | 'contactPerson' | 'industry' | 'products' | 'location' | 'companyLogo'
-> & { _id: string };
-
-export interface MemberRegisterInput {
-  companyName: string;
-  contactPerson: string;
-  email: string;
-  industry?: string;
-  products?: string;
-  location?: string;
-  country?: string;
-  website?: string;
-  membershipType?: MembershipType | '';
-  companyLogo?: string;
-  mobileNumber?: string;
-  whatsappNumber?: string;
-  officeAddress?: string;
-}
-
-export interface MemberProfileInput {
-  companyName?: string;
-  contactPerson?: string;
-  industry?: string;
-  products?: string;
-  location?: string;
-  country?: string;
-  website?: string;
-  membershipType?: MembershipType | '';
-  companyLogo?: string;
-  mobileNumber?: string;
-  whatsappNumber?: string;
-  officeAddress?: string;
-}
-
-// --- Account (self-service login) + MembershipApplication (the separate,
-// admin-approved business flow) — replaces Member above for new signups;
-// see backend/src/models/Account.js and MembershipApplication.js. Member
-// itself is left in place for whatever data hasn't been migrated yet.
+// Account (self-service login) + MembershipApplication (the separate,
+// admin-approved business flow) — see backend/src/models/Account.js and
+// MembershipApplication.js. The old combined Member model/API (single
+// record holding both login + business details) has been fully removed;
+// see git history if it's ever needed for reference.
 
 export interface Account {
   _id: string;

@@ -24,12 +24,11 @@ export default function CreateAccountPage() {
             </span>
             <h1 className="text-4xl font-bold tracking-tight text-brand-black sm:text-5xl">Create an Account</h1>
             <p className="max-w-xl text-base leading-relaxed text-brand-slate sm:text-lg">
-              {/* Honest about how accounts actually work here: there's no
-                  instant self-service signup — see backend/src/controllers/
-                  memberController.js. An admin reviews and approves every
-                  application, then emails your Member Portal login. */}
-              Just your own details — our team will confirm your access and email your Member Portal login once
-              approved.
+              {/* Self-service — no admin approval for a plain account (see
+                  backend/src/controllers/accountController.js). Verify your
+                  email and you're in; applying for business membership is a
+                  separate, later step (see /membership/register). */}
+              Just your name, email, and a password — verify your email and you&apos;re signed in. No approval wait.
             </p>
           </div>
         </div>

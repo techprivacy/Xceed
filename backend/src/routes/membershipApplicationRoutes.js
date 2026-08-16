@@ -20,7 +20,7 @@ const { protectAccount } = require('../middlewares/accountAuth');
 router.get('/directory', getPublicDirectory);
 
 // Account-authenticated — must come before /:id so "mine" isn't parsed as
-// an id, same reasoning as memberRoutes.js's /me ordering.
+// an id.
 router.post('/', protectAccount, submitApplication);
 router.get('/mine', protectAccount, getMyApplication);
 

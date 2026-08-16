@@ -1,11 +1,10 @@
 const jwt = require('jsonwebtoken');
 const Account = require('../models/Account');
 
-// Deliberately separate from middlewares/auth.js (admin) and memberAuth.js
-// (the old, being-phased-out Member login) — same pattern as both: a
-// distinct `kind` claim in the JWT payload (see accountController.
-// issueToken) plus a distinct collection, so tokens from one system can't
-// be replayed against another even though all three share JWT_SECRET.
+// Deliberately separate from middlewares/auth.js (admin) — a distinct
+// `kind` claim in the JWT payload (see accountController.issueToken) plus
+// a distinct collection, so a token from one system can't be replayed
+// against the other even though both share JWT_SECRET.
 const protectAccount = async (req, res, next) => {
   let token;
   const authHeader = req.headers.authorization;

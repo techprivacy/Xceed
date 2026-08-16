@@ -10,9 +10,8 @@ import {
 import { MembershipApplication, ApplicationStatus } from '@/types';
 import { toast } from '@/lib/toast';
 
-// Mirrors useMemberList.ts's shape closely on purpose — same list page
-// conventions (search/filter/paginate/delete), now backed by
-// MembershipApplication instead of the old Member collection.
+// Same list page conventions as the rest of the admin panel (search/
+// filter/paginate/delete), backed by the MembershipApplication collection.
 export function useMembershipApplicationList() {
   const [rows, setRows] = useState<MembershipApplication[]>([]);
   const [loading, setLoading] = useState(true);

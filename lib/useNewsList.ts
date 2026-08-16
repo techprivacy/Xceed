@@ -5,7 +5,7 @@ import { getAdminToken, getNewsArticles, deleteNewsArticle, NewsListParams } fro
 import { NewsArticle } from '@/types';
 import { toast } from '@/lib/toast';
 
-// Mirrors useMemberList.ts's shape — same list page conventions
+// Same list page conventions as the rest of the admin panel
 // (search/paginate/delete). includeDrafts is always true here since this
 // is the admin list — it needs to see drafts, unlike the public pages.
 export function useNewsList() {

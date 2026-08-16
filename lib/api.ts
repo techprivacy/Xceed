@@ -7,10 +7,6 @@ import {
   Category,
   QuoteRequest,
   QuoteRequestInput,
-  Member,
-  PublicMember,
-  MemberRegisterInput,
-  MemberProfileInput,
   Account,
   AccountRegisterInput,
   MembershipApplication,
@@ -223,136 +219,13 @@ export const updateUser = (token: string, id: string, payload: { role?: AdminRol
 export const deleteUser = (token: string, id: string) =>
   adminRequest<null>(`/auth/users/${id}`, token, { method: 'DELETE' });
 
-// --- Members (public directory + registration, member self-service, admin management) ---
-
-// Separate localStorage key from getAdminToken() so an admin and a member
-// session can coexist in the same browser without clobbering each other.
-export const getMemberToken = () =>
-  typeof window === 'undefined' ? null : localStorage.getItem('xceed_member_token');
-
-async function memberRequest<T>(path: string, token: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
-  const res = await fetch(`${API_URL}${path}`, {
-    cache: 'no-store',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-      ...options.headers,
-    },
-  });
-  const json = await res.json();
-  if (!res.ok) {
-    throw new Error(json.message || 'Request failed');
-  }
-  return json;
-}
-
-export const getPublicMemberDirectory = () =>
-  request<PublicMember[]>('/members/directory', { cache: 'no-store', next: undefined });
-
-export const registerMember = (payload: MemberRegisterInput) =>
-  request<{ id: string; status: string }>('/members/register', {
-    method: 'POST',
-    body: JSON.stringify(payload),
-    next: undefined,
-    cache: 'no-store',
-  });
-
-export interface MemberLoginResponse {
-  success: boolean;
-  message?: string;
-  token: string;
-  member: { id: string; companyName: string; email: string };
-}
-
-export const memberLogin = async (email: string, password: string): Promise<MemberLoginResponse> => {
-  const res = await fetch(`${API_URL}/members/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password }),
-    cache: 'no-store',
-  });
-  const json = await res.json();
-  if (!res.ok) {
-    throw new Error(json.message || 'Login failed');
-  }
-  return json;
-};
-
-// Always resolves with the backend's generic message (never throws for
-// "email not found") — the endpoint itself is deliberately non-revealing
-// about whether an email is registered, see memberController.forgotPassword.
-export const forgotMemberPassword = async (email: string): Promise<{ success: boolean; message: string }> => {
-  const res = await fetch(`${API_URL}/members/forgot-password`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email }),
-    cache: 'no-store',
-  });
-  const json = await res.json();
-  if (!res.ok) {
-    throw new Error(json.message || 'Something went wrong. Please try again.');
-  }
-  return json;
-};
-
-export const getMyMemberProfile = (token: string) => memberRequest<Member>('/members/me', token);
-
-export const updateMyMemberProfile = (token: string, payload: MemberProfileInput) =>
-  memberRequest<Member>('/members/me', token, {
-    method: 'PUT',
-    body: JSON.stringify(payload),
-  });
-
-export interface MemberListParams {
-  status?: string;
-  search?: string;
-  page?: number;
-  limit?: number;
-}
-
-export const getMembers = (token: string, params: MemberListParams = {}) => {
-  const query = new URLSearchParams(
-    Object.entries(params).reduce<Record<string, string>>((acc, [k, v]) => {
-      if (v !== undefined && v !== '') acc[k] = String(v);
-      return acc;
-    }, {})
-  ).toString();
-  return adminRequest<Member[]>(`/members${query ? `?${query}` : ''}`, token);
-};
-
-export const getMemberStats = (token: string) =>
-  adminRequest<{ totalMembers: number; approvedMembers: number; pendingApprovals: number }>('/members/stats', token);
-
-export const getMember = (token: string, id: string) => adminRequest<Member>(`/members/${id}`, token);
-
-export interface AdminMemberUpdateInput extends MemberProfileInput {
-  status?: Member['status'];
-  subscriptionStatus?: Member['subscriptionStatus'];
-}
-
-export const updateMember = (token: string, id: string, payload: AdminMemberUpdateInput) =>
-  adminRequest<Member>(`/members/${id}`, token, {
-    method: 'PUT',
-    body: JSON.stringify(payload),
-  });
-
-export const approveMember = (token: string, id: string) =>
-  adminRequest<Member>(`/members/${id}/approve`, token, { method: 'PUT' });
-
-export const rejectMember = (token: string, id: string) =>
-  adminRequest<Member>(`/members/${id}/reject`, token, { method: 'PUT' });
-
-export const deleteMember = (token: string, id: string) =>
-  adminRequest<null>(`/members/${id}`, token, { method: 'DELETE' });
-
 // --- Accounts (self-service signup/login) + Membership Applications (the
-// separate, admin-approved business flow) — the new system replacing
-// Members above for anything going forward. See backend/src/models/
+// separate, admin-approved business flow). See backend/src/models/
 // Account.js + MembershipApplication.js for why they're split. ---
 
-// Separate localStorage key from both getAdminToken() and getMemberToken()
-// so all three kinds of session can coexist in the same browser.
+// Separate localStorage key from getAdminToken() so an admin and an
+// account session can coexist in the same browser without clobbering
+// each other.
 export const getAccountToken = () =>
   typeof window === 'undefined' ? null : localStorage.getItem('xceed_account_token');
 
