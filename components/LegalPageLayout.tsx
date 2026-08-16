@@ -22,7 +22,7 @@ export default function LegalPageLayout({ title, lastUpdated, intro, sections }:
 
       <section className="bg-brand-mist py-14">
         <div className="container-x">
-          <SectionHeading eyebrow="Legal" title={title} subtitle={`Last updated: ${lastUpdated}`} />
+          <SectionHeading eyebrow="Legal" title={title} subtitle={`Last updated: ${lastUpdated}`} size="h1" />
         </div>
       </section>
 

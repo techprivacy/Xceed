@@ -1,4 +1,12 @@
+import type { Metadata } from 'next';
 import LegalPageLayout from '@/components/LegalPageLayout';
+import { buildMetadata } from '@/lib/seo';
+
+export const metadata: Metadata = buildMetadata({
+  title: 'Refund Policy',
+  description: "XCEED's Refund Policy: the terms under which refunds, replacements, or cancellations may be considered.",
+  path: '/refund-policy',
+});
 
 export default function RefundPolicyPage() {
   return (

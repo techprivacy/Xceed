@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { ReactNode } from 'react';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -6,7 +7,9 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
+import JsonLd from '@/components/seo/JsonLd';
 import { INDUSTRIES } from '@/lib/staticData';
+import { buildMetadata, noIndexMetadata, breadcrumbJsonLd } from '@/lib/seo';
 
 interface IndustryContent {
   tagline: string;
@@ -256,6 +259,17 @@ export function generateStaticParams() {
   return INDUSTRIES.map((industry) => ({ slug: industry.urlSlug }));
 }
 
+export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
+  const industry = INDUSTRIES.find((i) => i.urlSlug === params.slug);
+  const content = INDUSTRY_CONTENT[params.slug];
+  if (!industry || !content) return noIndexMetadata('Industry Not Found');
+  return buildMetadata({
+    title: `Marking Solutions for ${industry.name}`,
+    description: content.tagline,
+    path: `/industries/${industry.urlSlug}`,
+  });
+}
+
 export default function IndustryDetailPage({ params }: { params: { slug: string } }) {
   const industry = INDUSTRIES.find((i) => i.urlSlug === params.slug);
   const content = INDUSTRY_CONTENT[params.slug];
@@ -263,6 +277,13 @@ export default function IndustryDetailPage({ params }: { params: { slug: string 
 
   return (
     <main>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: 'Home', path: '/' },
+          { name: 'Industries', path: '/industries' },
+          { name: industry.name, path: `/industries/${industry.urlSlug}` },
+        ])}
+      />
       <Header />
 
       <section className="bg-brand-mist py-14">

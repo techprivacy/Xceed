@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -6,9 +7,17 @@ import ProductCard from '@/components/ProductCard';
 import ProductDetail from '@/components/ProductDetail';
 import CastingCharacterBuilder from '@/components/CastingCharacterBuilder';
 import HolderConfigurator from '@/components/HolderConfigurator';
+import JsonLd from '@/components/seo/JsonLd';
 import { getProducts } from '@/lib/api';
 import { PRODUCT_CATEGORIES } from '@/lib/staticData';
 import { ConfiguratorType, Product } from '@/types';
+import { buildMetadata, noIndexMetadata, breadcrumbJsonLd } from '@/lib/seo';
+
+export function generateMetadata({ params }: { params: { category: string } }): Metadata {
+  const entry = PRODUCT_CATEGORIES.find((c) => c.urlSlug === params.category);
+  if (!entry) return noIndexMetadata('Category Not Found');
+  return buildMetadata({ title: entry.title, description: entry.description, path: `/${entry.urlSlug}` });
+}
 
 // Cast Letters / Cast Numbers / Holders each store their pricing on a single
 // admin-managed product (Admin > Products, "Configurator" field) for that category.
@@ -30,10 +39,17 @@ export default async function CategoryPage({ params }: { params: { category: str
   const entry = PRODUCT_CATEGORIES.find((c) => c.urlSlug === params.category);
   if (!entry) notFound();
 
+  const categoryBreadcrumb = breadcrumbJsonLd([
+    { name: 'Home', path: '/' },
+    { name: 'Products', path: '/products' },
+    { name: entry.title, path: `/${entry.urlSlug}` },
+  ]);
+
   if (entry.urlSlug === 'cast-letters') {
     const configurator = await getConfiguratorProduct(entry.apiSlug, 'cast_letters');
     return (
       <main>
+        <JsonLd data={categoryBreadcrumb} />
         <Header />
         <CastingCharacterBuilder mode="letters" sizePricing={configurator?.sizePricing} />
         <Footer />
@@ -45,6 +61,7 @@ export default async function CategoryPage({ params }: { params: { category: str
     const configurator = await getConfiguratorProduct(entry.apiSlug, 'cast_numbers');
     return (
       <main>
+        <JsonLd data={categoryBreadcrumb} />
         <Header />
         <CastingCharacterBuilder mode="numbers" sizePricing={configurator?.sizePricing} />
         <Footer />
@@ -56,6 +73,7 @@ export default async function CategoryPage({ params }: { params: { category: str
     const configurator = await getConfiguratorProduct(entry.apiSlug, 'holder');
     return (
       <main>
+        <JsonLd data={categoryBreadcrumb} />
         <Header />
         <HolderConfigurator
           sizePricing={configurator?.sizePricing}
@@ -79,6 +97,7 @@ export default async function CategoryPage({ params }: { params: { category: str
     // category pages share one design language.
     return (
       <main>
+        <JsonLd data={categoryBreadcrumb} />
         <Header />
         <div className="min-h-screen bg-[#f5f7fb]">
           <div className="mx-auto max-w-7xl px-6 py-10">
@@ -112,11 +131,12 @@ export default async function CategoryPage({ params }: { params: { category: str
 
   return (
     <main>
+      <JsonLd data={categoryBreadcrumb} />
       <Header />
 
       <section className="bg-brand-mist py-14">
         <div className="container-x">
-          <SectionHeading eyebrow="Products" title={entry.title} subtitle={entry.description} />
+          <SectionHeading eyebrow="Products" title={entry.title} subtitle={entry.description} size="h1" />
         </div>
       </section>
 

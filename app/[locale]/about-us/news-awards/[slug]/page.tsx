@@ -5,8 +5,10 @@ import { ArrowLeft } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Card from '@/components/ui/Card';
+import JsonLd from '@/components/seo/JsonLd';
 import { getNewsArticleBySlug } from '@/lib/api';
 import { NEWS_ICON_MAP, formatNewsDate } from '@/lib/newsIcons';
+import { buildMetadata, noIndexMetadata, absoluteUrl, breadcrumbJsonLd } from '@/lib/seo';
 
 interface PageProps {
   params: { slug: string };
@@ -19,7 +21,14 @@ interface PageProps {
 // 60s revalidate window.
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const res = await getNewsArticleBySlug(params.slug).catch(() => null);
-  return { title: res?.data ? res.data.title : 'Article Not Found' };
+  const article = res?.data;
+  if (!article) return noIndexMetadata('Article Not Found');
+  return buildMetadata({
+    title: article.title,
+    description: article.excerpt,
+    path: `/about-us/news-awards/${article.slug}`,
+    type: 'article',
+  });
 }
 
 export default async function NewsArticlePage({ params }: PageProps) {
@@ -30,8 +39,35 @@ export default async function NewsArticlePage({ params }: PageProps) {
   const Icon = NEWS_ICON_MAP[article.icon];
   const paragraphs = article.body.split(/\n\s*\n/).filter(Boolean);
 
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'NewsArticle',
+    headline: article.title,
+    description: article.excerpt,
+    datePublished: article.date,
+    dateModified: article.updatedAt,
+    image: [absoluteUrl('/logo.png')],
+    articleSection: article.category,
+    mainEntityOfPage: absoluteUrl(`/about-us/news-awards/${article.slug}`),
+    publisher: {
+      '@type': 'Organization',
+      name: 'XCEED',
+      logo: { '@type': 'ImageObject', url: absoluteUrl('/logo.png') },
+    },
+  };
+
   return (
     <main>
+      <JsonLd
+        data={[
+          articleJsonLd,
+          breadcrumbJsonLd([
+            { name: 'Home', path: '/' },
+            { name: 'News & Awards', path: '/about-us/news-awards' },
+            { name: article.title, path: `/about-us/news-awards/${article.slug}` },
+          ]),
+        ]}
+      />
       <Header />
 
       <section className="relative overflow-hidden bg-brand-navy">

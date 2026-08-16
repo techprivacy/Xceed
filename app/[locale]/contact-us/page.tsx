@@ -1,7 +1,16 @@
+import type { Metadata } from 'next';
 import { Phone, Mail, Clock, Truck, CheckCircle2, Star } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
+import { buildMetadata } from '@/lib/seo';
+
+export const metadata: Metadata = buildMetadata({
+  title: 'Contact Us',
+  description:
+    "Get in touch with XCEED for product enquiries, bulk quotes, or partnership opportunities. Call, email, or send us a message and our team will respond promptly.",
+  path: '/contact-us',
+});
 
 const CONTACT_DETAILS = [
   {

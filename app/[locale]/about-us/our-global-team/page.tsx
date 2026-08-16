@@ -5,10 +5,13 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Card from '@/components/ui/Card';
 import SectionHeading from '@/components/ui/SectionHeading';
+import { buildMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'Our Global Team',
-};
+  description: "Meet the leadership team driving XCEED's operations and partnerships across India and Japan.",
+  path: '/about-us/our-global-team',
+});
 
 // Sunil and Amit have real photos (Sunil's reused from the Director
 // Message page); Pragya gets an initials avatar until hers is supplied,

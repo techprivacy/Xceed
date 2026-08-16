@@ -1,4 +1,13 @@
+import type { Metadata } from 'next';
 import LegalPageLayout from '@/components/LegalPageLayout';
+import { buildMetadata } from '@/lib/seo';
+
+export const metadata: Metadata = buildMetadata({
+  title: 'Privacy Policy',
+  description:
+    "XCEED's Privacy Policy: what personal information we collect, how we use it, and the choices you have regarding your data.",
+  path: '/privacy-policy',
+});
 
 export default function PrivacyPolicyPage() {
   return (

@@ -319,7 +319,7 @@ export default function CastingCharacterBuilder({ mode, sizePricing }: CastingCh
               <hr className="my-3 border-white/20" />
               <div className="flex items-end justify-between">
                 <span className="text-sm text-white/80">Total</span>
-                <h3 className="text-3xl font-extrabold">{formatINR(Math.round(total))}</h3>
+                <strong className="text-3xl font-extrabold">{formatINR(Math.round(total))}</strong>
               </div>
 
               <button

@@ -1,7 +1,15 @@
+import type { Metadata } from 'next';
 import { UserPlus } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CreateAccountForm from '@/components/CreateAccountForm';
+import { buildMetadata } from '@/lib/seo';
+
+export const metadata: Metadata = buildMetadata({
+  title: 'Create an Account',
+  description: 'Create a free XCEED account to apply for membership, track orders, and manage your business profile.',
+  path: '/member/register',
+});
 
 export default function CreateAccountPage() {
   return (

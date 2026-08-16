@@ -361,13 +361,13 @@ export default function HolderConfigurator({ sizePricing, holderPriceMatrix: hol
               <div className="flex items-center justify-between">
                 <span className="text-sm text-white/80">Letter Price</span>
               </div>
-              <h3 className="text-2xl font-extrabold">{formatINR(letterPrice)}</h3>
+              <p className="text-2xl font-extrabold">{formatINR(letterPrice)}</p>
               <hr className="my-3 border-white/20" />
 
               <div className="flex items-center justify-between">
                 <span className="text-sm text-white/80">Holder Price</span>
               </div>
-              <h3 className="text-2xl font-extrabold">{formatINR(holderPrice)}</h3>
+              <p className="text-2xl font-extrabold">{formatINR(holderPrice)}</p>
               <hr className="my-3 border-white/20" />
 
               <div className="flex items-center justify-between">
@@ -397,11 +397,11 @@ export default function HolderConfigurator({ sizePricing, holderPriceMatrix: hol
               <div className="flex items-center justify-between">
                 <span className="text-sm text-white/80">GST (18%)</span>
               </div>
-              <h3 className="text-2xl font-extrabold">{formatINR(gst)}</h3>
+              <p className="text-2xl font-extrabold">{formatINR(gst)}</p>
               <hr className="my-3 border-white/20" />
 
-              <h2 className="text-base font-bold text-white/90">Grand Total</h2>
-              <h1 className="text-4xl font-extrabold">{formatINR(grandTotal)}</h1>
+              <p className="text-base font-bold text-white/90">Grand Total</p>
+              <p className="text-4xl font-extrabold">{formatINR(grandTotal)}</p>
 
               {feedback && (
                 <p

@@ -1,4 +1,12 @@
+import type { Metadata } from 'next';
 import LegalPageLayout from '@/components/LegalPageLayout';
+import { buildMetadata } from '@/lib/seo';
+
+export const metadata: Metadata = buildMetadata({
+  title: 'Terms & Conditions',
+  description: "The terms that govern your use of the XCEED website and any products or services purchased through it.",
+  path: '/terms-and-conditions',
+});
 
 export default function TermsAndConditionsPage() {
   return (

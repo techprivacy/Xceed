@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import TrustBar from '@/components/TrustBar';
@@ -5,15 +6,19 @@ import FeaturedProductsSection from '@/components/FeaturedProductsSection';
 import IndustriesSection from '@/components/IndustriesSection';
 import WhyChooseSection from '@/components/WhyChooseSection';
 import Footer from '@/components/Footer';
+import JsonLd from '@/components/seo/JsonLd';
+import { absoluteUrl } from '@/lib/seo';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl('/') },
+};
 
 const ORGANIZATION_JSON_LD = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'XCEED',
-  url: SITE_URL,
-  logo: `${SITE_URL}/logo.png`,
+  url: absoluteUrl('/'),
+  logo: absoluteUrl('/logo.png'),
   description:
     'Japanese-quality industrial cast letters, numbers, holders and marking tools for manufacturing, steel, foundry, fabrication and engineering industries.',
   address: {
@@ -26,15 +31,13 @@ const ORGANIZATION_JSON_LD = {
     contactType: 'sales',
     email: 'info@xceedindia.com',
   },
+  sameAs: ['https://www.instagram.com/xceed_india', 'https://www.linkedin.com/company/xceedindia'],
 };
 
 export default function HomePage() {
   return (
     <main>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_JSON_LD) }}
-      />
+      <JsonLd data={ORGANIZATION_JSON_LD} />
       <Header />
       <Hero />
       <TrustBar />

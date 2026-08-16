@@ -1,8 +1,17 @@
+import type { Metadata } from 'next';
 import { Handshake, Globe2, Factory, Settings, Megaphone, TrendingUp } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import MemberDirectory from '@/components/MemberDirectory';
 import Button from '@/components/ui/Button';
+import { buildMetadata } from '@/lib/seo';
+
+export const metadata: Metadata = buildMetadata({
+  title: 'Member Directory',
+  description:
+    "Browse XCEED's directory of verified manufacturers, foundries, suppliers, and industrial partners across India and Japan, or apply to join the network.",
+  path: '/directory',
+});
 
 const MEMBERSHIP_BENEFITS = [
   { icon: Globe2, label: 'Japan–India Business Connections' },

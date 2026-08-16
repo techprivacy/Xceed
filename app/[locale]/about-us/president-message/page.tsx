@@ -4,10 +4,14 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Card from '@/components/ui/Card';
 import SectionHeading from '@/components/ui/SectionHeading';
+import { buildMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'President Message',
-};
+  description:
+    "A message from XCEED's President & Founder on bridging Japanese industrial technology with India's manufacturing, foundry, and engineering industries.",
+  path: '/about-us/president-message',
+});
 
 export default function PresidentMessagePage() {
   return (

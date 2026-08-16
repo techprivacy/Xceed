@@ -7,10 +7,13 @@ import Card from '@/components/ui/Card';
 import SectionHeading from '@/components/ui/SectionHeading';
 import { getNewsArticles } from '@/lib/api';
 import { NEWS_ICON_MAP, formatNewsDate } from '@/lib/newsIcons';
+import { buildMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'All News',
-};
+  description: 'The complete archive of company news, updates, and announcements from XCEED.',
+  path: '/about-us/news-awards/all',
+});
 
 export default async function AllNewsPage() {
   const res = await getNewsArticles({ limit: 100 }).catch(() => ({ data: [] }));

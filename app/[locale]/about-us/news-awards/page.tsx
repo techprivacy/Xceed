@@ -8,10 +8,13 @@ import Card from '@/components/ui/Card';
 import SectionHeading from '@/components/ui/SectionHeading';
 import { getNewsArticles } from '@/lib/api';
 import { NEWS_ICON_MAP, formatNewsDate } from '@/lib/newsIcons';
+import { buildMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'News & Awards',
-};
+  description: "Company news, industry recognition, and milestones from XCEED's work connecting Japan and India.",
+  path: '/about-us/news-awards',
+});
 
 // Awards/milestones stay placeholder copy — real ones get swapped in once
 // supplied. Article content (featured + latest) is now backend-managed

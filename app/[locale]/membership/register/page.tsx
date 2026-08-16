@@ -1,7 +1,16 @@
+import type { Metadata } from 'next';
 import { Handshake } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import MembershipForm from '@/components/MembershipForm';
+import { buildMetadata } from '@/lib/seo';
+
+export const metadata: Metadata = buildMetadata({
+  title: 'Apply for Membership',
+  description:
+    'Register your business with XCEED to join a growing network of manufacturers, foundries, and technology providers connecting Japan and India.',
+  path: '/membership/register',
+});
 
 export default function MembershipRegisterPage() {
   return (

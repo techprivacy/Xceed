@@ -111,9 +111,9 @@ export default function MemberDirectory() {
     <section className="bg-white py-16">
       <div className="container-x">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-2xl font-bold tracking-tight text-brand-black sm:text-3xl">
+          <h1 className="text-2xl font-bold tracking-tight text-brand-black sm:text-3xl">
             Connecting Manufacturers &amp; Suppliers Across India &amp; Japan
-          </h2>
+          </h1>
         </div>
 
         {/* The frosted backdrop spans the full row so cards scrolling underneath

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -5,6 +6,14 @@ import SectionHeading from '@/components/ui/SectionHeading';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import { INDUSTRIES } from '@/lib/staticData';
+import { buildMetadata } from '@/lib/seo';
+
+export const metadata: Metadata = buildMetadata({
+  title: 'Industries We Serve',
+  description:
+    'Durable marking and identification solutions for steel plants, foundries, fabrication units, automotive, warehouses, and manufacturing facilities across India.',
+  path: '/industries',
+});
 
 export default function IndustriesPage() {
   return (
@@ -17,6 +26,7 @@ export default function IndustriesPage() {
             eyebrow="Industry Applications"
             title="Built for India's Industrial Workforce"
             subtitle="Our marking solutions are trusted by thousands of industries across India for their daily marking, identification and traceability needs."
+            size="h1"
           />
         </div>
       </section>
