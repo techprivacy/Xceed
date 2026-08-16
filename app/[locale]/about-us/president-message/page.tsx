@@ -18,8 +18,8 @@ export default function PresidentMessagePage() {
         <div className="container-x">
           <SectionHeading
             eyebrow="President Message"
-            title="Bridging Japan and India Through Technology"
-            subtitle="XCEED connects advanced Japanese industrial technology and expertise with the growing needs of Indian manufacturing, foundry, and engineering industries."
+            title="A Pillar Connecting Japan and India Through Technology"
+            subtitle="XCEED serves as a pillar connecting advanced Japanese industrial technology and expertise with the evolving needs of India's manufacturing, foundry, and engineering industries."
             align="center"
             size="h1"
             className="mx-auto max-w-3xl"
