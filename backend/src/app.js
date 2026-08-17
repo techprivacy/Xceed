@@ -14,6 +14,7 @@ const savedCartRoutes = require('./routes/savedCartRoutes');
 const accountRoutes = require('./routes/accountRoutes');
 const membershipApplicationRoutes = require('./routes/membershipApplicationRoutes');
 const newsRoutes = require('./routes/newsRoutes');
+const subscriberRoutes = require('./routes/subscriberRoutes');
 
 const app = express();
 
@@ -47,6 +48,7 @@ app.use('/api/saved-carts', savedCartRoutes);
 app.use('/api/accounts', accountRoutes);
 app.use('/api/membership-applications', membershipApplicationRoutes);
 app.use('/api/news', newsRoutes);
+app.use('/api/subscribers', subscriberRoutes);
 
 // 404 handler
 app.use((req, res) => {

@@ -1,5 +1,6 @@
 import { Facebook, Instagram, Linkedin, Youtube, ShieldCheck, FileText, RefreshCcw, Phone, Mail, Clock } from 'lucide-react';
 import FloatingWhatsApp from '@/components/FloatingWhatsApp';
+import NewsletterSubscribe from '@/components/NewsletterSubscribe';
 import { PRODUCT_CATEGORIES } from '@/lib/staticData';
 
 const MAIN_CATEGORIES = PRODUCT_CATEGORIES.filter((c) =>
@@ -154,6 +155,8 @@ export default function Footer() {
                 Mon &ndash; Sat: 9:00 AM &ndash; 6:00 PM (IST)
               </li>
             </ul>
+
+            <NewsletterSubscribe />
           </div>
         </div>
       </div>

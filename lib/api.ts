@@ -158,6 +158,15 @@ export const submitQuoteRequest = (payload: QuoteRequestInput) =>
     cache: 'no-store',
   });
 
+export const subscribeToNewsletter = (email: string) =>
+  request<{ email: string }>('/subscribers', {
+    method: 'POST',
+    body: JSON.stringify({ email, source: 'Footer' }),
+    // Don't cache write requests
+    next: undefined,
+    cache: 'no-store',
+  });
+
 export interface LoginResponse {
   success: boolean;
   message?: string;
